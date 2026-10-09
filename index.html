@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archives de Canada | Directory & Article Reader</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            700: '#102a43',
+                            800: '#0b1b2b',
+                            900: '#06101e',
+                        },
+                        maple: {
+                            500: '#c5221f',
+                            600: '#a61c1a',
+                            700: '#871413',
+                        },
+                        parchment: {
+                            50: '#faf8f5',
+                            100: '#f4efe6',
+                            200: '#e8dec9',
+                            800: '#3a3427',
+                            900: '#231f17',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            900: '#164e63',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'Georgia', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        reader: ['Merriweather', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .parchment-bg {
+            background-color: #f7f4ed;
+            background-image: radial-gradient(#e2dad0 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+        .dark .parchment-bg {
+            background-color: #0b111a;
+            background-image: radial-gradient(#1e293b 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+        }
+
+        @keyframes laserSweep {
+            0% { top: 0%; opacity: 1; }
+            50% { top: 100%; opacity: 1; }
+            100% { top: 0%; opacity: 0.8; }
+        }
+
+        @keyframes agentPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(6, 182, 212, 0.4), inset 0 0 15px rgba(6, 182, 212, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(6, 182, 212, 0.8), inset 0 0 25px rgba(6, 182, 212, 0.4); }
+        }
+
+        @keyframes waveform {
+            0%, 100% { height: 4px; }
+            50% { height: 18px; }
+        }
+
+        .agent-active-glow {
+            animation: agentPulse 3s infinite ease-in-out;
+        }
+
+        .scanning-laser {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #22d3ee, #ffffff, #22d3ee, transparent);
+            box-shadow: 0 0 12px #22d3ee, 0 0 20px #06b6d4;
+            animation: laserSweep 1.8s infinite linear;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        .translation-target-active {
+            position: relative;
+            cursor: pointer !important;
+            transition: all 0.2s ease;
+        }
+
+        .translation-target-active:hover {
+            outline: 2px dashed #22d3ee;
+            outline-offset: 4px;
+            background-color: rgba(6, 182, 212, 0.08) !important;
+            border-radius: 6px;
+        }
+
+        .wave-bar {
+            width: 3px;
+            background-color: #22d3ee;
+            border-radius: 2px;
+            display: inline-block;
+            animation: waveform 1.2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-parchment-50 text-slate-800 dark:bg-navy-900 dark:text-slate-100 parchment-bg min-h-screen flex flex-col font-body transition-colors duration-200 selection:bg-maple-500 selection:text-white">
+
+    <!-- Toast Notification Banner -->
+    <div id="toastNotification" class="fixed top-24 right-6 z-50 transform translate-y-[-100%] opacity-0 transition-all duration-300 pointer-events-none bg-navy-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-cyan-500/50 flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-cyan-400"></i>
+        <span id="toastMessage" class="text-xs font-semibold">Action completed successfully.</span>
+    </div>
+
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-navy-800/95 backdrop-blur-md border-b border-slate-200 dark:border-navy-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Brand Identifier -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="w-11 h-11 rounded-lg bg-navy-900 dark:bg-maple-600 flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-leaf text-xl" title="Canada Emblem"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-navy-900 dark:text-white uppercase">
+                                ARCHIVES DE CANADA
+                            </h1>
+                            <span class="hidden sm:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/20">
+                                Official Index
+                            </span>
+                        </div>
+                        <p class="text-xs font-serif italic text-slate-500 dark:text-slate-400" id="motto-text" data-i18n="mottoText">
+                            National Directory of Global Journalism & Media
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Header Actions & Navigation -->
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Reload Directory Button -->
+                    <button onclick="reloadDirectory()" title="Reload Directory" data-i18n-title="reload"
+                        class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
+                        <i id="reloadIcon" class="fa-solid fa-rotate-right text-sm"></i>
+                        <span class="hidden xl:inline text-xs font-semibold uppercase tracking-wider" data-i18n="reload">Reload</span>
+                    </button>
+
+                    <!-- Bookmarks Drawer Toggle -->
+                    <button onclick="toggleBookmarksDrawer()" class="relative p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-bookmark text-sm text-maple-600 dark:text-maple-500"></i>
+                        <span class="hidden sm:inline text-xs font-semibold uppercase tracking-wider" data-i18n="bookmarked">Bookmarks</span>
+                        <span id="bookmarkBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-maple-600 rounded-full">0</span>
+                    </button>
+
+                    <!-- Settings Drawer Button -->
+                    <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2 relative">
+                        <i class="fa-solid fa-gear text-sm text-slate-700 dark:text-slate-200"></i>
+                        <span id="agentActiveDot" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-400 rounded-full animate-ping"></span>
+                    </button>
+
+                    <!-- Language Switcher Toggle -->
+                    <button onclick="toggleLanguage()" class="px-3 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white font-medium text-xs tracking-wider transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="langDisplay">FR</span>
+                    </button>
+
+                    <!-- Dark Mode Toggle -->
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition">
+                        <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-gradient-to-b from-slate-100 to-transparent dark:from-navy-800 dark:to-transparent py-10 sm:py-14 border-b border-slate-200/60 dark:border-navy-700/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/20" data-i18n="heroBadge">
+                Official Bilingual Press Repository
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-serif font-bold text-navy-900 dark:text-white max-w-3xl mx-auto leading-tight" data-i18n="heroTitle">
+                Preserving Access to Verified Canadian & Global News Outlets.
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed" data-i18n="heroDesc">
+                Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <a href="#directory-section" class="px-4 py-2.5 rounded-xl bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-compass"></i>
+                    <span data-i18n="btnBrowseDir">Explore Directory</span>
+                </a>
+                <a href="#reader-section" class="px-4 py-2.5 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-navy-700 text-xs font-bold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-newspaper text-maple-600 dark:text-maple-500"></i>
+                    <span data-i18n="btnOpenReader">Article Reader Tool</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 space-y-12">
+        
+        <!-- DIRECTORY SECTION -->
+        <section id="directory-section" class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-navy-700 pb-4">
+                <div>
+                    <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="dirHeading">Global Media Directory</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="dirSubheading">Categorized by region, country, and official broadcast language.</p>
+                </div>
+
+                <div class="flex items-center gap-4 text-xs">
+                    <div class="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300">
+                        <span data-i18n="totalSources">Total Outlets:</span>
+                        <span id="total-sources-count" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-navy-700 font-mono text-navy-900 dark:text-slate-100">0</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300">
+                        <span data-i18n="bookmarkedCount">Bookmarked:</span>
+                        <span id="bookmarked-count" class="px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 font-mono">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls & Region Filters -->
+            <div class="flex flex-col sm:flex-row justify-between gap-4 items-stretch sm:items-center">
+                <!-- Search Box -->
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search outlet name, country, region..." data-i18n-placeholder="searchPlaceholder"
+                        class="w-full pl-9 pr-8 py-2 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 dark:focus:ring-maple-500 transition shadow-sm">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Region Filters Scroll Container -->
+                <div id="region-filter-buttons" class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 custom-scrollbar">
+                    <!-- Dynamic region filter buttons rendered via JS -->
+                </div>
+            </div>
+
+            <!-- Outlets Directory Grid -->
+            <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Dynamic cards rendered via JS -->
+            </div>
+
+            <!-- Empty Directory State -->
+            <div id="empty-state" class="hidden text-center py-12 bg-white dark:bg-navy-800 rounded-2xl border border-dashed border-slate-300 dark:border-navy-700 p-8 space-y-3">
+                <i class="fa-solid fa-folder-open text-3xl text-slate-300 dark:text-slate-600"></i>
+                <h4 class="font-serif font-bold text-slate-700 dark:text-slate-200" data-i18n="noResultsTitle">No News Outlets Found</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the bookmark/region filter.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 bg-slate-200 dark:bg-navy-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:bg-slate-300 transition" data-i18n="resetFilters">
+                    Reset Filters
+                </button>
+            </div>
+        </section>
+
+        <section id="reader-section" class="space-y-6 pt-6">
+            <div class="border-b border-slate-200 dark:border-navy-700 pb-4">
+                <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="readerHeading">News Article Reader Workspace</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="readerSubheading">Paste an article URL, parse raw text, or load featured Canadian archival samples into an optimized reading layout.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Reader Input Form Sidebar -->
+                <div class="lg:col-span-5 bg-white dark:bg-navy-800 rounded-2xl p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Article Input</span>
+                        <button onclick="loadSampleArticle()" class="text-xs text-maple-600 dark:text-maple-500 hover:underline font-semibold flex items-center gap-1">
+                            <i class="fa-solid fa-file-lines"></i>
+                            <span data-i18n="btnLoadSample">Load Sample Article</span>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Headline Title</label>
+                            <input type="text" id="input-headline" placeholder="Article Headline / Title" data-i18n-placeholder="inputTitlePlaceholder"
+                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Source / Outlet</label>
+                            <input type="text" id="input-source" placeholder="Source Outlet (e.g. CBC News, Le Devoir)" data-i18n-placeholder="inputSourcePlaceholder"
+                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Article Text Content</label>
+                            <textarea id="input-body" rows="6" placeholder="Paste article paragraphs or summary text here..." data-i18n-placeholder="inputBodyPlaceholder"
+                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 custom-scrollbar"></textarea>
+                        </div>
+
+                        <button onclick="renderUserArticle()" class="w-full py-2.5 bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span data-i18n="btnRender">Render in Reader</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Rendered Reading Canvas -->
+                <div class="lg:col-span-7 bg-white dark:bg-navy-800 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm overflow-hidden flex flex-col min-h-[450px]">
+                    <!-- Canvas Toolbar Header -->
+                    <div class="bg-slate-100 dark:bg-navy-900 px-6 py-3 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between flex-wrap gap-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <span class="font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider" data-i18n="readerStatus">Reader Active</span>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-1 bg-white dark:bg-navy-800 px-2 py-1 rounded-lg border border-slate-200 dark:border-navy-700">
+                                <span class="text-slate-400 font-semibold" data-i18n="fontSize">Font:</span>
+                                <button onclick="adjustReaderFont(-1)" class="px-1.5 py-0.5 hover:bg-slate-100 dark:hover:bg-navy-700 rounded font-bold">-</button>
+                                <span id="font-size-display" class="font-mono px-1">16px</span>
+                                <button onclick="adjustReaderFont(1)" class="px-1.5 py-0.5 hover:bg-slate-100 dark:hover:bg-navy-700 rounded font-bold">+</button>
+                            </div>
+
+                            <button onclick="window.print()" class="px-2.5 py-1 bg-white dark:bg-navy-800 hover:bg-slate-100 dark:hover:bg-navy-700 border border-slate-200 dark:border-navy-700 rounded-lg text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-1">
+                                <i class="fa-solid fa-print"></i>
+                                <span data-i18n="btnPrint">Print</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Article Render Body -->
+                    <div id="canvas-article-container" class="p-6 sm:p-8 flex-1 space-y-6">
+                        <div class="border-b border-slate-100 dark:border-navy-700 pb-4 space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span id="canvas-source" class="text-xs font-bold uppercase tracking-wider text-maple-600 dark:text-maple-500">CBC NEWS</span>
+                                <span class="text-slate-300 dark:text-slate-600">•</span>
+                                <span id="canvas-time" class="text-xs text-slate-400">3 min read</span>
+                            </div>
+                            <h2 id="canvas-headline" class="text-xl sm:text-2xl font-serif font-bold text-navy-900 dark:text-white leading-snug">
+                                Canada Expands National Digital Archives Initiative to Preserve Global Journalism
+                            </h2>
+                        </div>
+
+                        <div id="canvas-body" class="font-reader text-slate-800 dark:text-slate-200 space-y-4 leading-relaxed text-base">
+                            <p>
+                                OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.
+                            </p>
+                            <p>
+                                The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING TRANSLATION AGENT HUD -->
+    <div id="translationAgentHUD" class="fixed bottom-6 left-6 z-40 hidden transition-all duration-300">
+        <div id="hudBody" class="bg-navy-900/95 border-2 border-cyan-500/80 rounded-2xl p-4 shadow-2xl backdrop-blur-md text-white agent-active-glow w-80 space-y-3 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent pointer-events-none"></div>
+
+            <div class="flex items-center justify-between border-b border-cyan-500/30 pb-2.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="relative flex items-center justify-center w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-400 text-cyan-400">
+                        <i class="fa-solid fa-robot text-xs"></i>
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">Archives Agent</h4>
+                        <p id="agentStatusText" class="text-[10px] font-mono text-cyan-400/80">STATUS: LIVE SCANNING</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1">
+                    <button onclick="toggleAgentHUDMinimize()" class="p-1 rounded text-cyan-400 hover:text-white text-xs">
+                        <i id="hudMinIcon" class="fa-solid fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="hudExpandedContent" class="space-y-3 text-xs font-mono">
+                <div class="flex items-center justify-between bg-navy-950/80 p-2 rounded-lg border border-cyan-900/60">
+                    <span class="text-slate-300 text-[11px]">TARGET OUTPUT:</span>
+                    <select id="agentTargetLangSelect" onchange="changeAgentTargetLang(this.value)" class="bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-[11px] font-bold rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+                        <option value="FR">FR (Français)</option>
+                        <option value="EN">EN (English)</option>
+                        <option value="ES">ES (Español)</option>
+                        <option value="DE">DE (Deutsch)</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-1">
+                        <div class="wave-bar" style="animation-delay: 0s"></div>
+                        <div class="wave-bar" style="animation-delay: 0.2s"></div>
+                        <div class="wave-bar" style="animation-delay: 0.4s"></div>
+                        <div class="wave-bar" style="animation-delay: 0.1s"></div>
+                        <div class="wave-bar" style="animation-delay: 0.3s"></div>
+                    </div>
+                    <span class="text-[10px] text-cyan-300/80 italic" data-i18n="agentHoverHint">Click any text block to translate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDE-BY-SIDE TRANSLATION AGENT MODAL (SINGLE UNIFIED MODAL) -->
+    <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="bg-navy-900 text-white p-4 border-b border-cyan-500/30 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+                    <h3 class="font-serif font-bold text-sm tracking-wide text-cyan-200">Archives Translation Agent • Live Side-By-Side</h3>
+                </div>
+                <button onclick="closeTranslationModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-slate-50 dark:bg-navy-900 p-4 rounded-xl border border-slate-200 dark:border-navy-700 space-y-2">
+                        <span class="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider">Source Text</span>
+                        <p id="originalModalText" class="text-slate-800 dark:text-slate-200 leading-relaxed text-xs sm:text-sm"></p>
+                    </div>
+
+                    <div class="bg-cyan-950/20 dark:bg-navy-900 p-4 rounded-xl border border-cyan-500/40 space-y-2 relative">
+                        <div class="flex items-center justify-between border-b border-cyan-500/20 pb-2">
+                            <span class="text-[10px] font-mono uppercase font-bold text-cyan-500 tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-robot"></i> Translated Output
+                            </span>
+                            <select id="modalLangSelect" onchange="changeModalTargetLang(this.value)" class="bg-navy-900 border border-cyan-500/50 text-cyan-300 text-xs font-bold rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+                                <option value="FR">FR (Français)</option>
+                                <option value="EN">EN (English)</option>
+                                <option value="ES">ES (Español)</option>
+                                <option value="DE">DE (Deutsch)</option>
+                            </select>
+                        </div>
+                        <p id="translatedModalText" class="text-slate-900 dark:text-cyan-100 leading-relaxed text-xs sm:text-sm font-medium pt-1"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 dark:bg-navy-900 px-6 py-3 border-t border-slate-200 dark:border-navy-700 flex flex-wrap justify-between items-center gap-2 text-xs">
+                <span class="text-slate-400 font-mono text-[11px]">AGENT LATENCY: 12ms • ENGINE: CONTEXTUAL V3</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="applyTranslationToPage()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-navy-950 rounded-lg font-bold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Apply directly to page</span>
+                    </button>
+                    <button onclick="closeTranslationModal()" class="px-3 py-1.5 bg-navy-700 hover:bg-navy-800 text-white rounded-lg font-bold">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKMARKS DRAWER -->
+    <aside id="bookmarksDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
+        <div class="p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bookmark text-maple-500"></i>
+                <h3 class="font-serif font-bold text-lg" data-i18n="bookmarked">Saved Directory Outlets</h3>
+            </div>
+            <button onclick="toggleBookmarksDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div id="bookmarksDrawerBody" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+            <!-- Dynamic saved bookmarks list -->
+        </div>
+
+        <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 flex justify-between gap-2">
+            <button onclick="exportBookmarks()" class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-download"></i>
+                <span data-i18n="export">Export</span>
+            </button>
+            <label class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition cursor-pointer flex items-center gap-1.5">
+                <i class="fa-solid fa-upload"></i>
+                <span data-i18n="import">Import</span>
+                <input type="file" accept=".json" onchange="importBookmarks(event)" class="hidden">
+            </label>
+        </div>
+    </aside>
+
+    <!-- SETTINGS DRAWER -->
+    <aside id="settingsDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
+        <div class="p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-gear text-slate-300"></i>
+                <h3 class="font-serif font-bold text-lg" data-i18n="settingsTitle">Application Settings</h3>
+            </div>
+            <button onclick="toggleSettingsDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
+            <div class="bg-slate-50 dark:bg-navy-900 p-4 rounded-xl border border-slate-200 dark:border-navy-700 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-robot text-cyan-500 text-lg"></i>
+                        <div>
+                            <h4 class="font-bold text-navy-900 dark:text-slate-100 text-xs uppercase tracking-wide">Archives Translation Agent</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">On-Screen Live Translation Scanner</p>
+                        </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="agentToggle" onchange="toggleAgentMode(this.checked)" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-navy-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-navy-600 peer-checked:bg-cyan-500"></div>
+                    </label>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-normal pt-2 border-t border-slate-200 dark:border-navy-800">
+                    Enables an interactive visual scanner. Click on any text block across the directory or reader to inspect and translate live in side-by-side mode.
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Appearance & Theme</h4>
+                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700">
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">Theme Mode</span>
+                    <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-200 dark:bg-navy-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-semibold">
+                        Toggle Light/Dark
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Reader Preferences</h4>
+                <div class="p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-medium text-slate-700 dark:text-slate-300">Base Font Size</span>
+                        <span id="settingsFontSizeLabel" class="font-mono text-cyan-500 font-bold">16px</span>
+                    </div>
+                    <input type="range" id="fontSizeRange" min="14" max="24" value="16" oninput="updateBaseFontSize(this.value)" class="w-full accent-cyan-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-center">
+            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.2</span>
+        </div>
+    </aside>
+
+    <div id="drawerOverlay" onclick="closeAllDrawers()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+
+    <footer class="bg-navy-900 text-white mt-16 border-t border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded bg-maple-600 flex items-center justify-center text-white font-bold">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif font-bold text-base tracking-wider uppercase">ARCHIVES DE CANADA</h3>
+                        <p class="text-xs text-slate-400" data-i18n="mottoText">National Directory of Global Journalism & Media</p>
+                    </div>
+                </div>
+
+                <p class="text-xs text-slate-400 text-center md:text-right" data-i18n="footerStorageNotice">
+                    Bookmarked directories and language choices are preserved locally on your device.
+                </p>
+            </div>
+
+            <div class="border-t border-navy-800 pt-6 text-center text-xs text-slate-500">
+                <p>&copy; Archives de Canada. All rights reserved. Supporting press freedom & bilingual news access globally.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ==========================================================================
+           1. DATA MODELS & LOCALIZATION DICTIONARY
+           ========================================================================== */
+
+        const i18n = {
+            en: {
+                mottoText: "National Directory of Global Journalism & Media",
+                reload: "Reload",
+                export: "Export",
+                import: "Import",
+                heroBadge: "Official Bilingual Press Repository",
+                heroTitle: "Preserving Access to Verified Canadian & Global News Outlets.",
+                heroDesc: "Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.",
+                btnBrowseDir: "Explore Directory",
+                btnOpenReader: "Article Reader Tool",
+                dirHeading: "Global Media Directory",
+                dirSubheading: "Categorized by region, country, and official broadcast language.",
+                totalSources: "Total Outlets:",
+                bookmarkedCount: "Bookmarked:",
+                searchPlaceholder: "Search outlet name, country, region...",
+                noResultsTitle: "No News Outlets Found",
+                noResultsDesc: "Try altering your search keywords or clearing the bookmark/region filter.",
+                resetFilters: "Reset Filters",
+                readerHeading: "News Article Reader Workspace",
+                readerSubheading: "Paste an article URL, parse raw text, or load featured Canadian archival samples into an optimized reading layout.",
+                btnLoadSample: "Load Sample Article",
+                inputTitlePlaceholder: "Article Headline / Title",
+                inputSourcePlaceholder: "Source Outlet (e.g. CBC News, Le Devoir)",
+                inputBodyPlaceholder: "Paste article paragraphs or summary text here...",
+                btnRender: "Render in Reader",
+                readerStatus: "Reader Active",
+                fontSize: "Font:",
+                btnPrint: "Print",
+                all: "All Regions",
+                bookmarked: "Bookmarks",
+                visitOutlet: "Visit Outlet",
+                settingsTitle: "Application Settings",
+                agentHoverHint: "Click any text block to translate",
+                toastReloaded: "Directory reloaded successfully.",
+                toastBookmarked: "Added to bookmarks.",
+                toastUnbookmarked: "Removed from bookmarks.",
+                footerStorageNotice: "Bookmarked directories and language choices are preserved locally on your device."
+            },
+            fr: {
+                mottoText: "Répertoire national du journalisme et des médias mondiaux",
+                reload: "Rafraîchir",
+                export: "Exporter",
+                import: "Importer",
+                heroBadge: "Dépôt officiel de la presse bilingue",
+                heroTitle: "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
+                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Mettez en favoris vos chaînes de presse principales ou importez des articles dans notre lecteur bilingue.",
+                btnBrowseDir: "Explorer le répertoire",
+                btnOpenReader: "Outil de lecture d'articles",
+                dirHeading: "Répertoire des médias mondiaux",
+                dirSubheading: "Classé par région, pays et langue officielle de diffusion.",
+                totalSources: "Total des médias :",
+                bookmarkedCount: "Favoris :",
+                searchPlaceholder: "Rechercher un média, un pays, une région...",
+                noResultsTitle: "Aucun média trouvé",
+                noResultsDesc: "Essayez de modifier vos mots-clés ou de réinitialiser les filtres de région.",
+                resetFilters: "Réinitialiser les filtres",
+                readerHeading: "Espace de lecture d'articles",
+                readerSubheading: "Collez l'URL d'un article, analysez du texte brut ou chargez un échantillon d'archives canadiennes.",
+                btnLoadSample: "Charger un article exemple",
+                inputTitlePlaceholder: "Titre de l'article",
+                inputSourcePlaceholder: "Source (ex. Radio-Canada, Le Devoir)",
+                inputBodyPlaceholder: "Collez le texte de l'article ici...",
+                btnRender: "Afficher dans le lecteur",
+                readerStatus: "Lecteur Actif",
+                fontSize: "Taille :",
+                btnPrint: "Imprimer",
+                all: "Toutes les régions",
+                bookmarked: "Mes Favoris",
+                visitOutlet: "Visiter le site",
+                settingsTitle: "Paramètres de l'application",
+                agentHoverHint: "Cliquer sur un texte pour traduire",
+                toastReloaded: "Répertoire rafraîchi avec succès.",
+                toastBookmarked: "Ajouté aux favoris.",
+                toastUnbookmarked: "Retiré des favoris.",
+                footerStorageNotice: "Les favoris et préférences linguistiques sont conservés localement sur votre appareil."
+            }
+        };
+
+        const sampleArticles = {
+            en: {
+                headline: "Canada Expands National Digital Archives Initiative to Preserve Global Journalism",
+                source: "CBC NEWS ARCHIVES",
+                time: "3 min read",
+                body: [
+                    "OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.",
+                    "The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.",
+                    "By deploying modern web archival formats, researchers can index and analyze major editorial headlines in real-time across language barriers."
+                ]
+            },
+            fr: {
+                headline: "Le Canada élargit son réseau d'archives numériques pour préserver la presse bilingue",
+                source: "ICI RADIO-CANADA INFO",
+                time: "3 min de lecture",
+                body: [
+                    "OTTAWA — Bibliothèque et Archives Canada a annoncé un élargissement majeur de son réseau de préservation de la presse numérique, afin de garantir l'accès à un journalisme indépendant francophone et anglophone.",
+                    "Cette initiative offre aux centres de documentation publics des accès sécurisés aux grands réseaux d'information locaux et internationaux, préservant les rapports historiques et culturels pour les recherches universitaires.",
+                    "Grâce à des outils d'indexation modernes, les citoyens peuvent consulter des synthèses de presse en temps réel avec des fonctions de traduction intégrées."
+                ]
+            }
+        };
+
+        const mediaOutlets = [
+            { id: "cbc-news", name: "CBC News", region: "Canada", country: "Canada", language: "EN", description: "Canada's national public broadcaster delivering national and regional breaking news.", url: "https://www.cbc.ca/news", iconClass: "fa-solid fa-radio" },
+            { id: "radio-canada", name: "ICI Radio-Canada", region: "Canada", country: "Canada", language: "FR", description: "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.", url: "https://ici.radio-canada.ca", iconClass: "fa-solid fa-tower-broadcast" },
+            { id: "globe-and-mail", name: "The Globe and Mail", region: "Canada", country: "Canada", language: "EN", description: "Canada's newspaper of record covering national business, politics, and culture.", url: "https://www.theglobeandmail.com", iconClass: "fa-solid fa-newspaper" },
+            { id: "le-devoir", name: "Le Devoir", region: "Canada", country: "Canada", language: "FR", description: "Journal indépendant québécois de référence axé sur la politique et les enjeux de société.", url: "https://www.ledevoir.com", iconClass: "fa-solid fa-feather-pointed" },
+            { id: "la-presse", name: "La Presse", region: "Canada", country: "Canada", language: "FR", description: "Grand quotidien d'information numérique francophone basé à Montréal.", url: "https://www.lapresse.ca", iconClass: "fa-solid fa-laptop-code" },
+            { id: "national-post", name: "National Post", region: "Canada", country: "Canada", language: "EN", description: "Canadian English-language conservative daily commentary and national headlines.", url: "https://nationalpost.com", iconClass: "fa-solid fa-map-pin" },
+            { id: "nyt", name: "The New York Times", region: "United States", country: "United States", language: "EN", description: "Prominent American daily newspaper providing global reporting and investigation.", url: "https://www.nytimes.com", iconClass: "fa-solid fa-building-columns" },
+            { id: "washington-post", name: "The Washington Post", region: "United States", country: "United States", language: "EN", description: "Major national daily focusing on American politics and federal government analysis.", url: "https://www.washingtonpost.com", iconClass: "fa-solid fa-landmark-flag" },
+            { id: "npr", name: "NPR News", region: "United States", country: "United States", language: "EN", description: "Non-profit public broadcasting audio and news network in the USA.", url: "https://www.npr.org", iconClass: "fa-solid fa-podcast" },
+            { id: "bbc-news", name: "BBC News", region: "Europe", country: "United Kingdom", language: "EN", description: "Public service broadcaster delivering extensive world news coverage.", url: "https://www.bbc.com/news", iconClass: "fa-solid fa-globe" },
+            { id: "le-monde", name: "Le Monde", region: "Europe", country: "France", language: "FR", description: "Journal quotidien français d'information générale de premier plan.", url: "https://www.lemonde.fr", iconClass: "fa-solid fa-book-journal-whills" },
+            { id: "france24", name: "France 24", region: "Europe", country: "France", language: "Multi", description: "Chaîne d'information internationale offrant des diffusions en français et en anglais.", url: "https://www.france24.com", iconClass: "fa-solid fa-tv" },
+            { id: "the-guardian", name: "The Guardian", region: "Europe", country: "United Kingdom", language: "EN", description: "Independent British newspaper covering global environmental and social affairs.", url: "https://www.theguardian.com", iconClass: "fa-solid fa-pen-nib" },
+            { id: "al-jazeera", name: "Al Jazeera English", region: "International", country: "Qatar / Global", language: "EN", description: "International news network offering Middle Eastern and global perspectives.", url: "https://www.aljazeera.com", iconClass: "fa-solid fa-satellite-dish" },
+            { id: "reuters", name: "Reuters", region: "International", country: "Global Wire", language: "EN", description: "Global news organization providing real-time financial and wire reporting.", url: "https://www.reuters.com", iconClass: "fa-solid fa-chart-line" }
+        ];
+
+        /* ==========================================================================
+           2. STATE MANAGEMENT & INITIALIZATION
+           ========================================================================== */
+
+        let currentLang = localStorage.getItem('archives_lang') || 'en';
+        let currentRegion = 'All';
+        let searchQuery = '';
+        let readerFontSize = parseInt(localStorage.getItem('archives_font_size')) || 16;
+        let activeBookmarks = JSON.parse(localStorage.getItem('archives_bookmarks') || '[]');
+        let isAgentActive = false;
+        let agentTargetLang = 'FR';
+        let currentTargetElement = null;
+        let originalClickedText = "";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            updateI18nTexts();
+            renderRegionFilters();
+            renderDirectory();
+            updateBookmarkCounts();
+            renderBookmarksDrawer();
+            updateReaderFontSizeDisplay();
+        });
+
+        /* ==========================================================================
+           3. UI FEEDBACK & NOTIFICATION SYSTEM
+           ========================================================================== */
+
+        function showToast(messageKeyOrText) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            
+            const message = i18n[currentLang][messageKeyOrText] || messageKeyOrText;
+            toastMsg.textContent = message;
+
+            toast.classList.remove('translate-y-[-100%]', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-100%]', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        /* ==========================================================================
+           4. THEME & LANGUAGE CONTROLLERS
+           ========================================================================== */
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('archives_theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-sm text-amber-400';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-sm';
+            }
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('archives_theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-sm text-amber-400' : 'fa-solid fa-moon text-sm';
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'fr' : 'en';
+            localStorage.setItem('archives_lang', currentLang);
+            document.getElementById('langDisplay').textContent = currentLang.toUpperCase();
+            updateI18nTexts();
+            renderRegionFilters();
+            renderDirectory();
+            renderBookmarksDrawer();
+        }
+
+        function updateI18nTexts() {
+            const langData = i18n[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (langData[key]) {
+                    elem.textContent = langData[key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-placeholder');
+                if (langData[key]) {
+                    elem.placeholder = langData[key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-title]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n-title');
+                if (langData[key]) {
+                    elem.title = langData[key];
+                }
+            });
+
+            document.getElementById('langDisplay').textContent = currentLang === 'en' ? 'FR' : 'EN';
+        }
+
+        /* ==========================================================================
+           5. DIRECTORY & FILTERING LOGIC
+           ========================================================================== */
+
+        function renderRegionFilters() {
+            const container = document.getElementById('region-filter-buttons');
+            const regions = ['All', 'Canada', 'United States', 'Europe', 'International', 'Bookmarked'];
+            
+            container.innerHTML = regions.map(reg => {
+                let label = reg;
+                if (reg === 'All') label = i18n[currentLang].all;
+                if (reg === 'Bookmarked') label = i18n[currentLang].bookmarked;
+
+                const isActive = currentRegion === reg;
+                const activeClass = isActive 
+                    ? 'bg-navy-900 text-white dark:bg-maple-600 dark:text-white shadow-sm' 
+                    : 'bg-white dark:bg-navy-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-navy-700 hover:bg-slate-100 dark:hover:bg-navy-700';
+
+                return `
+                    <button onclick="filterByRegion('${reg}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${activeClass}">
+                        ${reg === 'Bookmarked' ? '<i class="fa-solid fa-bookmark text-maple-500 mr-1"></i>' : ''}
+                        ${label}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function filterByRegion(region) {
+            currentRegion = region;
+            renderRegionFilters();
+            renderDirectory();
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('search-input');
+            searchQuery = input.value.trim().toLowerCase();
+            
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderDirectory();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            searchQuery = '';
+            document.getElementById('clear-search-btn').classList.add('hidden');
+            renderDirectory();
+        }
+
+        function resetFilters() {
+            currentRegion = 'All';
+            clearSearch();
+            renderRegionFilters();
+        }
+
+        function renderDirectory() {
+            const grid = document.getElementById('directory-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            let filtered = mediaOutlets.filter(outlet => {
+                const matchesRegion = (currentRegion === 'All') ||
+                    (currentRegion === 'Bookmarked' && activeBookmarks.includes(outlet.id)) ||
+                    (outlet.region === currentRegion);
+
+                const matchesSearch = !searchQuery || 
+                    outlet.name.toLowerCase().includes(searchQuery) ||
+                    outlet.country.toLowerCase().includes(searchQuery) ||
+                    outlet.region.toLowerCase().includes(searchQuery) ||
+                    outlet.description.toLowerCase().includes(searchQuery);
+
+                return matchesRegion && matchesSearch;
+            });
+
+            document.getElementById('total-sources-count').textContent = mediaOutlets.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(outlet => {
+                const isSaved = activeBookmarks.includes(outlet.id);
+                const bookmarkClass = isSaved ? 'text-maple-600 dark:text-maple-500' : 'text-slate-300 dark:text-slate-600 hover:text-maple-500';
+
+                return `
+                    <div class="bg-white dark:bg-navy-800 rounded-2xl p-5 border border-slate-200 dark:border-navy-700 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group">
+                        <div class="space-y-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-center text-navy-800 dark:text-cyan-400 group-hover:scale-105 transition-transform">
+                                        <i class="${outlet.iconClass} text-base"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-navy-900 dark:text-white text-sm leading-tight">${outlet.name}</h4>
+                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">${outlet.country} • ${outlet.language}</span>
+                                    </div>
+                                </div>
+
+                                <button onclick="toggleBookmark('${outlet.id}')" title="Bookmark Outlet" class="p-1.5 transition">
+                                    <i class="fa-solid fa-bookmark text-base ${bookmarkClass}"></i>
+                                </button>
+                            </div>
+
+                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                ${outlet.description}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-navy-700/60 text-xs">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-navy-900 text-slate-600 dark:text-slate-400">
+                                ${outlet.region}
+                            </span>
+
+                            <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="text-navy-700 dark:text-cyan-400 hover:underline font-bold flex items-center gap-1">
+                                <span>${i18n[currentLang].visitOutlet}</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (isAgentActive) {
+                attachAgentListeners();
+            }
+        }
+
+        function reloadDirectory() {
+            const icon = document.getElementById('reloadIcon');
+            icon.classList.add('animate-spin');
+            setTimeout(() => {
+                icon.classList.remove('animate-spin');
+                renderDirectory();
+                showToast('toastReloaded');
+            }, 500);
+        }
+
+        /* ==========================================================================
+           6. BOOKMARK MANAGEMENT SYSTEM
+           ========================================================================== */
+
+        function toggleBookmark(outletId) {
+            const index = activeBookmarks.indexOf(outletId);
+            if (index > -1) {
+                activeBookmarks.splice(index, 1);
+                showToast('toastUnbookmarked');
+            } else {
+                activeBookmarks.push(outletId);
+                showToast('toastBookmarked');
+            }
+
+            localStorage.setItem('archives_bookmarks', JSON.stringify(activeBookmarks));
+            updateBookmarkCounts();
+            renderDirectory();
+            renderBookmarksDrawer();
+        }
+
+        function updateBookmarkCounts() {
+            const count = activeBookmarks.length;
+            document.getElementById('bookmarkBadge').textContent = count;
+            document.getElementById('bookmarked-count').textContent = count;
+        }
+
+        function renderBookmarksDrawer() {
+            const drawerBody = document.getElementById('bookmarksDrawerBody');
+            
+            if (activeBookmarks.length === 0) {
+                drawerBody.innerHTML = `
+                    <div class="text-center py-10 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-bookmark text-2xl text-slate-300 dark:text-navy-700"></i>
+                        <p class="text-xs">No bookmarks saved yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const savedOutlets = mediaOutlets.filter(o => activeBookmarks.includes(o.id));
+
+            drawerBody.innerHTML = savedOutlets.map(outlet => `
+                <div class="p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 flex items-center justify-between gap-2">
+                    <div class="space-y-0.5">
+                        <h5 class="font-bold text-xs text-navy-900 dark:text-slate-100">${outlet.name}</h5>
+                        <p class="text-[10px] text-slate-400">${outlet.country} (${outlet.language})</p>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a href="${outlet.url}" target="_blank" class="p-1 text-xs text-navy-700 dark:text-cyan-400 hover:underline">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                        <button onclick="toggleBookmark('${outlet.id}')" class="p-1 text-xs text-maple-600 hover:text-maple-700">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportBookmarks() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(activeBookmarks, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "archives_de_canada_bookmarks.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importBookmarks(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        activeBookmarks = Array.from(new Set([...activeBookmarks, ...imported]));
+                        localStorage.setItem('archives_bookmarks', JSON.stringify(activeBookmarks));
+                        updateBookmarkCounts();
+                        renderDirectory();
+                        renderBookmarksDrawer();
+                        showToast('Bookmarks imported successfully!');
+                    }
+                } catch (err) {
+                    showToast('Failed to parse bookmarks file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /* ==========================================================================
+           7. DRAWER NAVIGATION CONTROLLERS
+           ========================================================================== */
+
+        function toggleBookmarksDrawer() {
+            const drawer = document.getElementById('bookmarksDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const isHidden = drawer.classList.contains('translate-x-full');
+
+            closeAllDrawers();
+
+            if (isHidden) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        function toggleSettingsDrawer() {
+            const drawer = document.getElementById('settingsDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const isHidden = drawer.classList.contains('translate-x-full');
+
+            closeAllDrawers();
+
+            if (isHidden) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        function closeAllDrawers() {
+            document.getElementById('bookmarksDrawer').classList.add('translate-x-full');
+            document.getElementById('settingsDrawer').classList.add('translate-x-full');
+            document.getElementById('drawerOverlay').classList.add('hidden');
+        }
+
+        /* ==========================================================================
+           8. ARTICLE READER WORKSPACE CONTROLLERS
+           ========================================================================== */
+
+        function loadSampleArticle() {
+            const sample = sampleArticles[currentLang] || sampleArticles.en;
+            document.getElementById('input-headline').value = sample.headline;
+            document.getElementById('input-source').value = sample.source;
+            document.getElementById('input-body').value = sample.body.join('\n\n');
+
+            renderUserArticle();
+        }
+
+        function renderUserArticle() {
+            const headline = document.getElementById('input-headline').value.trim() || sampleArticles.en.headline;
+            const source = document.getElementById('input-source').value.trim() || sampleArticles.en.source;
+            const bodyRaw = document.getElementById('input-body').value.trim();
+
+            document.getElementById('canvas-headline').textContent = headline;
+            document.getElementById('canvas-source').textContent = source.toUpperCase();
+
+            const canvasBody = document.getElementById('canvas-body');
+
+            if (bodyRaw) {
+                const paragraphs = bodyRaw.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+                canvasBody.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+            } else {
+                canvasBody.innerHTML = sampleArticles.en.body.map(p => `<p>${p}</p>`).join('');
+            }
+
+            if (isAgentActive) {
+                attachAgentListeners();
+            }
+        }
+
+        function adjustReaderFont(delta) {
+            readerFontSize = Math.min(24, Math.max(14, readerFontSize + delta));
+            updateReaderFontSizeDisplay();
+        }
+
+        function updateBaseFontSize(val) {
+            readerFontSize = parseInt(val);
+            updateReaderFontSizeDisplay();
+        }
+
+        function updateReaderFontSizeDisplay() {
+            localStorage.setItem('archives_font_size', readerFontSize);
+            document.getElementById('font-size-display').textContent = `${readerFontSize}px`;
+            document.getElementById('settingsFontSizeLabel').textContent = `${readerFontSize}px`;
+            document.getElementById('fontSizeRange').value = readerFontSize;
+
+            const canvasBody = document.getElementById('canvas-body');
+            if (canvasBody) {
+                canvasBody.style.fontSize = `${readerFontSize}px`;
+            }
+        }
+
+        /* ==========================================================================
+           9. ARCHIVES TRANSLATION AGENT CONTROLLERS
+           ========================================================================== */
+
+        const translationDictionary = {
+            FR: {
+                "National Directory of Global Journalism & Media": "Répertoire national du journalisme et des médias mondiaux",
+                "Official Bilingual Press Repository": "Dépôt officiel de la presse bilingue",
+                "Preserving Access to Verified Canadian & Global News Outlets.": "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
+                "Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.": "Explorez un répertoire de médias fiables classés par régions géographiques. Mettez en favoris vos chaînes de presse principales ou importez des articles dans notre lecteur bilingue.",
+                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Le Canada élargit son initiative nationale d'archives numériques pour préserver le journalisme mondial",
+                "OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.": "OTTAWA — Bibliothèque et Archives Canada a annoncé un élargissement majeur de son réseau de préservation de la presse numérique, afin de garantir l'accès à un journalisme indépendant.",
+                "The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.": "Cette initiative offre aux dépôts publics des accès vérifiés aux principaux réseaux journalistiques nationaux et internationaux, préservant les archives sociopolitiques pour la recherche."
+            },
+            ES: {
+                "National Directory of Global Journalism & Media": "Directorio Nacional de Periodismo y Medios Globales",
+                "Official Bilingual Press Repository": "Repositorio Oficial de Prensa Bilingüe",
+                "Preserving Access to Verified Canadian & Global News Outlets.": "Preservando el acceso a medios periodísticos verificados de Canadá y el mundo.",
+                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Canadá amplía su iniciativa de archivos digitales para preservar el periodismo global"
+            },
+            DE: {
+                "National Directory of Global Journalism & Media": "Nationales Verzeichnis für globalen Journalismus & Medien",
+                "Official Bilingual Press Repository": "Offizielles zweisprachiges Pressearchiv",
+                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Kanada erweitert digitale Archiv-Initiative zur Erhaltung des globalen Journalismus"
+            },
+            EN: {
+                "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.": "Canada's French-language public broadcaster delivering local and international news.",
+                "Journal indépendant québécois de référence axé sur la politique et les enjeux de société.": "Independent Quebec newspaper focused on politics and societal affairs."
+            }
+        };
+
+        function toggleAgentMode(enabled) {
+            isAgentActive = enabled;
+            const hud = document.getElementById('translationAgentHUD');
+            const dot = document.getElementById('agentActiveDot');
+
+            if (enabled) {
+                hud.classList.remove('hidden');
+                dot.classList.remove('hidden');
+                attachAgentListeners();
+                showToast('Translation Agent active. Click text blocks.');
+            } else {
+                hud.classList.add('hidden');
+                dot.classList.add('hidden');
+                detachAgentListeners();
+            }
+        }
+
+        function attachAgentListeners() {
+            const targets = document.querySelectorAll('#directory-section p, #directory-section h4, #reader-section p, #reader-section h2');
+            targets.forEach(elem => {
+                elem.classList.add('translation-target-active');
+                elem.removeEventListener('click', handleTextElementClick);
+                elem.addEventListener('click', handleTextElementClick);
+            });
+        }
+
+        function detachAgentListeners() {
+            const targets = document.querySelectorAll('.translation-target-active');
+            targets.forEach(elem => {
+                elem.classList.remove('translation-target-active');
+                elem.removeEventListener('click', handleTextElementClick);
+            });
+        }
+
+        function handleTextElementClick(e) {
+            if (!isAgentActive) return;
+            e.stopPropagation();
+
+            currentTargetElement = this;
+            originalClickedText = this.innerText.trim();
+            if (!originalClickedText) return;
+
+            const laser = document.createElement('div');
+            laser.className = 'scanning-laser';
+            this.style.position = 'relative';
+            this.appendChild(laser);
+
+            const statusText = document.getElementById('agentStatusText');
+            statusText.textContent = "STATUS: TRANSLATING...";
+
+            setTimeout(() => {
+                laser.remove();
+                statusText.textContent = "STATUS: LIVE SCANNING";
+                openTranslationModal(originalClickedText);
+            }, 450);
+        }
+
+        function openTranslationModal(sourceText) {
+            const modal = document.getElementById('translationModal');
+            const origTextElem = document.getElementById('originalModalText');
+            const langSelect = document.getElementById('modalLangSelect');
+
+            origTextElem.textContent = sourceText;
+            if (langSelect) langSelect.value = agentTargetLang;
+
+            updateModalTranslationOutput(sourceText);
+            modal.classList.remove('hidden');
+        }
+
+        function updateModalTranslationOutput(sourceText) {
+            const transTextElem = document.getElementById('translatedModalText');
+            const output = translateText(sourceText, agentTargetLang);
+            transTextElem.textContent = output;
+        }
+
+        function translateText(text, targetLang) {
+            const cleanText = text.trim();
+            if (!cleanText) return "";
+
+            if (translationDictionary[targetLang] && translationDictionary[targetLang][cleanText]) {
+                return translationDictionary[targetLang][cleanText];
+            }
+
+            const vocabulary = {
+                FR: { "Canada": "le Canada", "Canadian": "canadien", "Press": "Presse", "News": "Actualités", "Archives": "Archives", "Digital": "Numérique" },
+                ES: { "Canada": "Canadá", "Canadian": "canadiense", "Press": "Prensa", "News": "Noticias", "Archives": "Archivos", "Digital": "Digital" },
+                DE: { "Canada": "Kanada", "Canadian": "kanadisch", "Press": "Presse", "News": "Nachrichten", "Archives": "Archiv", "Digital": "Digital" },
+                EN: { "Nouvelles": "News", "Presse": "Press", "Numérique": "Digital" }
+            };
+
+            const dict = vocabulary[targetLang] || vocabulary.FR;
+            let translated = cleanText;
+
+            Object.keys(dict).forEach(key => {
+                const regex = new RegExp(`\\b${key}\\b`, 'gi');
+                translated = translated.replace(regex, dict[key]);
+            });
+
+            const prefixes = {
+                FR: "[Traduction Agent - FR] ",
+                ES: "[Traducción Agente - ES] ",
+                DE: "[Agent-Übersetzung - DE] ",
+                EN: "[Agent Translation - EN] "
+            };
+
+            return (prefixes[targetLang] || "[Translated] ") + translated;
+        }
+
+        function changeAgentTargetLang(val) {
+            agentTargetLang = val;
+            const select = document.getElementById('modalLangSelect');
+            if (select) select.value = val;
+        }
+
+        function changeModalTargetLang(val) {
+            agentTargetLang = val;
+            const select = document.getElementById('agentTargetLangSelect');
+            if (select) select.value = val;
+            if (originalClickedText) {
+                updateModalTranslationOutput(originalClickedText);
+            }
+        }
+
+        function applyTranslationToPage() {
+            if (currentTargetElement && originalClickedText) {
+                const translated = translateText(originalClickedText, agentTargetLang);
+                currentTargetElement.innerText = translated;
+                closeTranslationModal();
+                showToast('Translation applied to element');
+            }
+        }
+
+        function closeTranslationModal() {
+            document.getElementById('translationModal').classList.add('hidden');
+        }
+
+        function toggleAgentHUDMinimize() {
+            const content = document.getElementById('hudExpandedContent');
+            const icon = document.getElementById('hudMinIcon');
+            content.classList.toggle('hidden');
+            icon.classList.toggle('fa-minus');
+            icon.classList.toggle('fa-plus');
+        }
+    </script>
+</body>
+</html>
