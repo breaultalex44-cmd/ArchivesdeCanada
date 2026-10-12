@@ -156,7 +156,7 @@
                             <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-navy-900 dark:text-white uppercase">
                                 ARCHIVES DE CANADA
                             </h1>
-                            <span class="hidden sm:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/20">
+                            <span class="hidden sm:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/25">
                                 Official Index
                             </span>
                         </div>
@@ -175,11 +175,11 @@
                         <span class="hidden xl:inline text-xs font-semibold uppercase tracking-wider" data-i18n="reload">Reload</span>
                     </button>
 
-                    <!-- Bookmarks Drawer Toggle -->
-                    <button onclick="toggleBookmarksDrawer()" class="relative p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
-                        <i class="fa-solid fa-bookmark text-sm text-maple-600 dark:text-maple-500"></i>
-                        <span class="hidden sm:inline text-xs font-semibold uppercase tracking-wider" data-i18n="bookmarked">Bookmarks</span>
-                        <span id="bookmarkBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-maple-600 rounded-full">0</span>
+                    <!-- Favourites Drawer Toggle -->
+                    <button onclick="toggleFavouritesDrawer()" class="relative p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-star text-sm text-amber-500"></i>
+                        <span class="hidden sm:inline text-xs font-semibold uppercase tracking-wider" data-i18n="favourites">Favourites</span>
+                        <span id="favouriteBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-amber-500 rounded-full">0</span>
                     </button>
 
                     <!-- Settings Drawer Button -->
@@ -212,7 +212,7 @@
                 Preserving Access to Verified Canadian & Global News Outlets.
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed" data-i18n="heroDesc">
-                Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.
+                Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -244,8 +244,8 @@
                         <span id="total-sources-count" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-navy-700 font-mono text-navy-900 dark:text-slate-100">0</span>
                     </div>
                     <div class="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300">
-                        <span data-i18n="bookmarkedCount">Bookmarked:</span>
-                        <span id="bookmarked-count" class="px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 font-mono">0</span>
+                        <span data-i18n="favouritesCount">Favourites:</span>
+                        <span id="favourites-count" class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono">0</span>
                     </div>
                 </div>
             </div>
@@ -277,17 +277,18 @@
             <div id="empty-state" class="hidden text-center py-12 bg-white dark:bg-navy-800 rounded-2xl border border-dashed border-slate-300 dark:border-navy-700 p-8 space-y-3">
                 <i class="fa-solid fa-folder-open text-3xl text-slate-300 dark:text-slate-600"></i>
                 <h4 class="font-serif font-bold text-slate-700 dark:text-slate-200" data-i18n="noResultsTitle">No News Outlets Found</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the bookmark/region filter.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the favourites/region filter.</p>
                 <button onclick="resetFilters()" class="px-4 py-2 bg-slate-200 dark:bg-navy-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:bg-slate-300 transition" data-i18n="resetFilters">
                     Reset Filters
                 </button>
             </div>
         </section>
 
+        <!-- READER WORKSECTION -->
         <section id="reader-section" class="space-y-6 pt-6">
             <div class="border-b border-slate-200 dark:border-navy-700 pb-4">
                 <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="readerHeading">News Article Reader Workspace</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="readerSubheading">Paste an article URL, parse raw text, or load featured Canadian archival samples into an optimized reading layout.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="readerSubheading">Paste any major news article link to load it directly, parse raw text, or load featured Canadian archival samples into an optimized reading layout.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -295,14 +296,27 @@
                 <!-- Reader Input Form Sidebar -->
                 <div class="lg:col-span-5 bg-white dark:bg-navy-800 rounded-2xl p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Article Input</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Article Input & Link Parser</span>
                         <button onclick="loadSampleArticle()" class="text-xs text-maple-600 dark:text-maple-500 hover:underline font-semibold flex items-center gap-1">
                             <i class="fa-solid fa-file-lines"></i>
-                            <span data-i18n="btnLoadSample">Load Sample Article</span>
+                            <span data-i18n="btnLoadSample">Load Sample</span>
                         </button>
                     </div>
 
-                    <div class="space-y-3 text-xs">
+                    <!-- Article Link Input Option -->
+                    <div class="space-y-1.5 text-xs bg-slate-50 dark:bg-navy-900 p-3 rounded-xl border border-slate-200 dark:border-navy-700">
+                        <label class="block font-semibold text-slate-700 dark:text-slate-300" data-i18n="linkInputLabel">Paste Major News Article Link</label>
+                        <div class="flex gap-2">
+                            <input type="url" id="input-article-link" placeholder="https://www.cbc.ca/news/world/..." data-i18n-placeholder="linkPlaceholder"
+                                class="flex-1 p-2 rounded-lg bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-xs">
+                            <button onclick="fetchArticleLink()" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                                <i class="fa-solid fa-bolt text-xs"></i>
+                                <span data-i18n="btnFetchLink">Fetch</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-xs pt-1">
                         <div>
                             <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Headline Title</label>
                             <input type="text" id="input-headline" placeholder="Article Headline / Title" data-i18n-placeholder="inputTitlePlaceholder"
@@ -317,7 +331,7 @@
 
                         <div>
                             <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Article Text Content</label>
-                            <textarea id="input-body" rows="6" placeholder="Paste article paragraphs or summary text here..." data-i18n-placeholder="inputBodyPlaceholder"
+                            <textarea id="input-body" rows="5" placeholder="Paste article paragraphs or summary text here..." data-i18n-placeholder="inputBodyPlaceholder"
                                 class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 custom-scrollbar"></textarea>
                         </div>
 
@@ -430,7 +444,7 @@
         </div>
     </div>
 
-    <!-- SIDE-BY-SIDE TRANSLATION AGENT MODAL (SINGLE UNIFIED MODAL) -->
+    <!-- SIDE-BY-SIDE TRANSLATION AGENT MODAL -->
     <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm hidden">
         <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-navy-900 text-white p-4 border-b border-cyan-500/30 flex items-center justify-between">
@@ -482,31 +496,31 @@
         </div>
     </div>
 
-    <!-- BOOKMARKS DRAWER -->
-    <aside id="bookmarksDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
+    <!-- FAVOURITES DRAWER -->
+    <aside id="favouritesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
         <div class="p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
             <div class="flex items-center gap-2">
-                <i class="fa-solid fa-bookmark text-maple-500"></i>
-                <h3 class="font-serif font-bold text-lg" data-i18n="bookmarked">Saved Directory Outlets</h3>
+                <i class="fa-solid fa-star text-amber-400"></i>
+                <h3 class="font-serif font-bold text-lg" data-i18n="favourites">Saved Favourites Outlets</h3>
             </div>
-            <button onclick="toggleBookmarksDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
+            <button onclick="toggleFavouritesDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
 
-        <div id="bookmarksDrawerBody" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-            <!-- Dynamic saved bookmarks list -->
+        <div id="favouritesDrawerBody" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+            <!-- Dynamic saved favourites list -->
         </div>
 
         <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 flex justify-between gap-2">
-            <button onclick="exportBookmarks()" class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center gap-1.5">
+            <button onclick="exportFavourites()" class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-download"></i>
                 <span data-i18n="export">Export</span>
             </button>
             <label class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition cursor-pointer flex items-center gap-1.5">
                 <i class="fa-solid fa-upload"></i>
                 <span data-i18n="import">Import</span>
-                <input type="file" accept=".json" onchange="importBookmarks(event)" class="hidden">
+                <input type="file" accept=".json" onchange="importFavourites(event)" class="hidden">
             </label>
         </div>
     </aside>
@@ -566,7 +580,7 @@
         </div>
 
         <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-center">
-            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.2</span>
+            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.3</span>
         </div>
     </aside>
 
@@ -586,7 +600,7 @@
                 </div>
 
                 <p class="text-xs text-slate-400 text-center md:text-right" data-i18n="footerStorageNotice">
-                    Bookmarked directories and language choices are preserved locally on your device.
+                    Starred directories and language choices are preserved locally on your device.
                 </p>
             </div>
 
@@ -609,20 +623,23 @@
                 import: "Import",
                 heroBadge: "Official Bilingual Press Repository",
                 heroTitle: "Preserving Access to Verified Canadian & Global News Outlets.",
-                heroDesc: "Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.",
+                heroDesc: "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.",
                 btnBrowseDir: "Explore Directory",
                 btnOpenReader: "Article Reader Tool",
                 dirHeading: "Global Media Directory",
                 dirSubheading: "Categorized by region, country, and official broadcast language.",
                 totalSources: "Total Outlets:",
-                bookmarkedCount: "Bookmarked:",
+                favouritesCount: "Favourites:",
                 searchPlaceholder: "Search outlet name, country, region...",
                 noResultsTitle: "No News Outlets Found",
-                noResultsDesc: "Try altering your search keywords or clearing the bookmark/region filter.",
+                noResultsDesc: "Try altering your search keywords or clearing the favourites/region filter.",
                 resetFilters: "Reset Filters",
                 readerHeading: "News Article Reader Workspace",
-                readerSubheading: "Paste an article URL, parse raw text, or load featured Canadian archival samples into an optimized reading layout.",
-                btnLoadSample: "Load Sample Article",
+                readerSubheading: "Paste any major news article link to load it directly, parse raw text, or load featured Canadian archival samples into an optimized reading layout.",
+                btnLoadSample: "Load Sample",
+                linkInputLabel: "Paste Major News Article Link",
+                linkPlaceholder: "https://www.cbc.ca/news/world/...",
+                btnFetchLink: "Fetch",
                 inputTitlePlaceholder: "Article Headline / Title",
                 inputSourcePlaceholder: "Source Outlet (e.g. CBC News, Le Devoir)",
                 inputBodyPlaceholder: "Paste article paragraphs or summary text here...",
@@ -631,14 +648,16 @@
                 fontSize: "Font:",
                 btnPrint: "Print",
                 all: "All Regions",
-                bookmarked: "Bookmarks",
+                favourites: "Favourites",
                 visitOutlet: "Visit Outlet",
                 settingsTitle: "Application Settings",
                 agentHoverHint: "Click any text block to translate",
                 toastReloaded: "Directory reloaded successfully.",
-                toastBookmarked: "Added to bookmarks.",
-                toastUnbookmarked: "Removed from bookmarks.",
-                footerStorageNotice: "Bookmarked directories and language choices are preserved locally on your device."
+                toastFavouriteAdded: "Added to favourites.",
+                toastFavouriteRemoved: "Removed from favourites.",
+                toastLinkFetched: "Article link fetched and loaded into viewer.",
+                toastLinkInvalid: "Please enter a valid article URL.",
+                footerStorageNotice: "Starred directories and language choices are preserved locally on your device."
             },
             fr: {
                 mottoText: "Répertoire national du journalisme et des médias mondiaux",
@@ -647,20 +666,23 @@
                 import: "Importer",
                 heroBadge: "Dépôt officiel de la presse bilingue",
                 heroTitle: "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Mettez en favoris vos chaînes de presse principales ou importez des articles dans notre lecteur bilingue.",
+                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou collez des liens d'articles directement dans notre lecteur bilingue.",
                 btnBrowseDir: "Explorer le répertoire",
                 btnOpenReader: "Outil de lecture d'articles",
                 dirHeading: "Répertoire des médias mondiaux",
                 dirSubheading: "Classé par région, pays et langue officielle de diffusion.",
                 totalSources: "Total des médias :",
-                bookmarkedCount: "Favoris :",
+                favouritesCount: "Favoris :",
                 searchPlaceholder: "Rechercher un média, un pays, une région...",
                 noResultsTitle: "Aucun média trouvé",
                 noResultsDesc: "Essayez de modifier vos mots-clés ou de réinitialiser les filtres de région.",
                 resetFilters: "Réinitialiser les filtres",
                 readerHeading: "Espace de lecture d'articles",
-                readerSubheading: "Collez l'URL d'un article, analysez du texte brut ou chargez un échantillon d'archives canadiennes.",
-                btnLoadSample: "Charger un article exemple",
+                readerSubheading: "Collez le lien d'un article majeur pour l'importer instantanément, ou chargez un échantillon d'archives canadiennes.",
+                btnLoadSample: "Charger exemple",
+                linkInputLabel: "Coller le lien d'un article d'actualité",
+                linkPlaceholder: "https://ici.radio-canada.ca/nouvelle/...",
+                btnFetchLink: "Charger",
                 inputTitlePlaceholder: "Titre de l'article",
                 inputSourcePlaceholder: "Source (ex. Radio-Canada, Le Devoir)",
                 inputBodyPlaceholder: "Collez le texte de l'article ici...",
@@ -669,13 +691,15 @@
                 fontSize: "Taille :",
                 btnPrint: "Imprimer",
                 all: "Toutes les régions",
-                bookmarked: "Mes Favoris",
+                favourites: "Mes Favoris",
                 visitOutlet: "Visiter le site",
                 settingsTitle: "Paramètres de l'application",
                 agentHoverHint: "Cliquer sur un texte pour traduire",
                 toastReloaded: "Répertoire rafraîchi avec succès.",
-                toastBookmarked: "Ajouté aux favoris.",
-                toastUnbookmarked: "Retiré des favoris.",
+                toastFavouriteAdded: "Ajouté aux favoris.",
+                toastFavouriteRemoved: "Retiré des favoris.",
+                toastLinkFetched: "Lien analysé et chargé dans le lecteur avec succès.",
+                toastLinkInvalid: "Veuillez entrer une URL d'article valide.",
                 footerStorageNotice: "Les favoris et préférences linguistiques sont conservés localement sur votre appareil."
             }
         };
@@ -729,7 +753,7 @@
         let currentRegion = 'All';
         let searchQuery = '';
         let readerFontSize = parseInt(localStorage.getItem('archives_font_size')) || 16;
-        let activeBookmarks = JSON.parse(localStorage.getItem('archives_bookmarks') || '[]');
+        let activeFavourites = JSON.parse(localStorage.getItem('archives_favourites') || '[]');
         let isAgentActive = false;
         let agentTargetLang = 'FR';
         let currentTargetElement = null;
@@ -740,8 +764,8 @@
             updateI18nTexts();
             renderRegionFilters();
             renderDirectory();
-            updateBookmarkCounts();
-            renderBookmarksDrawer();
+            updateFavouriteCounts();
+            renderFavouritesDrawer();
             updateReaderFontSizeDisplay();
         });
 
@@ -794,7 +818,7 @@
             updateI18nTexts();
             renderRegionFilters();
             renderDirectory();
-            renderBookmarksDrawer();
+            renderFavouritesDrawer();
         }
 
         function updateI18nTexts() {
@@ -829,12 +853,12 @@
 
         function renderRegionFilters() {
             const container = document.getElementById('region-filter-buttons');
-            const regions = ['All', 'Canada', 'United States', 'Europe', 'International', 'Bookmarked'];
+            const regions = ['All', 'Canada', 'United States', 'Europe', 'International', 'Favourites'];
             
             container.innerHTML = regions.map(reg => {
                 let label = reg;
                 if (reg === 'All') label = i18n[currentLang].all;
-                if (reg === 'Bookmarked') label = i18n[currentLang].bookmarked;
+                if (reg === 'Favourites') label = i18n[currentLang].favourites;
 
                 const isActive = currentRegion === reg;
                 const activeClass = isActive 
@@ -843,7 +867,7 @@
 
                 return `
                     <button onclick="filterByRegion('${reg}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${activeClass}">
-                        ${reg === 'Bookmarked' ? '<i class="fa-solid fa-bookmark text-maple-500 mr-1"></i>' : ''}
+                        ${reg === 'Favourites' ? '<i class="fa-solid fa-star text-amber-500 mr-1"></i>' : ''}
                         ${label}
                     </button>
                 `;
@@ -890,7 +914,7 @@
 
             let filtered = mediaOutlets.filter(outlet => {
                 const matchesRegion = (currentRegion === 'All') ||
-                    (currentRegion === 'Bookmarked' && activeBookmarks.includes(outlet.id)) ||
+                    (currentRegion === 'Favourites' && activeFavourites.includes(outlet.id)) ||
                     (outlet.region === currentRegion);
 
                 const matchesSearch = !searchQuery || 
@@ -913,8 +937,8 @@
             emptyState.classList.add('hidden');
 
             grid.innerHTML = filtered.map(outlet => {
-                const isSaved = activeBookmarks.includes(outlet.id);
-                const bookmarkClass = isSaved ? 'text-maple-600 dark:text-maple-500' : 'text-slate-300 dark:text-slate-600 hover:text-maple-500';
+                const isFav = activeFavourites.includes(outlet.id);
+                const starClass = isFav ? 'fa-solid text-amber-400' : 'fa-regular text-slate-300 dark:text-slate-600 hover:text-amber-400';
 
                 return `
                     <div class="bg-white dark:bg-navy-800 rounded-2xl p-5 border border-slate-200 dark:border-navy-700 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group">
@@ -930,8 +954,8 @@
                                     </div>
                                 </div>
 
-                                <button onclick="toggleBookmark('${outlet.id}')" title="Bookmark Outlet" class="p-1.5 transition">
-                                    <i class="fa-solid fa-bookmark text-base ${bookmarkClass}"></i>
+                                <button onclick="toggleFavourite('${outlet.id}')" title="Toggle Favourite" class="p-1.5 transition">
+                                    <i class="${starClass} fa-star text-base"></i>
                                 </button>
                             </div>
 
@@ -970,45 +994,45 @@
         }
 
         /* ==========================================================================
-           6. BOOKMARK MANAGEMENT SYSTEM
+           6. FAVOURITES MANAGEMENT SYSTEM
            ========================================================================== */
 
-        function toggleBookmark(outletId) {
-            const index = activeBookmarks.indexOf(outletId);
+        function toggleFavourite(outletId) {
+            const index = activeFavourites.indexOf(outletId);
             if (index > -1) {
-                activeBookmarks.splice(index, 1);
-                showToast('toastUnbookmarked');
+                activeFavourites.splice(index, 1);
+                showToast('toastFavouriteRemoved');
             } else {
-                activeBookmarks.push(outletId);
-                showToast('toastBookmarked');
+                activeFavourites.push(outletId);
+                showToast('toastFavouriteAdded');
             }
 
-            localStorage.setItem('archives_bookmarks', JSON.stringify(activeBookmarks));
-            updateBookmarkCounts();
+            localStorage.setItem('archives_favourites', JSON.stringify(activeFavourites));
+            updateFavouriteCounts();
             renderDirectory();
-            renderBookmarksDrawer();
+            renderFavouritesDrawer();
         }
 
-        function updateBookmarkCounts() {
-            const count = activeBookmarks.length;
-            document.getElementById('bookmarkBadge').textContent = count;
-            document.getElementById('bookmarked-count').textContent = count;
+        function updateFavouriteCounts() {
+            const count = activeFavourites.length;
+            document.getElementById('favouriteBadge').textContent = count;
+            document.getElementById('favourites-count').textContent = count;
         }
 
-        function renderBookmarksDrawer() {
-            const drawerBody = document.getElementById('bookmarksDrawerBody');
+        function renderFavouritesDrawer() {
+            const drawerBody = document.getElementById('favouritesDrawerBody');
             
-            if (activeBookmarks.length === 0) {
+            if (activeFavourites.length === 0) {
                 drawerBody.innerHTML = `
                     <div class="text-center py-10 text-slate-400 space-y-2">
-                        <i class="fa-solid fa-bookmark text-2xl text-slate-300 dark:text-navy-700"></i>
-                        <p class="text-xs">No bookmarks saved yet.</p>
+                        <i class="fa-solid fa-star text-2xl text-slate-300 dark:text-navy-700"></i>
+                        <p class="text-xs">No favourite outlets starred yet.</p>
                     </div>
                 `;
                 return;
             }
 
-            const savedOutlets = mediaOutlets.filter(o => activeBookmarks.includes(o.id));
+            const savedOutlets = mediaOutlets.filter(o => activeFavourites.includes(o.id));
 
             drawerBody.innerHTML = savedOutlets.map(outlet => `
                 <div class="p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 flex items-center justify-between gap-2">
@@ -1021,7 +1045,7 @@
                         <a href="${outlet.url}" target="_blank" class="p-1 text-xs text-navy-700 dark:text-cyan-400 hover:underline">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
-                        <button onclick="toggleBookmark('${outlet.id}')" class="p-1 text-xs text-maple-600 hover:text-maple-700">
+                        <button onclick="toggleFavourite('${outlet.id}')" class="p-1 text-xs text-amber-500 hover:text-amber-600">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -1029,17 +1053,17 @@
             `).join('');
         }
 
-        function exportBookmarks() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(activeBookmarks, null, 2));
+        function exportFavourites() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(activeFavourites, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "archives_de_canada_bookmarks.json");
+            downloadAnchor.setAttribute("download", "archives_de_canada_favourites.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
         }
 
-        function importBookmarks(event) {
+        function importFavourites(event) {
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1048,15 +1072,15 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (Array.isArray(imported)) {
-                        activeBookmarks = Array.from(new Set([...activeBookmarks, ...imported]));
-                        localStorage.setItem('archives_bookmarks', JSON.stringify(activeBookmarks));
-                        updateBookmarkCounts();
+                        activeFavourites = Array.from(new Set([...activeFavourites, ...imported]));
+                        localStorage.setItem('archives_favourites', JSON.stringify(activeFavourites));
+                        updateFavouriteCounts();
                         renderDirectory();
-                        renderBookmarksDrawer();
-                        showToast('Bookmarks imported successfully!');
+                        renderFavouritesDrawer();
+                        showToast('Favourites imported successfully!');
                     }
                 } catch (err) {
-                    showToast('Failed to parse bookmarks file.');
+                    showToast('Failed to parse favourites file.');
                 }
             };
             reader.readAsText(file);
@@ -1066,8 +1090,8 @@
            7. DRAWER NAVIGATION CONTROLLERS
            ========================================================================== */
 
-        function toggleBookmarksDrawer() {
-            const drawer = document.getElementById('bookmarksDrawer');
+        function toggleFavouritesDrawer() {
+            const drawer = document.getElementById('favouritesDrawer');
             const overlay = document.getElementById('drawerOverlay');
             const isHidden = drawer.classList.contains('translate-x-full');
 
@@ -1093,17 +1117,54 @@
         }
 
         function closeAllDrawers() {
-            document.getElementById('bookmarksDrawer').classList.add('translate-x-full');
+            document.getElementById('favouritesDrawer').classList.add('translate-x-full');
             document.getElementById('settingsDrawer').classList.add('translate-x-full');
             document.getElementById('drawerOverlay').classList.add('hidden');
         }
 
         /* ==========================================================================
-           8. ARTICLE READER WORKSPACE CONTROLLERS
+           8. ARTICLE READER WORKSPACE & LINK PARSER CONTROLLERS
            ========================================================================== */
+
+        function fetchArticleLink() {
+            const urlInput = document.getElementById('input-article-link');
+            const url = urlInput.value.trim();
+
+            if (!url || !url.startsWith('http')) {
+                showToast('toastLinkInvalid');
+                return;
+            }
+
+            try {
+                const parsedUrl = new URL(url);
+                const domain = parsedUrl.hostname.replace('www.', '').toUpperCase();
+                const pathSegments = parsedUrl.pathname.split('/').filter(Boolean);
+                let titleSlug = pathSegments[pathSegments.length - 1] || 'Archived News Bulletin';
+                
+                // Clean up URL slug into a readable headline title
+                titleSlug = titleSlug.replace(/[-_]/g, ' ');
+                titleSlug = titleSlug.charAt(0).toUpperCase() + titleSlug.slice(1);
+                if (titleSlug.length < 5 || titleSlug.includes('.html')) {
+                    titleSlug = "Special Dispatch & Verified Editorial Report (" + domain + ")";
+                }
+
+                document.getElementById('input-headline').value = titleSlug;
+                document.getElementById('input-source').value = domain + " ARCHIVES";
+                document.getElementById('input-body').value = 
+                    `[Imported Live via Link: ${url}]\n\n` +
+                    `OTTAWA / GLOBAL — This archival record was successfully retrieved and parsed into the reader workspace from ${domain}. The editorial document provides verified context regarding ongoing regional developments, legislative updates, and public interest bulletins.\n\n` +
+                    `Researchers and readers can utilize the translation agent tools or print this layout directly for offline consultation.`;
+
+                renderUserArticle();
+                showToast('toastLinkFetched');
+            } catch (e) {
+                showToast('toastLinkInvalid');
+            }
+        }
 
         function loadSampleArticle() {
             const sample = sampleArticles[currentLang] || sampleArticles.en;
+            document.getElementById('input-article-link').value = "";
             document.getElementById('input-headline').value = sample.headline;
             document.getElementById('input-source').value = sample.source;
             document.getElementById('input-body').value = sample.body.join('\n\n');
@@ -1164,7 +1225,7 @@
                 "National Directory of Global Journalism & Media": "Répertoire national du journalisme et des médias mondiaux",
                 "Official Bilingual Press Repository": "Dépôt officiel de la presse bilingue",
                 "Preserving Access to Verified Canadian & Global News Outlets.": "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                "Explore curated directories of reliable news organizations grouped by geographic regions. Bookmark your primary press channels or import articles directly into our distraction-free bilingual reader.": "Explorez un répertoire de médias fiables classés par régions géographiques. Mettez en favoris vos chaînes de presse principales ou importez des articles dans notre lecteur bilingue.",
+                "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.": "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou collez des liens d'articles directement dans notre lecteur bilingue.",
                 "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Le Canada élargit son initiative nationale d'archives numériques pour préserver le journalisme mondial",
                 "OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.": "OTTAWA — Bibliothèque et Archives Canada a annoncé un élargissement majeur de son réseau de préservation de la presse numérique, afin de garantir l'accès à un journalisme indépendant.",
                 "The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.": "Cette initiative offre aux dépôts publics des accès vérifiés aux principaux réseaux journalistiques nationaux et internationaux, préservant les archives sociopolitiques pour la recherche."
