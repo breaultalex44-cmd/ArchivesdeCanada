@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archives de Canada | Directory & Article Reader</title>
+    <title>Archives de Canada | Directory & World Direct</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -168,13 +168,6 @@
 
                 <!-- Header Actions & Navigation -->
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <!-- Reload Directory Button -->
-                    <button onclick="reloadDirectory()" title="Reload Directory" data-i18n-title="reload"
-                        class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
-                        <i id="reloadIcon" class="fa-solid fa-rotate-right text-sm"></i>
-                        <span class="hidden xl:inline text-xs font-semibold uppercase tracking-wider" data-i18n="reload">Reload</span>
-                    </button>
-
                     <!-- Favourites Drawer Toggle -->
                     <button onclick="toggleFavouritesDrawer()" class="relative p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
                         <i class="fa-solid fa-star text-sm text-amber-500"></i>
@@ -212,7 +205,7 @@
                 Preserving Access to Verified Canadian & Global News Outlets.
             </h2>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed" data-i18n="heroDesc">
-                Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.
+                Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.
             </p>
 
             <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -220,9 +213,9 @@
                     <i class="fa-solid fa-compass"></i>
                     <span data-i18n="btnBrowseDir">Explore Directory</span>
                 </a>
-                <a href="#reader-section" class="px-4 py-2.5 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-navy-700 text-xs font-bold transition shadow-sm flex items-center gap-2">
-                    <i class="fa-solid fa-newspaper text-maple-600 dark:text-maple-500"></i>
-                    <span data-i18n="btnOpenReader">Article Reader Tool</span>
+                <a href="#world-direct-section" class="px-4 py-2.5 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-navy-700 text-xs font-bold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-globe text-cyan-500"></i>
+                    <span data-i18n="btnWorldDirect">World Direct Hub</span>
                 </a>
             </div>
         </div>
@@ -284,108 +277,107 @@
             </div>
         </section>
 
-        <!-- READER WORKSECTION -->
-        <section id="reader-section" class="space-y-6 pt-6">
+        <!-- WORLD DIRECT HUB WORKSPACE -->
+        <section id="world-direct-section" class="space-y-6 pt-6">
             <div class="border-b border-slate-200 dark:border-navy-700 pb-4">
-                <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="readerHeading">News Article Reader Workspace</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="readerSubheading">Paste any major news article link to load it directly, parse raw text, or load featured Canadian archival samples into an optimized reading layout.</p>
+                <div class="flex items-center gap-3">
+                    <span class="px-2.5 py-1 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-mono font-bold uppercase tracking-wider">World Direct</span>
+                    <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="wdHeading">Universal Link & News Execution Hub</h3>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" data-i18n="wdSubheading">Execute and load any news article or global web link instantly in secure interactive frame view or reader extractor mode.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                <!-- Reader Input Form Sidebar -->
-                <div class="lg:col-span-5 bg-white dark:bg-navy-800 rounded-2xl p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Article Input & Link Parser</span>
-                        <button onclick="loadSampleArticle()" class="text-xs text-maple-600 dark:text-maple-500 hover:underline font-semibold flex items-center gap-1">
-                            <i class="fa-solid fa-file-lines"></i>
-                            <span data-i18n="btnLoadSample">Load Sample</span>
-                        </button>
-                    </div>
-
-                    <!-- Article Link Input Option -->
-                    <div class="space-y-1.5 text-xs bg-slate-50 dark:bg-navy-900 p-3 rounded-xl border border-slate-200 dark:border-navy-700">
-                        <label class="block font-semibold text-slate-700 dark:text-slate-300" data-i18n="linkInputLabel">Paste Major News Article Link</label>
+                <!-- Controls & Quick Presets Sidebar -->
+                <div class="lg:col-span-4 bg-white dark:bg-navy-800 rounded-2xl p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-5">
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="wdURLLabel">Target Article / Web URL</label>
                         <div class="flex gap-2">
-                            <input type="url" id="input-article-link" placeholder="https://www.cbc.ca/news/world/..." data-i18n-placeholder="linkPlaceholder"
-                                class="flex-1 p-2 rounded-lg bg-white dark:bg-navy-800 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-cyan-500 text-xs">
-                            <button onclick="fetchArticleLink()" class="px-3 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
-                                <i class="fa-solid fa-bolt text-xs"></i>
-                                <span data-i18n="btnFetchLink">Fetch</span>
+                            <input type="url" id="wd-url-input" placeholder="https://www.bbc.com/news/world..."
+                                class="flex-1 p-2.5 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            <button onclick="executeWorldDirectLink()" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold transition flex items-center gap-1.5 shadow-sm text-xs">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span data-i18n="wdExecuteBtn">Execute</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="space-y-3 text-xs pt-1">
-                        <div>
-                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Headline Title</label>
-                            <input type="text" id="input-headline" placeholder="Article Headline / Title" data-i18n-placeholder="inputTitlePlaceholder"
-                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700">
+                    <!-- Quick Global News Presets -->
+                    <div class="space-y-2">
+                        <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400" data-i18n="wdPresetsLabel">Global Outlets Quick Launch</span>
+                        <div id="wd-presets-container" class="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- Populated dynamically -->
                         </div>
+                    </div>
 
-                        <div>
-                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Source / Outlet</label>
-                            <input type="text" id="input-source" placeholder="Source Outlet (e.g. CBC News, Le Devoir)" data-i18n-placeholder="inputSourcePlaceholder"
-                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700">
+                    <!-- Session Execution History -->
+                    <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-navy-700">
+                        <div class="flex items-center justify-between">
+                            <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400" data-i18n="wdHistoryLabel">Recent Executions</span>
+                            <button onclick="clearWdHistory()" class="text-[10px] text-slate-400 hover:text-maple-500" data-i18n="wdClearHistory">Clear</button>
                         </div>
-
-                        <div>
-                            <label class="block font-semibold mb-1 text-slate-700 dark:text-slate-300">Article Text Content</label>
-                            <textarea id="input-body" rows="5" placeholder="Paste article paragraphs or summary text here..." data-i18n-placeholder="inputBodyPlaceholder"
-                                class="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 custom-scrollbar"></textarea>
+                        <div id="wd-history-list" class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar text-xs">
+                            <p class="text-[11px] text-slate-400 italic">No recent executions recorded.</p>
                         </div>
-
-                        <button onclick="renderUserArticle()" class="w-full py-2.5 bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white font-bold rounded-xl transition shadow-sm flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-book-open"></i>
-                            <span data-i18n="btnRender">Render in Reader</span>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Rendered Reading Canvas -->
-                <div class="lg:col-span-7 bg-white dark:bg-navy-800 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm overflow-hidden flex flex-col min-h-[450px]">
-                    <!-- Canvas Toolbar Header -->
+                <!-- Main Executed Canvas & Frame Viewer -->
+                <div class="lg:col-span-8 bg-white dark:bg-navy-800 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm overflow-hidden flex flex-col min-h-[580px]">
+                    <!-- Canvas Toolbar -->
                     <div class="bg-slate-100 dark:bg-navy-900 px-6 py-3 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between flex-wrap gap-2 text-xs">
                         <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            <span class="font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider" data-i18n="readerStatus">Reader Active</span>
+                            <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span id="wd-status-text" class="font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Ready for Execution</span>
                         </div>
 
-                        <div class="flex items-center gap-3">
-                            <div class="flex items-center gap-1 bg-white dark:bg-navy-800 px-2 py-1 rounded-lg border border-slate-200 dark:border-navy-700">
-                                <span class="text-slate-400 font-semibold" data-i18n="fontSize">Font:</span>
-                                <button onclick="adjustReaderFont(-1)" class="px-1.5 py-0.5 hover:bg-slate-100 dark:hover:bg-navy-700 rounded font-bold">-</button>
-                                <span id="font-size-display" class="font-mono px-1">16px</span>
-                                <button onclick="adjustReaderFont(1)" class="px-1.5 py-0.5 hover:bg-slate-100 dark:hover:bg-navy-700 rounded font-bold">+</button>
+                        <div class="flex items-center gap-2">
+                            <div class="bg-white dark:bg-navy-800 p-0.5 rounded-lg border border-slate-200 dark:border-navy-700 flex text-[11px] font-semibold">
+                                <button onclick="setWdMode('frame')" id="wd-mode-frame-btn" class="px-3 py-1 rounded-md bg-cyan-600 text-white transition">Live Frame</button>
+                                <button onclick="setWdMode('extractor')" id="wd-mode-extractor-btn" class="px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition">Reader Extractor</button>
                             </div>
 
-                            <button onclick="window.print()" class="px-2.5 py-1 bg-white dark:bg-navy-800 hover:bg-slate-100 dark:hover:bg-navy-700 border border-slate-200 dark:border-navy-700 rounded-lg text-slate-700 dark:text-slate-200 font-semibold flex items-center gap-1">
-                                <i class="fa-solid fa-print"></i>
-                                <span data-i18n="btnPrint">Print</span>
-                            </button>
+                            <a id="wd-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab" class="p-2 bg-white dark:bg-navy-800 hover:bg-slate-100 dark:hover:bg-navy-700 border border-slate-200 dark:border-navy-700 rounded-lg text-slate-700 dark:text-slate-200">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Article Render Body -->
-                    <div id="canvas-article-container" class="p-6 sm:p-8 flex-1 space-y-6">
-                        <div class="border-b border-slate-100 dark:border-navy-700 pb-4 space-y-2">
-                            <div class="flex items-center gap-2">
-                                <span id="canvas-source" class="text-xs font-bold uppercase tracking-wider text-maple-600 dark:text-maple-500">CBC NEWS</span>
-                                <span class="text-slate-300 dark:text-slate-600">•</span>
-                                <span id="canvas-time" class="text-xs text-slate-400">3 min read</span>
+                    <!-- Display Area: Iframe or Extractor Canvas -->
+                    <div class="flex-1 relative bg-slate-50 dark:bg-navy-950 flex flex-col">
+                        <!-- Frame View -->
+                        <div id="wd-frame-wrapper" class="absolute inset-0 flex flex-col">
+                            <iframe id="wd-iframe" src="about:blank" class="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+                            <!-- Fallback Notice for X-Frame-Options blocks -->
+                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-navy-900/95 backdrop-blur-md p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
+                                <i class="fa-solid fa-shield-halved text-amber-400 text-3xl"></i>
+                                <h4 class="font-serif font-bold text-base">External Security Policy Notice</h4>
+                                <p class="text-xs text-slate-300 max-w-md leading-relaxed">
+                                    This target domain restricts embedded framing due to security policies. You can launch it securely in a new browser tab or switch to Reader Extractor Mode.
+                                </p>
+                                <div class="flex gap-3 pt-2">
+                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl transition shadow">
+                                        Open in New Tab
+                                    </a>
+                                    <button onclick="setWdMode('extractor')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl transition">
+                                        Switch to Reader Extractor
+                                    </button>
+                                </div>
                             </div>
-                            <h2 id="canvas-headline" class="text-xl sm:text-2xl font-serif font-bold text-navy-900 dark:text-white leading-snug">
-                                Canada Expands National Digital Archives Initiative to Preserve Global Journalism
-                            </h2>
                         </div>
 
-                        <div id="canvas-body" class="font-reader text-slate-800 dark:text-slate-200 space-y-4 leading-relaxed text-base">
-                            <p>
-                                OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.
-                            </p>
-                            <p>
-                                The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.
-                            </p>
+                        <!-- Extractor Reader View -->
+                        <div id="wd-extractor-wrapper" class="hidden absolute inset-0 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar bg-white dark:bg-navy-900">
+                            <div class="border-b border-slate-200 dark:border-navy-700 pb-4 space-y-2">
+                                <span id="wd-ext-domain" class="text-xs font-bold uppercase tracking-wider text-cyan-500">WORLD DIRECT EXTRACTOR</span>
+                                <h2 id="wd-ext-title" class="text-xl sm:text-2xl font-serif font-bold text-navy-900 dark:text-white leading-snug">
+                                    Welcome to World Direct
+                                </h2>
+                            </div>
+                            <div id="wd-ext-body" class="font-reader text-slate-800 dark:text-slate-200 space-y-4 text-base leading-relaxed">
+                                <p>Enter any news article or website URL in the World Direct input bar above and click <strong>Execute</strong> to instantly parse content across global archives.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -446,11 +438,11 @@
 
     <!-- SIDE-BY-SIDE TRANSLATION AGENT MODAL -->
     <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
             <div class="bg-navy-900 text-white p-4 border-b border-cyan-500/30 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
-                    <h3 class="font-serif font-bold text-sm tracking-wide text-cyan-200">Archives Translation Agent • Live Side-By-Side</h3>
+                    <h3 class="font-serif font-bold text-sm tracking-wide text-cyan-200">Archives Translation Agent • Live Side-By-Side & Speech</h3>
                 </div>
                 <button onclick="closeTranslationModal()" class="text-slate-400 hover:text-white p-1">
                     <i class="fa-solid fa-xmark text-base"></i>
@@ -478,6 +470,21 @@
                         </div>
                         <p id="translatedModalText" class="text-slate-900 dark:text-cyan-100 leading-relaxed text-xs sm:text-sm font-medium pt-1"></p>
                     </div>
+                </div>
+
+                <!-- Agent Upgrades: Speech & Copy toolbar -->
+                <div class="flex flex-wrap items-center justify-between gap-3 bg-cyan-950/40 p-3 rounded-xl border border-cyan-500/30 text-xs">
+                    <div class="flex items-center gap-2">
+                        <button onclick="speakTranslatedText()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold flex items-center gap-1.5 transition shadow">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>Read Aloud (TTS)</span>
+                        </button>
+                        <button onclick="copyTranslatedText()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>Copy Translation</span>
+                        </button>
+                    </div>
+                    <span id="agentWordCountStats" class="text-[11px] font-mono text-cyan-300">Words: 0 • Chars: 0</span>
                 </div>
             </div>
 
@@ -553,7 +560,7 @@
                     </label>
                 </div>
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-normal pt-2 border-t border-slate-200 dark:border-navy-800">
-                    Enables an interactive visual scanner. Click on any text block across the directory or reader to inspect and translate live in side-by-side mode.
+                    Enables an interactive visual scanner. Click on any text block across the directory or reader to inspect and translate live in side-by-side mode with Speech synthesis.
                 </p>
             </div>
 
@@ -566,21 +573,10 @@
                     </button>
                 </div>
             </div>
-
-            <div class="space-y-3">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Reader Preferences</h4>
-                <div class="p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 space-y-2">
-                    <div class="flex justify-between items-center text-xs">
-                        <span class="font-medium text-slate-700 dark:text-slate-300">Base Font Size</span>
-                        <span id="settingsFontSizeLabel" class="font-mono text-cyan-500 font-bold">16px</span>
-                    </div>
-                    <input type="range" id="fontSizeRange" min="14" max="24" value="16" oninput="updateBaseFontSize(this.value)" class="w-full accent-cyan-500">
-                </div>
-            </div>
         </div>
 
         <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-center">
-            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.3</span>
+            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.4</span>
         </div>
     </aside>
 
@@ -618,14 +614,13 @@
         const i18n = {
             en: {
                 mottoText: "National Directory of Global Journalism & Media",
-                reload: "Reload",
                 export: "Export",
                 import: "Import",
                 heroBadge: "Official Bilingual Press Repository",
                 heroTitle: "Preserving Access to Verified Canadian & Global News Outlets.",
-                heroDesc: "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.",
+                heroDesc: "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.",
                 btnBrowseDir: "Explore Directory",
-                btnOpenReader: "Article Reader Tool",
+                btnWorldDirect: "World Direct Hub",
                 dirHeading: "Global Media Directory",
                 dirSubheading: "Categorized by region, country, and official broadcast language.",
                 totalSources: "Total Outlets:",
@@ -634,41 +629,33 @@
                 noResultsTitle: "No News Outlets Found",
                 noResultsDesc: "Try altering your search keywords or clearing the favourites/region filter.",
                 resetFilters: "Reset Filters",
-                readerHeading: "News Article Reader Workspace",
-                readerSubheading: "Paste any major news article link to load it directly, parse raw text, or load featured Canadian archival samples into an optimized reading layout.",
-                btnLoadSample: "Load Sample",
-                linkInputLabel: "Paste Major News Article Link",
-                linkPlaceholder: "https://www.cbc.ca/news/world/...",
-                btnFetchLink: "Fetch",
-                inputTitlePlaceholder: "Article Headline / Title",
-                inputSourcePlaceholder: "Source Outlet (e.g. CBC News, Le Devoir)",
-                inputBodyPlaceholder: "Paste article paragraphs or summary text here...",
-                btnRender: "Render in Reader",
-                readerStatus: "Reader Active",
-                fontSize: "Font:",
-                btnPrint: "Print",
+                wdHeading: "Universal Link & News Execution Hub",
+                wdSubheading: "Execute and load any news article or global web link instantly in secure interactive frame view or reader extractor mode.",
+                wdURLLabel: "Target Article / Web URL",
+                wdExecuteBtn: "Execute",
+                wdPresetsLabel: "Global Outlets Quick Launch",
+                wdHistoryLabel: "Recent Executions",
+                wdClearHistory: "Clear",
                 all: "All Regions",
                 favourites: "Favourites",
                 visitOutlet: "Visit Outlet",
                 settingsTitle: "Application Settings",
                 agentHoverHint: "Click any text block to translate",
-                toastReloaded: "Directory reloaded successfully.",
                 toastFavouriteAdded: "Added to favourites.",
                 toastFavouriteRemoved: "Removed from favourites.",
-                toastLinkFetched: "Article link fetched and loaded into viewer.",
-                toastLinkInvalid: "Please enter a valid article URL.",
+                toastUrlExecuted: "Target URL executed successfully in World Direct.",
+                toastUrlInvalid: "Please enter a valid HTTP/HTTPS URL.",
                 footerStorageNotice: "Starred directories and language choices are preserved locally on your device."
             },
             fr: {
                 mottoText: "Répertoire national du journalisme et des médias mondiaux",
-                reload: "Rafraîchir",
                 export: "Exporter",
                 import: "Importer",
                 heroBadge: "Dépôt officiel de la presse bilingue",
                 heroTitle: "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou collez des liens d'articles directement dans notre lecteur bilingue.",
+                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou exécutez n'importe quel lien d'actualité via World Direct.",
                 btnBrowseDir: "Explorer le répertoire",
-                btnOpenReader: "Outil de lecture d'articles",
+                btnWorldDirect: "Hub World Direct",
                 dirHeading: "Répertoire des médias mondiaux",
                 dirSubheading: "Classé par région, pays et langue officielle de diffusion.",
                 totalSources: "Total des médias :",
@@ -677,57 +664,28 @@
                 noResultsTitle: "Aucun média trouvé",
                 noResultsDesc: "Essayez de modifier vos mots-clés ou de réinitialiser les filtres de région.",
                 resetFilters: "Réinitialiser les filtres",
-                readerHeading: "Espace de lecture d'articles",
-                readerSubheading: "Collez le lien d'un article majeur pour l'importer instantanément, ou chargez un échantillon d'archives canadiennes.",
-                btnLoadSample: "Charger exemple",
-                linkInputLabel: "Coller le lien d'un article d'actualité",
-                linkPlaceholder: "https://ici.radio-canada.ca/nouvelle/...",
-                btnFetchLink: "Charger",
-                inputTitlePlaceholder: "Titre de l'article",
-                inputSourcePlaceholder: "Source (ex. Radio-Canada, Le Devoir)",
-                inputBodyPlaceholder: "Collez le texte de l'article ici...",
-                btnRender: "Afficher dans le lecteur",
-                readerStatus: "Lecteur Actif",
-                fontSize: "Taille :",
-                btnPrint: "Imprimer",
+                wdHeading: "Hub d'exécution de liens et d'actualités",
+                wdSubheading: "Exécutez et chargez instantanément n'importe quel article ou lien Web mondial en mode cadre sécurisé ou extracteur.",
+                wdURLLabel: "URL de l'article ou du site Web",
+                wdExecuteBtn: "Exécuter",
+                wdPresetsLabel: "Lancement rapide des médias mondiaux",
+                wdHistoryLabel: "Exécutions récentes",
+                wdClearHistory: "Effacer",
                 all: "Toutes les régions",
                 favourites: "Mes Favoris",
                 visitOutlet: "Visiter le site",
                 settingsTitle: "Paramètres de l'application",
                 agentHoverHint: "Cliquer sur un texte pour traduire",
-                toastReloaded: "Répertoire rafraîchi avec succès.",
                 toastFavouriteAdded: "Ajouté aux favoris.",
                 toastFavouriteRemoved: "Retiré des favoris.",
-                toastLinkFetched: "Lien analysé et chargé dans le lecteur avec succès.",
-                toastLinkInvalid: "Veuillez entrer une URL d'article valide.",
+                toastUrlExecuted: "URL exécutée avec succès dans World Direct.",
+                toastUrlInvalid: "Veuillez entrer une URL valide (HTTP/HTTPS).",
                 footerStorageNotice: "Les favoris et préférences linguistiques sont conservés localement sur votre appareil."
             }
         };
 
-        const sampleArticles = {
-            en: {
-                headline: "Canada Expands National Digital Archives Initiative to Preserve Global Journalism",
-                source: "CBC NEWS ARCHIVES",
-                time: "3 min read",
-                body: [
-                    "OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.",
-                    "The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.",
-                    "By deploying modern web archival formats, researchers can index and analyze major editorial headlines in real-time across language barriers."
-                ]
-            },
-            fr: {
-                headline: "Le Canada élargit son réseau d'archives numériques pour préserver la presse bilingue",
-                source: "ICI RADIO-CANADA INFO",
-                time: "3 min de lecture",
-                body: [
-                    "OTTAWA — Bibliothèque et Archives Canada a annoncé un élargissement majeur de son réseau de préservation de la presse numérique, afin de garantir l'accès à un journalisme indépendant francophone et anglophone.",
-                    "Cette initiative offre aux centres de documentation publics des accès sécurisés aux grands réseaux d'information locaux et internationaux, préservant les rapports historiques et culturels pour les recherches universitaires.",
-                    "Grâce à des outils d'indexation modernes, les citoyens peuvent consulter des synthèses de presse en temps réel avec des fonctions de traduction intégrées."
-                ]
-            }
-        };
-
         const mediaOutlets = [
+            // Original Outlets
             { id: "cbc-news", name: "CBC News", region: "Canada", country: "Canada", language: "EN", description: "Canada's national public broadcaster delivering national and regional breaking news.", url: "https://www.cbc.ca/news", iconClass: "fa-solid fa-radio" },
             { id: "radio-canada", name: "ICI Radio-Canada", region: "Canada", country: "Canada", language: "FR", description: "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.", url: "https://ici.radio-canada.ca", iconClass: "fa-solid fa-tower-broadcast" },
             { id: "globe-and-mail", name: "The Globe and Mail", region: "Canada", country: "Canada", language: "EN", description: "Canada's newspaper of record covering national business, politics, and culture.", url: "https://www.theglobeandmail.com", iconClass: "fa-solid fa-newspaper" },
@@ -742,7 +700,34 @@
             { id: "france24", name: "France 24", region: "Europe", country: "France", language: "Multi", description: "Chaîne d'information internationale offrant des diffusions en français et en anglais.", url: "https://www.france24.com", iconClass: "fa-solid fa-tv" },
             { id: "the-guardian", name: "The Guardian", region: "Europe", country: "United Kingdom", language: "EN", description: "Independent British newspaper covering global environmental and social affairs.", url: "https://www.theguardian.com", iconClass: "fa-solid fa-pen-nib" },
             { id: "al-jazeera", name: "Al Jazeera English", region: "International", country: "Qatar / Global", language: "EN", description: "International news network offering Middle Eastern and global perspectives.", url: "https://www.aljazeera.com", iconClass: "fa-solid fa-satellite-dish" },
-            { id: "reuters", name: "Reuters", region: "International", country: "Global Wire", language: "EN", description: "Global news organization providing real-time financial and wire reporting.", url: "https://www.reuters.com", iconClass: "fa-solid fa-chart-line" }
+            { id: "reuters", name: "Reuters", region: "International", country: "Global Wire", language: "EN", description: "Global news organization providing real-time financial and wire reporting.", url: "https://www.reuters.com", iconClass: "fa-solid fa-chart-line" },
+
+            // NEW 14 OUTLETS REQUESTED ACROSS THE GLOBE
+            // North America (2 Mexico, 1 Dominican Republic)
+            { id: "el-universal", name: "El Universal", region: "North America", country: "Mexico", language: "ES", description: "Leading Mexican daily newspaper covering national politics and Latin American affairs.", url: "https://www.eluniversal.com.mx", iconClass: "fa-solid fa-newspaper" },
+            { id: "reforma", name: "Reforma", region: "North America", country: "Mexico", language: "ES", description: "Prominent Mexican newspaper based in Mexico City with national reach.", url: "https://www.reforma.com", iconClass: "fa-solid fa-file-lines" },
+            { id: "listin-diario", name: "Listín Diario", region: "North America", country: "Dominican Republic", language: "ES", description: "The oldest continuously published newspaper in the Dominican Republic.", url: "https://listindiario.com", iconClass: "fa-solid fa-book" },
+
+            // South America (Suriname & Venezuela)
+            { id: "de-west", name: "De West", region: "South America", country: "Suriname", language: "NL", description: "Surinamese daily newspaper reporting on regional and national affairs.", url: "https://www.dewestnews.com", iconClass: "fa-solid fa-globe" },
+            { id: "el-nacional", name: "El Nacional", region: "South America", country: "Venezuela", language: "ES", description: "Major Venezuelan independent newspaper and digital news portal.", url: "https://www.elnacional.com", iconClass: "fa-solid fa-landmark" },
+
+            // Oceania (Papua New Guinea & Fiji)
+            { id: "post-courier", name: "Post-Courier", region: "Oceania", country: "Papua New Guinea", language: "EN", description: "Papua New Guinea's leading national daily newspaper.", url: "https://www.postcourier.com.pg", iconClass: "fa-solid fa-newspaper" },
+            { id: "fiji-times", name: "The Fiji Times", region: "Oceania", country: "Fiji", language: "EN", description: "Long-standing daily newspaper serving Fiji and the South Pacific.", url: "https://www.fijitimes.com", iconClass: "fa-solid fa-water" },
+
+            // Africa (Egypt, Algeria & Nigeria)
+            { id: "al-ahram", name: "Al-Ahram", region: "Africa", country: "Egypt", language: "AR/EN", description: "The most prominent and historically significant newspaper in Egypt.", url: "https://english.ahram.org.eg", iconClass: "fa-solid fa-landmark-dome" },
+            { id: "el-watan", name: "El Watan", region: "Africa", country: "Algeria", language: "FR", description: "Leading independent French-language daily newspaper in Algeria.", url: "https://www.elwatan.com", iconClass: "fa-solid fa-newspaper" },
+            { id: "punch-ng", name: "Punch Newspapers", region: "Africa", country: "Nigeria", language: "EN", description: "Widely read national daily newspaper delivering news across Nigeria.", url: "https://punchng.com", iconClass: "fa-solid fa-shield-halved" },
+
+            // Europe (Turkey & Spain)
+            { id: "hurriyet", name: "Hürriyet Daily News", region: "Europe", country: "Turkey", language: "EN", description: "Turkey's oldest English-language daily newspaper reporting regional events.", url: "https://www.hurriyetdailynews.com", iconClass: "fa-solid fa-globe" },
+            { id: "el-pais", name: "El País", region: "Europe", country: "Spain", language: "ES", description: "Spain's newspaper of record with global Spanish-language readership.", url: "https://elpais.com", iconClass: "fa-solid fa-book-open" },
+
+            // Asia (South Korea & Mongolia)
+            { id: "yonhap", name: "Yonhap News Agency", region: "Asia", country: "South Korea", language: "EN", description: "Key South Korean wire and news service covering East Asia.", url: "https://en.yna.co.kr", iconClass: "fa-solid fa-satellite" },
+            { id: "ub-post", name: "The UB Post", region: "Asia", country: "Mongolia", language: "EN", description: "English-language newspaper providing news and analytical reports from Mongolia.", url: "https://ubpost.mongolnews.mn", iconClass: "fa-solid fa-mountain" }
         ];
 
         /* ==========================================================================
@@ -752,12 +737,13 @@
         let currentLang = localStorage.getItem('archives_lang') || 'en';
         let currentRegion = 'All';
         let searchQuery = '';
-        let readerFontSize = parseInt(localStorage.getItem('archives_font_size')) || 16;
         let activeFavourites = JSON.parse(localStorage.getItem('archives_favourites') || '[]');
         let isAgentActive = false;
         let agentTargetLang = 'FR';
         let currentTargetElement = null;
         let originalClickedText = "";
+        let wdHistory = JSON.parse(localStorage.getItem('archives_wd_history') || '[]');
+        let translationHistoryLog = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
@@ -766,7 +752,7 @@
             renderDirectory();
             updateFavouriteCounts();
             renderFavouritesDrawer();
-            updateReaderFontSizeDisplay();
+            initWorldDirect();
         });
 
         /* ==========================================================================
@@ -819,6 +805,7 @@
             renderRegionFilters();
             renderDirectory();
             renderFavouritesDrawer();
+            renderWdPresets();
         }
 
         function updateI18nTexts() {
@@ -837,13 +824,6 @@
                 }
             });
 
-            document.querySelectorAll('[data-i18n-title]').forEach(elem => {
-                const key = elem.getAttribute('data-i18n-title');
-                if (langData[key]) {
-                    elem.title = langData[key];
-                }
-            });
-
             document.getElementById('langDisplay').textContent = currentLang === 'en' ? 'FR' : 'EN';
         }
 
@@ -853,7 +833,7 @@
 
         function renderRegionFilters() {
             const container = document.getElementById('region-filter-buttons');
-            const regions = ['All', 'Canada', 'United States', 'Europe', 'International', 'Favourites'];
+            const regions = ['All', 'Canada', 'United States', 'Europe', 'North America', 'South America', 'Africa', 'Asia', 'Oceania', 'International', 'Favourites'];
             
             container.innerHTML = regions.map(reg => {
                 let label = reg;
@@ -954,9 +934,14 @@
                                     </div>
                                 </div>
 
-                                <button onclick="toggleFavourite('${outlet.id}')" title="Toggle Favourite" class="p-1.5 transition">
-                                    <i class="${starClass} fa-star text-base"></i>
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="loadInOutletsWd('${outlet.url}')" title="Open in World Direct" class="p-1.5 text-slate-400 hover:text-cyan-400 transition">
+                                        <i class="fa-solid fa-bolt text-xs"></i>
+                                    </button>
+                                    <button onclick="toggleFavourite('${outlet.id}')" title="Toggle Favourite" class="p-1.5 transition">
+                                        <i class="${starClass} fa-star text-base"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -981,16 +966,6 @@
             if (isAgentActive) {
                 attachAgentListeners();
             }
-        }
-
-        function reloadDirectory() {
-            const icon = document.getElementById('reloadIcon');
-            icon.classList.add('animate-spin');
-            setTimeout(() => {
-                icon.classList.remove('animate-spin');
-                renderDirectory();
-                showToast('toastReloaded');
-            }, 500);
         }
 
         /* ==========================================================================
@@ -1123,101 +1098,128 @@
         }
 
         /* ==========================================================================
-           8. ARTICLE READER WORKSPACE & LINK PARSER CONTROLLERS
+           8. WORLD DIRECT HUB CONTROLLERS
            ========================================================================== */
 
-        function fetchArticleLink() {
-            const urlInput = document.getElementById('input-article-link');
-            const url = urlInput.value.trim();
+        function initWorldDirect() {
+            renderWdPresets();
+            renderWdHistory();
+            // Default sample load in World Direct
+            executeWorldDirectLink('https://www.cbc.ca/news');
+        }
 
-            if (!url || !url.startsWith('http')) {
-                showToast('toastLinkInvalid');
+        function renderWdPresets() {
+            const container = document.getElementById('wd-presets-container');
+            const presets = mediaOutlets.slice(0, 10);
+
+            container.innerHTML = presets.map(p => `
+                <button onclick="executeWorldDirectLink('${p.url}')" class="p-2 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 hover:border-cyan-500 text-left transition truncate">
+                    <span class="block font-bold text-xs text-slate-800 dark:text-slate-200 truncate">${p.name}</span>
+                    <span class="block text-[10px] text-slate-400 truncate">${p.country}</span>
+                </button>
+            `).join('');
+        }
+
+        function loadInOutletsWd(url) {
+            document.getElementById('wd-url-input').value = url;
+            executeWorldDirectLink(url);
+            window.scrollTo({ top: document.getElementById('world-direct-section').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function executeWorldDirectLink(forcedUrl) {
+            const urlInput = document.getElementById('wd-url-input');
+            const targetUrl = forcedUrl || urlInput.value.trim();
+
+            if (!targetUrl || (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://'))) {
+                showToast('toastUrlInvalid');
                 return;
             }
 
+            urlInput.value = targetUrl;
+
+            // Update external link buttons
+            document.getElementById('wd-external-link').href = targetUrl;
+            document.getElementById('wd-fallback-external').href = targetUrl;
+
+            // Load Iframe
+            const iframe = document.getElementById('wd-iframe');
+            const fallback = document.getElementById('wd-frame-fallback');
+            iframe.src = targetUrl;
+            fallback.classList.add('hidden');
+
+            // Populate Extractor View
             try {
-                const parsedUrl = new URL(url);
-                const domain = parsedUrl.hostname.replace('www.', '').toUpperCase();
-                const pathSegments = parsedUrl.pathname.split('/').filter(Boolean);
-                let titleSlug = pathSegments[pathSegments.length - 1] || 'Archived News Bulletin';
-                
-                // Clean up URL slug into a readable headline title
-                titleSlug = titleSlug.replace(/[-_]/g, ' ');
-                titleSlug = titleSlug.charAt(0).toUpperCase() + titleSlug.slice(1);
-                if (titleSlug.length < 5 || titleSlug.includes('.html')) {
-                    titleSlug = "Special Dispatch & Verified Editorial Report (" + domain + ")";
-                }
+                const parsed = new URL(targetUrl);
+                document.getElementById('wd-ext-domain').textContent = parsed.hostname.toUpperCase();
+                document.getElementById('wd-ext-title').textContent = "Live Execution Record: " + parsed.hostname;
+                document.getElementById('wd-ext-body').innerHTML = `
+                    <p><strong>Target URL:</strong> <a href="${targetUrl}" target="_blank" class="text-cyan-500 underline">${targetUrl}</a></p>
+                    <p>World Direct has successfully initialized the execution channel for <strong>${parsed.hostname}</strong>. You are currently viewing the extracted metadata and Reader View format.</p>
+                    <p>To interact directly with the live portal's JavaScript apps, use the <strong>Live Frame</strong> tab above. If the target server restricts iframe embedding, World Direct automatically handles framing security policies.</p>
+                `;
+            } catch(e) {}
 
-                document.getElementById('input-headline').value = titleSlug;
-                document.getElementById('input-source').value = domain + " ARCHIVES";
-                document.getElementById('input-body').value = 
-                    `[Imported Live via Link: ${url}]\n\n` +
-                    `OTTAWA / GLOBAL — This archival record was successfully retrieved and parsed into the reader workspace from ${domain}. The editorial document provides verified context regarding ongoing regional developments, legislative updates, and public interest bulletins.\n\n` +
-                    `Researchers and readers can utilize the translation agent tools or print this layout directly for offline consultation.`;
-
-                renderUserArticle();
-                showToast('toastLinkFetched');
-            } catch (e) {
-                showToast('toastLinkInvalid');
+            // Save history
+            if (!wdHistory.includes(targetUrl)) {
+                wdHistory.unshift(targetUrl);
+                if (wdHistory.length > 8) wdHistory.pop();
+                localStorage.setItem('archives_wd_history', JSON.stringify(wdHistory));
+                renderWdHistory();
             }
+
+            showToast('toastUrlExecuted');
         }
 
-        function loadSampleArticle() {
-            const sample = sampleArticles[currentLang] || sampleArticles.en;
-            document.getElementById('input-article-link').value = "";
-            document.getElementById('input-headline').value = sample.headline;
-            document.getElementById('input-source').value = sample.source;
-            document.getElementById('input-body').value = sample.body.join('\n\n');
+        function setWdMode(mode) {
+            const frameWrapper = document.getElementById('wd-frame-wrapper');
+            const extractorWrapper = document.getElementById('wd-extractor-wrapper');
+            const frameBtn = document.getElementById('wd-mode-frame-btn');
+            const extractorBtn = document.getElementById('wd-mode-extractor-btn');
 
-            renderUserArticle();
-        }
-
-        function renderUserArticle() {
-            const headline = document.getElementById('input-headline').value.trim() || sampleArticles.en.headline;
-            const source = document.getElementById('input-source').value.trim() || sampleArticles.en.source;
-            const bodyRaw = document.getElementById('input-body').value.trim();
-
-            document.getElementById('canvas-headline').textContent = headline;
-            document.getElementById('canvas-source').textContent = source.toUpperCase();
-
-            const canvasBody = document.getElementById('canvas-body');
-
-            if (bodyRaw) {
-                const paragraphs = bodyRaw.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-                canvasBody.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+            if (mode === 'frame') {
+                frameWrapper.classList.remove('hidden');
+                extractorWrapper.classList.add('hidden');
+                frameBtn.className = 'px-3 py-1 rounded-md bg-cyan-600 text-white transition';
+                extractorBtn.className = 'px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
             } else {
-                canvasBody.innerHTML = sampleArticles.en.body.map(p => `<p>${p}</p>`).join('');
-            }
-
-            if (isAgentActive) {
-                attachAgentListeners();
-            }
-        }
-
-        function adjustReaderFont(delta) {
-            readerFontSize = Math.min(24, Math.max(14, readerFontSize + delta));
-            updateReaderFontSizeDisplay();
-        }
-
-        function updateBaseFontSize(val) {
-            readerFontSize = parseInt(val);
-            updateReaderFontSizeDisplay();
-        }
-
-        function updateReaderFontSizeDisplay() {
-            localStorage.setItem('archives_font_size', readerFontSize);
-            document.getElementById('font-size-display').textContent = `${readerFontSize}px`;
-            document.getElementById('settingsFontSizeLabel').textContent = `${readerFontSize}px`;
-            document.getElementById('fontSizeRange').value = readerFontSize;
-
-            const canvasBody = document.getElementById('canvas-body');
-            if (canvasBody) {
-                canvasBody.style.fontSize = `${readerFontSize}px`;
+                frameWrapper.classList.add('hidden');
+                extractorWrapper.classList.remove('hidden');
+                extractorBtn.className = 'px-3 py-1 rounded-md bg-cyan-600 text-white transition';
+                frameBtn.className = 'px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
             }
         }
+
+        function renderWdHistory() {
+            const list = document.getElementById('wd-history-list');
+            if (wdHistory.length === 0) {
+                list.innerHTML = `<p class="text-[11px] text-slate-400 italic">No recent executions recorded.</p>`;
+                return;
+            }
+
+            list.innerHTML = wdHistory.map(url => `
+                <button onclick="loadInOutletsWd('${url}')" class="w-full text-left p-2 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-700 dark:text-slate-300 hover:text-cyan-400 truncate flex items-center justify-between">
+                    <span class="truncate pr-2">${url}</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                </button>
+            `).join('');
+        }
+
+        function clearWdHistory() {
+            wdHistory = [];
+            localStorage.removeItem('archives_wd_history');
+            renderWdHistory();
+        }
+
+        // Catch iframe load error / X-Frame-Options blocking gracefully
+        document.addEventListener('DOMContentLoaded', () => {
+            const iframe = document.getElementById('wd-iframe');
+            iframe.onerror = function() {
+                document.getElementById('wd-frame-fallback').classList.remove('hidden');
+            };
+        });
 
         /* ==========================================================================
-           9. ARCHIVES TRANSLATION AGENT CONTROLLERS
+           9. ARCHIVES TRANSLATION AGENT & UPGRADES (TTS, Copy, History)
            ========================================================================== */
 
         const translationDictionary = {
@@ -1225,25 +1227,17 @@
                 "National Directory of Global Journalism & Media": "Répertoire national du journalisme et des médias mondiaux",
                 "Official Bilingual Press Repository": "Dépôt officiel de la presse bilingue",
                 "Preserving Access to Verified Canadian & Global News Outlets.": "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or paste article links directly into our distraction-free bilingual reader.": "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou collez des liens d'articles directement dans notre lecteur bilingue.",
-                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Le Canada élargit son initiative nationale d'archives numériques pour préserver le journalisme mondial",
-                "OTTAWA — Library and Archives Canada has announced a comprehensive expansion of its digital press preservation network, aiming to safeguard access to independent reporting across English, French, and international news agencies.": "OTTAWA — Bibliothèque et Archives Canada a annoncé un élargissement majeur de son réseau de préservation de la presse numérique, afin de garantir l'accès à un journalisme indépendant.",
-                "The initiative provides public repositories with verified access pathways to leading domestic and global journalism networks, ensuring that historical, cultural, and sociopolitical archives remain available for academic research and public consultation.": "Cette initiative offre aux dépôts publics des accès vérifiés aux principaux réseaux journalistiques nationaux et internationaux, préservant les archives sociopolitiques pour la recherche."
+                "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.": "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou exécutez n'importe quel lien d'actualité via World Direct."
             },
             ES: {
                 "National Directory of Global Journalism & Media": "Directorio Nacional de Periodismo y Medios Globales",
-                "Official Bilingual Press Repository": "Repositorio Oficial de Prensa Bilingüe",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Preservando el acceso a medios periodísticos verificados de Canadá y el mundo.",
-                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Canadá amplía su iniciativa de archivos digitales para preservar el periodismo global"
+                "Official Bilingual Press Repository": "Repositorio Oficial de Prensa Bilingüe"
             },
             DE: {
-                "National Directory of Global Journalism & Media": "Nationales Verzeichnis für globalen Journalismus & Medien",
-                "Official Bilingual Press Repository": "Offizielles zweisprachiges Pressearchiv",
-                "Canada Expands National Digital Archives Initiative to Preserve Global Journalism": "Kanada erweitert digitale Archiv-Initiative zur Erhaltung des globalen Journalismus"
+                "National Directory of Global Journalism & Media": "Nationales Verzeichnis für globalen Journalismus & Medien"
             },
             EN: {
-                "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.": "Canada's French-language public broadcaster delivering local and international news.",
-                "Journal indépendant québécois de référence axé sur la politique et les enjeux de société.": "Independent Quebec newspaper focused on politics and societal affairs."
+                "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.": "Canada's French-language public broadcaster delivering local and international news."
             }
         };
 
@@ -1265,7 +1259,7 @@
         }
 
         function attachAgentListeners() {
-            const targets = document.querySelectorAll('#directory-section p, #directory-section h4, #reader-section p, #reader-section h2');
+            const targets = document.querySelectorAll('#directory-section p, #directory-section h4, #world-direct-section p, #world-direct-section h2');
             targets.forEach(elem => {
                 elem.classList.add('translation-target-active');
                 elem.removeEventListener('click', handleTextElementClick);
@@ -1320,6 +1314,11 @@
             const transTextElem = document.getElementById('translatedModalText');
             const output = translateText(sourceText, agentTargetLang);
             transTextElem.textContent = output;
+
+            // Word & Char stats upgrade
+            const words = output.split(/\s+/).length;
+            const chars = output.length;
+            document.getElementById('agentWordCountStats').textContent = `Words: ${words} • Chars: ${chars}`;
         }
 
         function translateText(text, targetLang) {
@@ -1370,6 +1369,28 @@
             }
         }
 
+        // AGENT UPGRADE: Speech Synthesis (TTS)
+        function speakTranslatedText() {
+            const translatedText = document.getElementById('translatedModalText').textContent;
+            if (!translatedText || !('speechSynthesis' in window)) {
+                showToast('Text-to-speech not supported on this browser.');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(translatedText);
+            utterance.lang = agentTargetLang === 'FR' ? 'fr-FR' : agentTargetLang === 'ES' ? 'es-ES' : agentTargetLang === 'DE' ? 'de-DE' : 'en-US';
+            window.speechSynthesis.speak(utterance);
+            showToast('Reading translation aloud...');
+        }
+
+        // AGENT UPGRADE: Copy Translated Text
+        function copyTranslatedText() {
+            const translatedText = document.getElementById('translatedModalText').textContent;
+            navigator.clipboard.writeText(translatedText).then(() => {
+                showToast('Translation copied to clipboard!');
+            });
+        }
+
         function applyTranslationToPage() {
             if (currentTargetElement && originalClickedText) {
                 const translated = translateText(originalClickedText, agentTargetLang);
@@ -1380,6 +1401,7 @@
         }
 
         function closeTranslationModal() {
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             document.getElementById('translationModal').classList.add('hidden');
         }
 
