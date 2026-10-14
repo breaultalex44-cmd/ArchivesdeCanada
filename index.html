@@ -66,8 +66,8 @@
             background-size: 16px 16px;
         }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.05);
@@ -93,7 +93,7 @@
 
         @keyframes waveform {
             0%, 100% { height: 4px; }
-            50% { height: 18px; }
+            50% { height: 16px; }
         }
 
         .agent-active-glow {
@@ -137,83 +137,83 @@
 <body class="bg-parchment-50 text-slate-800 dark:bg-navy-900 dark:text-slate-100 parchment-bg min-h-screen flex flex-col font-body transition-colors duration-200 selection:bg-maple-500 selection:text-white">
 
     <!-- Toast Notification Banner -->
-    <div id="toastNotification" class="fixed top-24 right-6 z-50 transform translate-y-[-100%] opacity-0 transition-all duration-300 pointer-events-none bg-navy-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-cyan-500/50 flex items-center gap-3">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-cyan-400"></i>
+    <div id="toastNotification" class="fixed top-20 right-4 left-4 sm:left-auto sm:right-6 z-50 transform translate-y-[-120%] opacity-0 transition-all duration-300 pointer-events-none bg-navy-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-cyan-500/50 flex items-center gap-3 max-w-sm sm:max-w-md mx-auto sm:mx-0">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-cyan-400 flex-shrink-0"></i>
         <span id="toastMessage" class="text-xs font-semibold">Action completed successfully.</span>
     </div>
 
     <header class="sticky top-0 z-40 bg-white/95 dark:bg-navy-800/95 backdrop-blur-md border-b border-slate-200 dark:border-navy-700 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
                 
                 <!-- Logo & Brand Identifier -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <div class="w-11 h-11 rounded-lg bg-navy-900 dark:bg-maple-600 flex items-center justify-center text-white shadow-md">
-                        <i class="fa-solid fa-leaf text-xl" title="Canada Emblem"></i>
+                <div class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer min-w-0" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-navy-900 dark:bg-maple-600 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                        <i class="fa-solid fa-leaf text-base sm:text-xl" title="Canada Emblem"></i>
                     </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-navy-900 dark:text-white uppercase">
+                    <div class="min-w-0">
+                        <div class="flex items-center space-x-1.5 sm:space-x-2">
+                            <h1 class="font-serif text-sm sm:text-xl md:text-2xl font-bold tracking-wider text-navy-900 dark:text-white uppercase truncate">
                                 ARCHIVES DE CANADA
                             </h1>
-                            <span class="hidden sm:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/25">
+                            <span class="hidden md:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/25">
                                 Official Index
                             </span>
                         </div>
-                        <p class="text-xs font-serif italic text-slate-500 dark:text-slate-400" id="motto-text" data-i18n="mottoText">
+                        <p class="text-[10px] sm:text-xs font-serif italic text-slate-500 dark:text-slate-400 truncate" id="motto-text" data-i18n="mottoText">
                             National Directory of Global Journalism & Media
                         </p>
                     </div>
                 </div>
 
                 <!-- Header Actions & Navigation -->
-                <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
                     <!-- Favourites Drawer Toggle -->
-                    <button onclick="toggleFavouritesDrawer()" class="relative p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2">
-                        <i class="fa-solid fa-star text-sm text-amber-500"></i>
-                        <span class="hidden sm:inline text-xs font-semibold uppercase tracking-wider" data-i18n="favourites">Favourites</span>
-                        <span id="favouriteBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-amber-500 rounded-full">0</span>
+                    <button onclick="toggleFavouritesDrawer()" class="relative p-2 sm:p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-star text-xs sm:text-sm text-amber-500"></i>
+                        <span class="hidden md:inline text-xs font-semibold uppercase tracking-wider" data-i18n="favourites">Favourites</span>
+                        <span id="favouriteBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] sm:text-xs font-bold leading-none text-white bg-amber-500 rounded-full">0</span>
                     </button>
 
                     <!-- Settings Drawer Button -->
-                    <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2 relative">
-                        <i class="fa-solid fa-gear text-sm text-slate-700 dark:text-slate-200"></i>
+                    <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2 sm:p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition flex items-center gap-2 relative">
+                        <i class="fa-solid fa-gear text-xs sm:text-sm text-slate-700 dark:text-slate-200"></i>
                         <span id="agentActiveDot" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-cyan-400 rounded-full animate-ping"></span>
                     </button>
 
                     <!-- Language Switcher Toggle -->
-                    <button onclick="toggleLanguage()" class="px-3 py-2 rounded-lg bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white font-medium text-xs tracking-wider transition flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-globe"></i>
+                    <button onclick="toggleLanguage()" class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white font-medium text-xs tracking-wider transition flex items-center gap-1 shadow-sm">
+                        <i class="fa-solid fa-globe text-xs"></i>
                         <span id="langDisplay">FR</span>
                     </button>
 
                     <!-- Dark Mode Toggle -->
-                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition">
-                        <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+                    <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-lg border border-slate-200 dark:border-navy-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-navy-700 transition">
+                        <i id="themeIcon" class="fa-solid fa-moon text-xs sm:text-sm"></i>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="bg-gradient-to-b from-slate-100 to-transparent dark:from-navy-800 dark:to-transparent py-10 sm:py-14 border-b border-slate-200/60 dark:border-navy-700/60">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/20" data-i18n="heroBadge">
+    <section class="bg-gradient-to-b from-slate-100 to-transparent dark:from-navy-800 dark:to-transparent py-8 sm:py-12 border-b border-slate-200/60 dark:border-navy-700/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3 sm:space-y-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-maple-500/10 text-maple-600 dark:text-maple-500 border border-maple-500/20" data-i18n="heroBadge">
                 Official Bilingual Press Repository
             </span>
-            <h2 class="text-2xl sm:text-4xl font-serif font-bold text-navy-900 dark:text-white max-w-3xl mx-auto leading-tight" data-i18n="heroTitle">
+            <h2 class="text-xl sm:text-3xl md:text-4xl font-serif font-bold text-navy-900 dark:text-white max-w-3xl mx-auto leading-tight" data-i18n="heroTitle">
                 Preserving Access to Verified Canadian & Global News Outlets.
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed" data-i18n="heroDesc">
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed px-2 sm:px-0" data-i18n="heroDesc">
                 Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.
             </p>
 
-            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-                <a href="#directory-section" class="px-4 py-2.5 rounded-xl bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-2">
+            <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+                <a href="#directory-section" class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-navy-700 hover:bg-navy-800 dark:bg-maple-600 dark:hover:bg-maple-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-2">
                     <i class="fa-solid fa-compass"></i>
                     <span data-i18n="btnBrowseDir">Explore Directory</span>
                 </a>
-                <a href="#world-direct-section" class="px-4 py-2.5 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-navy-700 text-xs font-bold transition shadow-sm flex items-center gap-2">
+                <a href="#world-direct-section" class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-navy-700 text-xs font-bold transition shadow-sm flex items-center gap-2">
                     <i class="fa-solid fa-globe text-cyan-500"></i>
                     <span data-i18n="btnWorldDirect">World Direct Hub</span>
                 </a>
@@ -221,17 +221,17 @@
         </div>
     </section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 space-y-12">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-10 flex-1 space-y-10 sm:space-y-12 w-full">
         
         <!-- DIRECTORY SECTION -->
-        <section id="directory-section" class="space-y-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-navy-700 pb-4">
+        <section id="directory-section" class="space-y-5 sm:space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-slate-200 dark:border-navy-700 pb-4">
                 <div>
-                    <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="dirHeading">Global Media Directory</h3>
+                    <h3 class="text-lg sm:text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="dirHeading">Global Media Directory</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="dirSubheading">Categorized by region, country, and official broadcast language.</p>
                 </div>
 
-                <div class="flex items-center gap-4 text-xs">
+                <div class="flex items-center gap-3 text-xs pt-1 md:pt-0">
                     <div class="flex items-center gap-1.5 font-semibold text-slate-600 dark:text-slate-300">
                         <span data-i18n="totalSources">Total Outlets:</span>
                         <span id="total-sources-count" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-navy-700 font-mono text-navy-900 dark:text-slate-100">0</span>
@@ -244,32 +244,32 @@
             </div>
 
             <!-- Controls & Region Filters -->
-            <div class="flex flex-col sm:flex-row justify-between gap-4 items-stretch sm:items-center">
+            <div class="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 items-stretch sm:items-center">
                 <!-- Search Box -->
                 <div class="relative flex-1 max-w-md">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                     <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search outlet name, country, region..." data-i18n-placeholder="searchPlaceholder"
-                        class="w-full pl-9 pr-8 py-2 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 dark:focus:ring-maple-500 transition shadow-sm">
-                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+                        class="w-full pl-9 pr-8 py-2.5 sm:py-2 rounded-xl bg-white dark:bg-navy-800 border border-slate-300 dark:border-navy-700 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-navy-700 dark:focus:ring-maple-500 transition shadow-sm">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs p-1">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
                 <!-- Region Filters Scroll Container -->
-                <div id="region-filter-buttons" class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 custom-scrollbar">
+                <div id="region-filter-buttons" class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 custom-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
                     <!-- Dynamic region filter buttons rendered via JS -->
                 </div>
             </div>
 
             <!-- Outlets Directory Grid -->
-            <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div id="directory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                 <!-- Dynamic cards rendered via JS -->
             </div>
 
             <!-- Empty Directory State -->
-            <div id="empty-state" class="hidden text-center py-12 bg-white dark:bg-navy-800 rounded-2xl border border-dashed border-slate-300 dark:border-navy-700 p-8 space-y-3">
+            <div id="empty-state" class="hidden text-center py-12 bg-white dark:bg-navy-800 rounded-2xl border border-dashed border-slate-300 dark:border-navy-700 p-6 sm:p-8 space-y-3">
                 <i class="fa-solid fa-folder-open text-3xl text-slate-300 dark:text-slate-600"></i>
-                <h4 class="font-serif font-bold text-slate-700 dark:text-slate-200" data-i18n="noResultsTitle">No News Outlets Found</h4>
+                <h4 class="font-serif font-bold text-slate-700 dark:text-slate-200 text-sm sm:text-base" data-i18n="noResultsTitle">No News Outlets Found</h4>
                 <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the favourites/region filter.</p>
                 <button onclick="resetFilters()" class="px-4 py-2 bg-slate-200 dark:bg-navy-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:bg-slate-300 transition" data-i18n="resetFilters">
                     Reset Filters
@@ -278,25 +278,25 @@
         </section>
 
         <!-- WORLD DIRECT HUB WORKSPACE -->
-        <section id="world-direct-section" class="space-y-6 pt-6">
+        <section id="world-direct-section" class="space-y-5 sm:space-y-6 pt-4">
             <div class="border-b border-slate-200 dark:border-navy-700 pb-4">
-                <div class="flex items-center gap-3">
-                    <span class="px-2.5 py-1 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-mono font-bold uppercase tracking-wider">World Direct</span>
-                    <h3 class="text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="wdHeading">Universal Link & News Execution Hub</h3>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                    <span class="px-2.5 py-1 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-[11px] font-mono font-bold uppercase tracking-wider">World Direct</span>
+                    <h3 class="text-lg sm:text-xl font-serif font-bold text-navy-900 dark:text-white" data-i18n="wdHeading">Universal Link & News Execution Hub</h3>
                 </div>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" data-i18n="wdSubheading">Execute and load any news article or global web link instantly in secure interactive frame view or reader extractor mode.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
                 
                 <!-- Controls & Quick Presets Sidebar -->
-                <div class="lg:col-span-4 bg-white dark:bg-navy-800 rounded-2xl p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-5">
+                <div class="lg:col-span-4 bg-white dark:bg-navy-800 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-navy-700 shadow-sm space-y-4 sm:space-y-5">
                     <div class="space-y-2">
                         <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="wdURLLabel">Target Article / Web URL</label>
-                        <div class="flex gap-2">
+                        <div class="flex flex-col sm:flex-row gap-2">
                             <input type="url" id="wd-url-input" placeholder="https://www.bbc.com/news/world..."
-                                class="flex-1 p-2.5 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <button onclick="executeWorldDirectLink()" class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold transition flex items-center gap-1.5 shadow-sm text-xs">
+                                class="w-full sm:flex-1 p-2.5 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            <button onclick="executeWorldDirectLink()" class="w-full sm:w-auto px-4 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold transition flex items-center justify-center gap-1.5 shadow-sm text-xs flex-shrink-0">
                                 <i class="fa-solid fa-bolt"></i>
                                 <span data-i18n="wdExecuteBtn">Execute</span>
                             </button>
@@ -306,7 +306,7 @@
                     <!-- Quick Global News Presets -->
                     <div class="space-y-2">
                         <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400" data-i18n="wdPresetsLabel">Global Outlets Quick Launch</span>
-                        <div id="wd-presets-container" class="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                        <div id="wd-presets-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
                             <!-- Populated dynamically -->
                         </div>
                     </div>
@@ -315,7 +315,7 @@
                     <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-navy-700">
                         <div class="flex items-center justify-between">
                             <span class="block text-[11px] font-bold uppercase tracking-wider text-slate-400" data-i18n="wdHistoryLabel">Recent Executions</span>
-                            <button onclick="clearWdHistory()" class="text-[10px] text-slate-400 hover:text-maple-500" data-i18n="wdClearHistory">Clear</button>
+                            <button onclick="clearWdHistory()" class="text-[10px] text-slate-400 hover:text-maple-500 p-1" data-i18n="wdClearHistory">Clear</button>
                         </div>
                         <div id="wd-history-list" class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar text-xs">
                             <p class="text-[11px] text-slate-400 italic">No recent executions recorded.</p>
@@ -324,18 +324,18 @@
                 </div>
 
                 <!-- Main Executed Canvas & Frame Viewer -->
-                <div class="lg:col-span-8 bg-white dark:bg-navy-800 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm overflow-hidden flex flex-col min-h-[580px]">
+                <div class="lg:col-span-8 bg-white dark:bg-navy-800 rounded-2xl border border-slate-200 dark:border-navy-700 shadow-sm overflow-hidden flex flex-col min-h-[480px] sm:min-h-[580px]">
                     <!-- Canvas Toolbar -->
-                    <div class="bg-slate-100 dark:bg-navy-900 px-6 py-3 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between flex-wrap gap-2 text-xs">
-                        <div class="flex items-center gap-2">
-                            <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="wd-status-text" class="font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">Ready for Execution</span>
+                    <div class="bg-slate-100 dark:bg-navy-900 px-4 sm:px-6 py-3 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between flex-wrap gap-2 text-xs">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+                            <span id="wd-status-text" class="font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider truncate">Ready for Execution</span>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <div class="bg-white dark:bg-navy-800 p-0.5 rounded-lg border border-slate-200 dark:border-navy-700 flex text-[11px] font-semibold">
-                                <button onclick="setWdMode('frame')" id="wd-mode-frame-btn" class="px-3 py-1 rounded-md bg-cyan-600 text-white transition">Live Frame</button>
-                                <button onclick="setWdMode('extractor')" id="wd-mode-extractor-btn" class="px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition">Reader Extractor</button>
+                                <button onclick="setWdMode('frame')" id="wd-mode-frame-btn" class="px-2.5 sm:px-3 py-1 rounded-md bg-cyan-600 text-white transition">Live Frame</button>
+                                <button onclick="setWdMode('extractor')" id="wd-mode-extractor-btn" class="px-2.5 sm:px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition">Reader</button>
                             </div>
 
                             <a id="wd-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab" class="p-2 bg-white dark:bg-navy-800 hover:bg-slate-100 dark:hover:bg-navy-700 border border-slate-200 dark:border-navy-700 rounded-lg text-slate-700 dark:text-slate-200">
@@ -350,14 +350,14 @@
                         <div id="wd-frame-wrapper" class="absolute inset-0 flex flex-col">
                             <iframe id="wd-iframe" src="about:blank" class="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
                             <!-- Fallback Notice for X-Frame-Options blocks -->
-                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-navy-900/95 backdrop-blur-md p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
+                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-navy-900/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 text-white">
                                 <i class="fa-solid fa-shield-halved text-amber-400 text-3xl"></i>
                                 <h4 class="font-serif font-bold text-base">External Security Policy Notice</h4>
                                 <p class="text-xs text-slate-300 max-w-md leading-relaxed">
                                     This target domain restricts embedded framing due to security policies. You can launch it securely in a new browser tab or switch to Reader Extractor Mode.
                                 </p>
-                                <div class="flex gap-3 pt-2">
-                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl transition shadow">
+                                <div class="flex flex-col sm:flex-row gap-2.5 pt-2 w-full sm:w-auto">
+                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-xl transition shadow text-center">
                                         Open in New Tab
                                     </a>
                                     <button onclick="setWdMode('extractor')" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl transition">
@@ -368,14 +368,14 @@
                         </div>
 
                         <!-- Extractor Reader View -->
-                        <div id="wd-extractor-wrapper" class="hidden absolute inset-0 overflow-y-auto p-6 sm:p-8 space-y-6 custom-scrollbar bg-white dark:bg-navy-900">
-                            <div class="border-b border-slate-200 dark:border-navy-700 pb-4 space-y-2">
+                        <div id="wd-extractor-wrapper" class="hidden absolute inset-0 overflow-y-auto p-5 sm:p-8 space-y-4 sm:space-y-6 custom-scrollbar bg-white dark:bg-navy-900">
+                            <div class="border-b border-slate-200 dark:border-navy-700 pb-4 space-y-1.5">
                                 <span id="wd-ext-domain" class="text-xs font-bold uppercase tracking-wider text-cyan-500">WORLD DIRECT EXTRACTOR</span>
-                                <h2 id="wd-ext-title" class="text-xl sm:text-2xl font-serif font-bold text-navy-900 dark:text-white leading-snug">
+                                <h2 id="wd-ext-title" class="text-lg sm:text-2xl font-serif font-bold text-navy-900 dark:text-white leading-snug">
                                     Welcome to World Direct
                                 </h2>
                             </div>
-                            <div id="wd-ext-body" class="font-reader text-slate-800 dark:text-slate-200 space-y-4 text-base leading-relaxed">
+                            <div id="wd-ext-body" class="font-reader text-slate-800 dark:text-slate-200 space-y-3.5 text-xs sm:text-base leading-relaxed">
                                 <p>Enter any news article or website URL in the World Direct input bar above and click <strong>Execute</strong> to instantly parse content across global archives.</p>
                             </div>
                         </div>
@@ -387,33 +387,33 @@
 
     </main>
 
-    <!-- FLOATING TRANSLATION AGENT HUD -->
-    <div id="translationAgentHUD" class="fixed bottom-6 left-6 z-40 hidden transition-all duration-300">
-        <div id="hudBody" class="bg-navy-900/95 border-2 border-cyan-500/80 rounded-2xl p-4 shadow-2xl backdrop-blur-md text-white agent-active-glow w-80 space-y-3 relative overflow-hidden">
+    <!-- FLOATING TRANSLATION AGENT HUD (Optimized for Mobile/Moto G Play dimensions) -->
+    <div id="translationAgentHUD" class="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-40 hidden transition-all duration-300 max-w-sm mx-auto sm:mx-0">
+        <div id="hudBody" class="bg-navy-900/95 border-2 border-cyan-500/80 rounded-2xl p-3.5 sm:p-4 shadow-2xl backdrop-blur-md text-white agent-active-glow w-full sm:w-80 space-y-3 relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-transparent to-transparent pointer-events-none"></div>
 
             <div class="flex items-center justify-between border-b border-cyan-500/30 pb-2.5">
-                <div class="flex items-center gap-2.5">
-                    <div class="relative flex items-center justify-center w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-400 text-cyan-400">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="relative flex items-center justify-center w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-400 text-cyan-400 flex-shrink-0">
                         <i class="fa-solid fa-robot text-xs"></i>
                         <span class="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
                     </div>
-                    <div>
-                        <h4 class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider">Archives Agent</h4>
-                        <p id="agentStatusText" class="text-[10px] font-mono text-cyan-400/80">STATUS: LIVE SCANNING</p>
+                    <div class="min-w-0">
+                        <h4 class="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider truncate">Archives Agent</h4>
+                        <p id="agentStatusText" class="text-[10px] font-mono text-cyan-400/80 truncate">STATUS: LIVE SCANNING</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-1">
-                    <button onclick="toggleAgentHUDMinimize()" class="p-1 rounded text-cyan-400 hover:text-white text-xs">
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button onclick="toggleAgentHUDMinimize()" class="p-1.5 rounded text-cyan-400 hover:text-white text-xs">
                         <i id="hudMinIcon" class="fa-solid fa-minus"></i>
                     </button>
                 </div>
             </div>
 
             <div id="hudExpandedContent" class="space-y-3 text-xs font-mono">
-                <div class="flex items-center justify-between bg-navy-950/80 p-2 rounded-lg border border-cyan-900/60">
-                    <span class="text-slate-300 text-[11px]">TARGET OUTPUT:</span>
+                <div class="flex items-center justify-between bg-navy-950/80 p-2 rounded-lg border border-cyan-900/60 gap-2">
+                    <span class="text-slate-300 text-[10px] sm:text-[11px] flex-shrink-0">TARGET OUTPUT:</span>
                     <select id="agentTargetLangSelect" onchange="changeAgentTargetLang(this.value)" class="bg-cyan-950 border border-cyan-500/50 text-cyan-300 text-[11px] font-bold rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-cyan-400">
                         <option value="FR">FR (Français)</option>
                         <option value="EN">EN (English)</option>
@@ -437,31 +437,31 @@
     </div>
 
     <!-- SIDE-BY-SIDE TRANSLATION AGENT MODAL -->
-    <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-900/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div class="bg-navy-900 text-white p-4 border-b border-cyan-500/30 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
-                    <h3 class="font-serif font-bold text-sm tracking-wide text-cyan-200">Archives Translation Agent • Live Side-By-Side & Speech</h3>
+    <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-navy-900/70 backdrop-blur-sm hidden">
+        <div class="bg-white dark:bg-navy-800 border-2 border-cyan-500/80 rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 max-h-[90vh] flex flex-col">
+            <div class="bg-navy-900 text-white p-3.5 sm:p-4 border-b border-cyan-500/30 flex items-center justify-between flex-shrink-0">
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 flex-shrink-0"></i>
+                    <h3 class="font-serif font-bold text-xs sm:text-sm tracking-wide text-cyan-200 truncate">Archives Translation Agent</h3>
                 </div>
-                <button onclick="closeTranslationModal()" class="text-slate-400 hover:text-white p-1">
+                <button onclick="closeTranslationModal()" class="text-slate-400 hover:text-white p-1.5 flex-shrink-0">
                     <i class="fa-solid fa-xmark text-base"></i>
                 </button>
             </div>
 
-            <div class="p-6 space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div class="bg-slate-50 dark:bg-navy-900 p-4 rounded-xl border border-slate-200 dark:border-navy-700 space-y-2">
+            <div class="p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar flex-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 text-sm">
+                    <div class="bg-slate-50 dark:bg-navy-900 p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-navy-700 space-y-2">
                         <span class="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider">Source Text</span>
                         <p id="originalModalText" class="text-slate-800 dark:text-slate-200 leading-relaxed text-xs sm:text-sm"></p>
                     </div>
 
-                    <div class="bg-cyan-950/20 dark:bg-navy-900 p-4 rounded-xl border border-cyan-500/40 space-y-2 relative">
-                        <div class="flex items-center justify-between border-b border-cyan-500/20 pb-2">
-                            <span class="text-[10px] font-mono uppercase font-bold text-cyan-500 tracking-wider flex items-center gap-1">
+                    <div class="bg-cyan-950/20 dark:bg-navy-900 p-3.5 sm:p-4 rounded-xl border border-cyan-500/40 space-y-2 relative">
+                        <div class="flex items-center justify-between border-b border-cyan-500/20 pb-2 gap-2">
+                            <span class="text-[10px] font-mono uppercase font-bold text-cyan-500 tracking-wider flex items-center gap-1 truncate">
                                 <i class="fa-solid fa-robot"></i> Translated Output
                             </span>
-                            <select id="modalLangSelect" onchange="changeModalTargetLang(this.value)" class="bg-navy-900 border border-cyan-500/50 text-cyan-300 text-xs font-bold rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+                            <select id="modalLangSelect" onchange="changeModalTargetLang(this.value)" class="bg-navy-900 border border-cyan-500/50 text-cyan-300 text-xs font-bold rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-cyan-400 flex-shrink-0">
                                 <option value="FR">FR (Français)</option>
                                 <option value="EN">EN (English)</option>
                                 <option value="ES">ES (Español)</option>
@@ -473,29 +473,29 @@
                 </div>
 
                 <!-- Agent Upgrades: Speech & Copy toolbar -->
-                <div class="flex flex-wrap items-center justify-between gap-3 bg-cyan-950/40 p-3 rounded-xl border border-cyan-500/30 text-xs">
-                    <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center justify-between gap-2.5 bg-cyan-950/40 p-3 rounded-xl border border-cyan-500/30 text-xs">
+                    <div class="flex flex-wrap items-center gap-2">
                         <button onclick="speakTranslatedText()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold flex items-center gap-1.5 transition shadow">
                             <i class="fa-solid fa-volume-high"></i>
-                            <span>Read Aloud (TTS)</span>
+                            <span>Read Aloud</span>
                         </button>
                         <button onclick="copyTranslatedText()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-copy"></i>
-                            <span>Copy Translation</span>
+                            <span>Copy</span>
                         </button>
                     </div>
-                    <span id="agentWordCountStats" class="text-[11px] font-mono text-cyan-300">Words: 0 • Chars: 0</span>
+                    <span id="agentWordCountStats" class="text-[10px] sm:text-[11px] font-mono text-cyan-300">Words: 0 • Chars: 0</span>
                 </div>
             </div>
 
-            <div class="bg-slate-100 dark:bg-navy-900 px-6 py-3 border-t border-slate-200 dark:border-navy-700 flex flex-wrap justify-between items-center gap-2 text-xs">
-                <span class="text-slate-400 font-mono text-[11px]">AGENT LATENCY: 12ms • ENGINE: CONTEXTUAL V3</span>
-                <div class="flex items-center gap-2">
-                    <button onclick="applyTranslationToPage()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-navy-950 rounded-lg font-bold flex items-center gap-1.5 transition">
+            <div class="bg-slate-100 dark:bg-navy-900 px-4 sm:px-6 py-3 border-t border-slate-200 dark:border-navy-700 flex flex-wrap justify-between items-center gap-2 text-xs flex-shrink-0">
+                <span class="text-slate-400 font-mono text-[10px] sm:text-[11px] hidden sm:inline">AGENT LATENCY: 12ms • ENGINE: CONTEXTUAL V3</span>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="applyTranslationToPage()" class="flex-1 sm:flex-initial px-3 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold flex items-center justify-center gap-1.5 transition text-xs">
                         <i class="fa-solid fa-check"></i>
-                        <span>Apply directly to page</span>
+                        <span>Apply to Page</span>
                     </button>
-                    <button onclick="closeTranslationModal()" class="px-3 py-1.5 bg-navy-700 hover:bg-navy-800 text-white rounded-lg font-bold">
+                    <button onclick="closeTranslationModal()" class="px-3 py-2 bg-navy-700 hover:bg-navy-800 text-white rounded-lg font-bold text-xs">
                         Close
                     </button>
                 </div>
@@ -505,12 +505,12 @@
 
     <!-- FAVOURITES DRAWER -->
     <aside id="favouritesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
-        <div class="p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
+        <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-star text-amber-400"></i>
-                <h3 class="font-serif font-bold text-lg" data-i18n="favourites">Saved Favourites Outlets</h3>
+                <h3 class="font-serif font-bold text-base sm:text-lg" data-i18n="favourites">Saved Favourites Outlets</h3>
             </div>
-            <button onclick="toggleFavouritesDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
+            <button onclick="toggleFavouritesDrawer()" class="p-2 rounded text-slate-300 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
@@ -520,11 +520,11 @@
         </div>
 
         <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 flex justify-between gap-2">
-            <button onclick="exportFavourites()" class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center gap-1.5">
+            <button onclick="exportFavourites()" class="flex-1 px-3 py-2.5 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-download"></i>
                 <span data-i18n="export">Export</span>
             </button>
-            <label class="px-3 py-2 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition cursor-pointer flex items-center gap-1.5">
+            <label class="flex-1 px-3 py-2.5 bg-slate-200 dark:bg-navy-700 text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition cursor-pointer flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-upload"></i>
                 <span data-i18n="import">Import</span>
                 <input type="file" accept=".json" onchange="importFavourites(event)" class="hidden">
@@ -534,27 +534,27 @@
 
     <!-- SETTINGS DRAWER -->
     <aside id="settingsDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-navy-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-200 dark:border-navy-700 flex flex-col">
-        <div class="p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
+        <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-navy-700 flex items-center justify-between bg-navy-800 text-white">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-gear text-slate-300"></i>
-                <h3 class="font-serif font-bold text-lg" data-i18n="settingsTitle">Application Settings</h3>
+                <h3 class="font-serif font-bold text-base sm:text-lg" data-i18n="settingsTitle">Application Settings</h3>
             </div>
-            <button onclick="toggleSettingsDrawer()" class="p-1 rounded text-slate-300 hover:text-white">
+            <button onclick="toggleSettingsDrawer()" class="p-2 rounded text-slate-300 hover:text-white">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
+        <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 custom-scrollbar text-sm">
             <div class="bg-slate-50 dark:bg-navy-900 p-4 rounded-xl border border-slate-200 dark:border-navy-700 space-y-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-robot text-cyan-500 text-lg"></i>
-                        <div>
-                            <h4 class="font-bold text-navy-900 dark:text-slate-100 text-xs uppercase tracking-wide">Archives Translation Agent</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">On-Screen Live Translation Scanner</p>
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <i class="fa-solid fa-robot text-cyan-500 text-lg flex-shrink-0"></i>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-navy-900 dark:text-slate-100 text-xs uppercase tracking-wide truncate">Archives Translation Agent</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">On-Screen Live Translation Scanner</p>
                         </div>
                     </div>
-                    <label class="relative inline-flex items-center cursor-pointer">
+                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
                         <input type="checkbox" id="agentToggle" onchange="toggleAgentMode(this.checked)" class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-navy-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-navy-600 peer-checked:bg-cyan-500"></div>
                     </label>
@@ -566,9 +566,9 @@
 
             <div class="space-y-3">
                 <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Appearance & Theme</h4>
-                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700">
+                <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700">
                     <span class="text-xs font-medium text-slate-700 dark:text-slate-300">Theme Mode</span>
-                    <button onclick="toggleDarkMode()" class="px-3 py-1.5 bg-slate-200 dark:bg-navy-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-semibold">
+                    <button onclick="toggleDarkMode()" class="px-3.5 py-2 bg-slate-200 dark:bg-navy-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-semibold">
                         Toggle Light/Dark
                     </button>
                 </div>
@@ -576,26 +576,26 @@
         </div>
 
         <div class="p-4 border-t border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-900 text-center">
-            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.4</span>
+            <span class="text-xs text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 3.4 (MOBILE OPTIMIZED)</span>
         </div>
     </aside>
 
     <div id="drawerOverlay" onclick="closeAllDrawers()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden transition-opacity"></div>
 
     <footer class="bg-navy-900 text-white mt-16 border-t border-navy-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded bg-maple-600 flex items-center justify-center text-white font-bold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                <div class="flex items-center space-x-3 justify-center md:justify-start">
+                    <div class="w-9 h-9 rounded bg-maple-600 flex items-center justify-center text-white font-bold flex-shrink-0">
                         <i class="fa-solid fa-leaf"></i>
                     </div>
-                    <div>
-                        <h3 class="font-serif font-bold text-base tracking-wider uppercase">ARCHIVES DE CANADA</h3>
-                        <p class="text-xs text-slate-400" data-i18n="mottoText">National Directory of Global Journalism & Media</p>
+                    <div class="min-w-0">
+                        <h3 class="font-serif font-bold text-sm sm:text-base tracking-wider uppercase truncate">ARCHIVES DE CANADA</h3>
+                        <p class="text-xs text-slate-400 truncate" data-i18n="mottoText">National Directory of Global Journalism & Media</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-400 text-center md:text-right" data-i18n="footerStorageNotice">
+                <p class="text-xs text-slate-400 max-w-sm" data-i18n="footerStorageNotice">
                     Starred directories and language choices are preserved locally on your device.
                 </p>
             </div>
@@ -685,7 +685,6 @@
         };
 
         const mediaOutlets = [
-            // Original Outlets
             { id: "cbc-news", name: "CBC News", region: "Canada", country: "Canada", language: "EN", description: "Canada's national public broadcaster delivering national and regional breaking news.", url: "https://www.cbc.ca/news", iconClass: "fa-solid fa-radio" },
             { id: "radio-canada", name: "ICI Radio-Canada", region: "Canada", country: "Canada", language: "FR", description: "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.", url: "https://ici.radio-canada.ca", iconClass: "fa-solid fa-tower-broadcast" },
             { id: "globe-and-mail", name: "The Globe and Mail", region: "Canada", country: "Canada", language: "EN", description: "Canada's newspaper of record covering national business, politics, and culture.", url: "https://www.theglobeandmail.com", iconClass: "fa-solid fa-newspaper" },
@@ -701,31 +700,18 @@
             { id: "the-guardian", name: "The Guardian", region: "Europe", country: "United Kingdom", language: "EN", description: "Independent British newspaper covering global environmental and social affairs.", url: "https://www.theguardian.com", iconClass: "fa-solid fa-pen-nib" },
             { id: "al-jazeera", name: "Al Jazeera English", region: "International", country: "Qatar / Global", language: "EN", description: "International news network offering Middle Eastern and global perspectives.", url: "https://www.aljazeera.com", iconClass: "fa-solid fa-satellite-dish" },
             { id: "reuters", name: "Reuters", region: "International", country: "Global Wire", language: "EN", description: "Global news organization providing real-time financial and wire reporting.", url: "https://www.reuters.com", iconClass: "fa-solid fa-chart-line" },
-
-            // NEW 14 OUTLETS REQUESTED ACROSS THE GLOBE
-            // North America (2 Mexico, 1 Dominican Republic)
             { id: "el-universal", name: "El Universal", region: "North America", country: "Mexico", language: "ES", description: "Leading Mexican daily newspaper covering national politics and Latin American affairs.", url: "https://www.eluniversal.com.mx", iconClass: "fa-solid fa-newspaper" },
             { id: "reforma", name: "Reforma", region: "North America", country: "Mexico", language: "ES", description: "Prominent Mexican newspaper based in Mexico City with national reach.", url: "https://www.reforma.com", iconClass: "fa-solid fa-file-lines" },
             { id: "listin-diario", name: "Listín Diario", region: "North America", country: "Dominican Republic", language: "ES", description: "The oldest continuously published newspaper in the Dominican Republic.", url: "https://listindiario.com", iconClass: "fa-solid fa-book" },
-
-            // South America (Suriname & Venezuela)
             { id: "de-west", name: "De West", region: "South America", country: "Suriname", language: "NL", description: "Surinamese daily newspaper reporting on regional and national affairs.", url: "https://www.dewestnews.com", iconClass: "fa-solid fa-globe" },
             { id: "el-nacional", name: "El Nacional", region: "South America", country: "Venezuela", language: "ES", description: "Major Venezuelan independent newspaper and digital news portal.", url: "https://www.elnacional.com", iconClass: "fa-solid fa-landmark" },
-
-            // Oceania (Papua New Guinea & Fiji)
             { id: "post-courier", name: "Post-Courier", region: "Oceania", country: "Papua New Guinea", language: "EN", description: "Papua New Guinea's leading national daily newspaper.", url: "https://www.postcourier.com.pg", iconClass: "fa-solid fa-newspaper" },
             { id: "fiji-times", name: "The Fiji Times", region: "Oceania", country: "Fiji", language: "EN", description: "Long-standing daily newspaper serving Fiji and the South Pacific.", url: "https://www.fijitimes.com", iconClass: "fa-solid fa-water" },
-
-            // Africa (Egypt, Algeria & Nigeria)
             { id: "al-ahram", name: "Al-Ahram", region: "Africa", country: "Egypt", language: "AR/EN", description: "The most prominent and historically significant newspaper in Egypt.", url: "https://english.ahram.org.eg", iconClass: "fa-solid fa-landmark-dome" },
             { id: "el-watan", name: "El Watan", region: "Africa", country: "Algeria", language: "FR", description: "Leading independent French-language daily newspaper in Algeria.", url: "https://www.elwatan.com", iconClass: "fa-solid fa-newspaper" },
             { id: "punch-ng", name: "Punch Newspapers", region: "Africa", country: "Nigeria", language: "EN", description: "Widely read national daily newspaper delivering news across Nigeria.", url: "https://punchng.com", iconClass: "fa-solid fa-shield-halved" },
-
-            // Europe (Turkey & Spain)
             { id: "hurriyet", name: "Hürriyet Daily News", region: "Europe", country: "Turkey", language: "EN", description: "Turkey's oldest English-language daily newspaper reporting regional events.", url: "https://www.hurriyetdailynews.com", iconClass: "fa-solid fa-globe" },
             { id: "el-pais", name: "El País", region: "Europe", country: "Spain", language: "ES", description: "Spain's newspaper of record with global Spanish-language readership.", url: "https://elpais.com", iconClass: "fa-solid fa-book-open" },
-
-            // Asia (South Korea & Mongolia)
             { id: "yonhap", name: "Yonhap News Agency", region: "Asia", country: "South Korea", language: "EN", description: "Key South Korean wire and news service covering East Asia.", url: "https://en.yna.co.kr", iconClass: "fa-solid fa-satellite" },
             { id: "ub-post", name: "The UB Post", region: "Asia", country: "Mongolia", language: "EN", description: "English-language newspaper providing news and analytical reports from Mongolia.", url: "https://ubpost.mongolnews.mn", iconClass: "fa-solid fa-mountain" }
         ];
@@ -743,7 +729,6 @@
         let currentTargetElement = null;
         let originalClickedText = "";
         let wdHistory = JSON.parse(localStorage.getItem('archives_wd_history') || '[]');
-        let translationHistoryLog = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
@@ -766,12 +751,12 @@
             const message = i18n[currentLang][messageKeyOrText] || messageKeyOrText;
             toastMsg.textContent = message;
 
-            toast.classList.remove('translate-y-[-100%]', 'opacity-0', 'pointer-events-none');
+            toast.classList.remove('translate-y-[-120%]', 'opacity-0', 'pointer-events-none');
             toast.classList.add('translate-y-0', 'opacity-100');
 
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-[-100%]', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-[-120%]', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
 
@@ -784,17 +769,17 @@
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
                 document.documentElement.classList.add('dark');
-                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-sm text-amber-400';
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-xs sm:text-sm text-amber-400';
             } else {
                 document.documentElement.classList.remove('dark');
-                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-sm';
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-xs sm:text-sm';
             }
         }
 
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('archives_theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-sm text-amber-400' : 'fa-solid fa-moon text-sm';
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-xs sm:text-sm text-amber-400' : 'fa-solid fa-moon text-xs sm:text-sm';
         }
 
         function toggleLanguage() {
@@ -846,7 +831,7 @@
                     : 'bg-white dark:bg-navy-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-navy-700 hover:bg-slate-100 dark:hover:bg-navy-700';
 
                 return `
-                    <button onclick="filterByRegion('${reg}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${activeClass}">
+                    <button onclick="filterByRegion('${reg}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition flex-shrink-0 ${activeClass}">
                         ${reg === 'Favourites' ? '<i class="fa-solid fa-star text-amber-500 mr-1"></i>' : ''}
                         ${label}
                     </button>
@@ -921,25 +906,25 @@
                 const starClass = isFav ? 'fa-solid text-amber-400' : 'fa-regular text-slate-300 dark:text-slate-600 hover:text-amber-400';
 
                 return `
-                    <div class="bg-white dark:bg-navy-800 rounded-2xl p-5 border border-slate-200 dark:border-navy-700 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group">
+                    <div class="bg-white dark:bg-navy-800 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-navy-700 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group">
                         <div class="space-y-3">
                             <div class="flex items-start justify-between gap-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-center text-navy-800 dark:text-cyan-400 group-hover:scale-105 transition-transform">
-                                        <i class="${outlet.iconClass} text-base"></i>
+                                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 flex items-center justify-center text-navy-800 dark:text-cyan-400 group-hover:scale-105 transition-transform flex-shrink-0">
+                                        <i class="${outlet.iconClass} text-sm sm:text-base"></i>
                                     </div>
-                                    <div>
-                                        <h4 class="font-bold text-navy-900 dark:text-white text-sm leading-tight">${outlet.name}</h4>
-                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">${outlet.country} • ${outlet.language}</span>
+                                    <div class="min-w-0">
+                                        <h4 class="font-bold text-navy-900 dark:text-white text-xs sm:text-sm leading-tight truncate">${outlet.name}</h4>
+                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider truncate block">${outlet.country} • ${outlet.language}</span>
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-2">
-                                    <button onclick="loadInOutletsWd('${outlet.url}')" title="Open in World Direct" class="p-1.5 text-slate-400 hover:text-cyan-400 transition">
+                                <div class="flex items-center gap-1.5 flex-shrink-0">
+                                    <button onclick="loadInOutletsWd('${outlet.url}')" title="Open in World Direct" class="p-2 text-slate-400 hover:text-cyan-400 transition">
                                         <i class="fa-solid fa-bolt text-xs"></i>
                                     </button>
-                                    <button onclick="toggleFavourite('${outlet.id}')" title="Toggle Favourite" class="p-1.5 transition">
-                                        <i class="${starClass} fa-star text-base"></i>
+                                    <button onclick="toggleFavourite('${outlet.id}')" title="Toggle Favourite" class="p-2 transition">
+                                        <i class="${starClass} fa-star text-sm sm:text-base"></i>
                                     </button>
                                 </div>
                             </div>
@@ -954,7 +939,7 @@
                                 ${outlet.region}
                             </span>
 
-                            <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="text-navy-700 dark:text-cyan-400 hover:underline font-bold flex items-center gap-1">
+                            <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="text-navy-700 dark:text-cyan-400 hover:underline font-bold flex items-center gap-1 py-1">
                                 <span>${i18n[currentLang].visitOutlet}</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                             </a>
@@ -1011,16 +996,16 @@
 
             drawerBody.innerHTML = savedOutlets.map(outlet => `
                 <div class="p-3 bg-slate-50 dark:bg-navy-900 rounded-xl border border-slate-200 dark:border-navy-700 flex items-center justify-between gap-2">
-                    <div class="space-y-0.5">
-                        <h5 class="font-bold text-xs text-navy-900 dark:text-slate-100">${outlet.name}</h5>
-                        <p class="text-[10px] text-slate-400">${outlet.country} (${outlet.language})</p>
+                    <div class="space-y-0.5 min-w-0 pr-2">
+                        <h5 class="font-bold text-xs text-navy-900 dark:text-slate-100 truncate">${outlet.name}</h5>
+                        <p class="text-[10px] text-slate-400 truncate">${outlet.country} (${outlet.language})</p>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <a href="${outlet.url}" target="_blank" class="p-1 text-xs text-navy-700 dark:text-cyan-400 hover:underline">
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        <a href="${outlet.url}" target="_blank" class="p-2 text-xs text-navy-700 dark:text-cyan-400 hover:underline">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
-                        <button onclick="toggleFavourite('${outlet.id}')" class="p-1 text-xs text-amber-500 hover:text-amber-600">
+                        <button onclick="toggleFavourite('${outlet.id}')" class="p-2 text-xs text-amber-500 hover:text-amber-600">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -1104,7 +1089,6 @@
         function initWorldDirect() {
             renderWdPresets();
             renderWdHistory();
-            // Default sample load in World Direct
             executeWorldDirectLink('https://www.cbc.ca/news');
         }
 
@@ -1113,7 +1097,7 @@
             const presets = mediaOutlets.slice(0, 10);
 
             container.innerHTML = presets.map(p => `
-                <button onclick="executeWorldDirectLink('${p.url}')" class="p-2 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 hover:border-cyan-500 text-left transition truncate">
+                <button onclick="executeWorldDirectLink('${p.url}')" class="p-2.5 rounded-xl bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 hover:border-cyan-500 text-left transition truncate">
                     <span class="block font-bold text-xs text-slate-800 dark:text-slate-200 truncate">${p.name}</span>
                     <span class="block text-[10px] text-slate-400 truncate">${p.country}</span>
                 </button>
@@ -1123,7 +1107,7 @@
         function loadInOutletsWd(url) {
             document.getElementById('wd-url-input').value = url;
             executeWorldDirectLink(url);
-            window.scrollTo({ top: document.getElementById('world-direct-section').offsetTop - 100, behavior: 'smooth' });
+            window.scrollTo({ top: document.getElementById('world-direct-section').offsetTop - 80, behavior: 'smooth' });
         }
 
         function executeWorldDirectLink(forcedUrl) {
@@ -1137,17 +1121,14 @@
 
             urlInput.value = targetUrl;
 
-            // Update external link buttons
             document.getElementById('wd-external-link').href = targetUrl;
             document.getElementById('wd-fallback-external').href = targetUrl;
 
-            // Load Iframe
             const iframe = document.getElementById('wd-iframe');
             const fallback = document.getElementById('wd-frame-fallback');
             iframe.src = targetUrl;
             fallback.classList.add('hidden');
 
-            // Populate Extractor View
             try {
                 const parsed = new URL(targetUrl);
                 document.getElementById('wd-ext-domain').textContent = parsed.hostname.toUpperCase();
@@ -1159,7 +1140,6 @@
                 `;
             } catch(e) {}
 
-            // Save history
             if (!wdHistory.includes(targetUrl)) {
                 wdHistory.unshift(targetUrl);
                 if (wdHistory.length > 8) wdHistory.pop();
@@ -1179,13 +1159,13 @@
             if (mode === 'frame') {
                 frameWrapper.classList.remove('hidden');
                 extractorWrapper.classList.add('hidden');
-                frameBtn.className = 'px-3 py-1 rounded-md bg-cyan-600 text-white transition';
-                extractorBtn.className = 'px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
+                frameBtn.className = 'px-2.5 sm:px-3 py-1 rounded-md bg-cyan-600 text-white transition';
+                extractorBtn.className = 'px-2.5 sm:px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
             } else {
                 frameWrapper.classList.add('hidden');
                 extractorWrapper.classList.remove('hidden');
-                extractorBtn.className = 'px-3 py-1 rounded-md bg-cyan-600 text-white transition';
-                frameBtn.className = 'px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
+                extractorBtn.className = 'px-2.5 sm:px-3 py-1 rounded-md bg-cyan-600 text-white transition';
+                frameBtn.className = 'px-2.5 sm:px-3 py-1 rounded-md text-slate-600 dark:text-slate-300 transition';
             }
         }
 
@@ -1199,7 +1179,7 @@
             list.innerHTML = wdHistory.map(url => `
                 <button onclick="loadInOutletsWd('${url}')" class="w-full text-left p-2 rounded-lg bg-slate-50 dark:bg-navy-900 border border-slate-200 dark:border-navy-700 text-slate-700 dark:text-slate-300 hover:text-cyan-400 truncate flex items-center justify-between">
                     <span class="truncate pr-2">${url}</span>
-                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400 flex-shrink-0"></i>
                 </button>
             `).join('');
         }
@@ -1210,7 +1190,6 @@
             renderWdHistory();
         }
 
-        // Catch iframe load error / X-Frame-Options blocking gracefully
         document.addEventListener('DOMContentLoaded', () => {
             const iframe = document.getElementById('wd-iframe');
             iframe.onerror = function() {
@@ -1315,7 +1294,6 @@
             const output = translateText(sourceText, agentTargetLang);
             transTextElem.textContent = output;
 
-            // Word & Char stats upgrade
             const words = output.split(/\s+/).length;
             const chars = output.length;
             document.getElementById('agentWordCountStats').textContent = `Words: ${words} • Chars: ${chars}`;
@@ -1369,7 +1347,6 @@
             }
         }
 
-        // AGENT UPGRADE: Speech Synthesis (TTS)
         function speakTranslatedText() {
             const translatedText = document.getElementById('translatedModalText').textContent;
             if (!translatedText || !('speechSynthesis' in window)) {
@@ -1383,7 +1360,6 @@
             showToast('Reading translation aloud...');
         }
 
-        // AGENT UPGRADE: Copy Translated Text
         function copyTranslatedText() {
             const translatedText = document.getElementById('translatedModalText').textContent;
             navigator.clipboard.writeText(translatedText).then(() => {
