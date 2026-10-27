@@ -67,59 +67,6 @@
         .dark .custom-scrollbar::-webkit-scrollbar-thumb {
             background: rgba(255,255,255,0.18);
         }
-
-        @keyframes archivalSweep {
-            0% { top: 0%; opacity: 0.9; }
-            50% { top: 100%; opacity: 0.9; }
-            100% { top: 0%; opacity: 0.6; }
-        }
-
-        @keyframes agentPulse {
-            0%, 100% { box-shadow: 0 0 15px rgba(139, 38, 38, 0.25), inset 0 0 10px rgba(139, 38, 38, 0.1); }
-            50% { box-shadow: 0 0 25px rgba(139, 38, 38, 0.45), inset 0 0 15px rgba(139, 38, 38, 0.2); }
-        }
-
-        @keyframes waveform {
-            0%, 100% { height: 4px; }
-            50% { height: 16px; }
-        }
-
-        .agent-active-glow {
-            animation: agentPulse 3.5s infinite ease-in-out;
-        }
-
-        .scanning-laser {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #8b2626, #b89742, #8b2626, transparent);
-            box-shadow: 0 0 10px #8b2626, 0 0 15px #b89742;
-            animation: archivalSweep 2s infinite linear;
-            z-index: 30;
-            pointer-events: none;
-        }
-
-        .translation-target-active {
-            position: relative;
-            cursor: pointer !important;
-            transition: all 0.2s ease;
-        }
-
-        .translation-target-active:hover {
-            outline: 1.5px dashed #8b2626;
-            outline-offset: 4px;
-            background-color: rgba(139, 38, 38, 0.04) !important;
-            border-radius: 4px;
-        }
-
-        .wave-bar {
-            width: 3px;
-            background-color: #8b2626;
-            border-radius: 2px;
-            display: inline-block;
-            animation: waveform 1.2s infinite ease-in-out;
-        }
     </style>
 </head>
 <body class="archival-bg text-archival-ink dark:text-slate-100 min-h-screen flex flex-col font-body transition-colors duration-200 selection:bg-archival-accent selection:text-white">
@@ -167,7 +114,6 @@
                     <!-- Settings Drawer Button -->
                     <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2 sm:p-2.5 rounded-lg border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-archival-darkBorder transition flex items-center gap-2 relative">
                         <i class="fa-solid fa-sliders text-xs sm:text-sm"></i>
-                        <span id="agentActiveDot" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-archival-accent rounded-full animate-ping"></span>
                     </button>
 
                     <!-- Language Switcher Toggle -->
@@ -359,143 +305,6 @@
 
     </main>
 
-    <!-- FLOATING TRANSLATION AGENT HUD -->
-    <div id="translationAgentHUD" class="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-40 hidden transition-all duration-300 max-w-sm mx-auto sm:mx-0">
-        <div id="hudBody" class="bg-white dark:bg-archival-darkCard border-2 border-archival-accent/80 rounded-2xl p-4 shadow-2xl backdrop-blur-md text-archival-ink dark:text-white agent-active-glow w-full sm:w-80 space-y-3.5 relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-archival-accent/5 via-transparent to-transparent pointer-events-none"></div>
-
-            <div class="flex items-center justify-between border-b border-archival-border dark:border-archival-darkBorder pb-3">
-                <div class="flex items-center gap-2.5 min-w-0">
-                    <div class="relative flex items-center justify-center w-8 h-8 rounded-lg bg-archival-accent/10 border border-archival-accent text-archival-accent flex-shrink-0">
-                        <i class="fa-solid fa-language text-xs"></i>
-                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-archival-accent rounded-full animate-pulse"></span>
-                    </div>
-                    <div class="min-w-0">
-                        <h4 class="text-xs font-mono font-bold text-archival-ink dark:text-white uppercase tracking-wider truncate">Archives Agent v5</h4>
-                        <p id="agentStatusText" class="text-[10px] font-mono text-archival-accent dark:text-red-400 truncate">STATUS: LIVE SCANNING</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-1 flex-shrink-0">
-                    <button onclick="toggleAgentHUDMinimize()" class="p-1.5 rounded text-slate-500 hover:text-archival-ink dark:hover:text-white text-xs">
-                        <i id="hudMinIcon" class="fa-solid fa-minus"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="hudExpandedContent" class="space-y-3.5 text-xs font-mono">
-                <div class="flex items-center justify-between bg-slate-50 dark:bg-archival-darkPaper p-2.5 rounded-xl border border-archival-border dark:border-archival-darkBorder gap-2">
-                    <span class="text-slate-600 dark:text-slate-300 text-[10px] sm:text-[11px] flex-shrink-0 font-bold">TARGET OUTPUT:</span>
-                    <select id="agentTargetLangSelect" onchange="changeAgentTargetLang(this.value)" class="bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-cyan-300 text-[11px] font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-archival-accent">
-                        <option value="FR">FR (Français)</option>
-                        <option value="EN">EN (English)</option>
-                        <option value="ES">ES (Español)</option>
-                        <option value="DE">DE (Deutsch)</option>
-                        <option value="ZH">ZH (中文)</option>
-                        <option value="JA">JA (日本語)</option>
-                        <option value="AR">AR (العربية)</option>
-                        <option value="HI">HI (हिन्दी)</option>
-                        <option value="PT">PT (Português)</option>
-                        <option value="RU">RU (Русский)</option>
-                        <option value="IT">IT (Italiano)</option>
-                        <option value="KO">KO (한국어)</option>
-                    </select>
-                </div>
-
-                <div class="flex items-center justify-between px-1">
-                    <div class="flex items-center gap-1">
-                        <div class="wave-bar" style="animation-delay: 0s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.2s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.4s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.1s"></div>
-                        <div class="wave-bar" style="animation-delay: 0.3s"></div>
-                    </div>
-                    <span class="text-[10px] font-editorial italic text-slate-500 dark:text-slate-400" data-i18n="agentHoverHint">Click any paragraph to translate</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- REMODELED FULL-PARAGRAPH TRANSLATION MODAL -->
-    <div id="translationModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm hidden">
-        <div class="bg-white dark:bg-archival-darkCard border-2 border-archival-accent rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 max-h-[90vh] flex flex-col">
-            <div class="bg-archival-ink text-white p-4 border-b border-archival-border flex items-center justify-between flex-shrink-0">
-                <div class="flex items-center gap-2.5 min-w-0 pr-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-archival-gold flex-shrink-0"></i>
-                    <h3 class="font-serif font-bold text-xs sm:text-sm tracking-wide text-white truncate">Archives Full-Paragraph Translation Agent v5</h3>
-                </div>
-                <button onclick="closeTranslationModal()" class="text-slate-400 hover:text-white p-1.5 flex-shrink-0">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <div class="p-5 sm:p-7 space-y-5 overflow-y-auto custom-scrollbar flex-1 font-editorial">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <!-- Original Source Paragraph Box -->
-                    <div class="bg-slate-50 dark:bg-archival-darkPaper p-4.5 rounded-xl border border-archival-border dark:border-archival-darkBorder space-y-2 flex flex-col">
-                        <div class="flex items-center justify-between border-b border-archival-border dark:border-archival-darkBorder pb-2">
-                            <span class="text-[10px] font-mono uppercase font-bold text-slate-400 tracking-wider">Source Paragraph</span>
-                            <span id="sourceStats" class="text-[10px] font-mono text-slate-400">0 words</span>
-                        </div>
-                        <p id="originalModalText" class="text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base flex-1 whitespace-pre-wrap py-1"></p>
-                    </div>
-
-                    <!-- Translated Paragraph Output Box -->
-                    <div class="bg-archival-accent/5 dark:bg-archival-darkPaper p-4.5 rounded-xl border border-archival-accent/40 space-y-2 flex flex-col relative">
-                        <div class="flex items-center justify-between border-b border-archival-accent/20 pb-2 gap-2">
-                            <span class="text-[10px] font-mono uppercase font-bold text-archival-accent dark:text-red-400 tracking-wider flex items-center gap-1 truncate">
-                                <i class="fa-solid fa-robot"></i> Full Translation Output
-                            </span>
-                            <select id="modalLangSelect" onchange="changeModalTargetLang(this.value)" class="bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-cyan-300 text-xs font-mono font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-archival-accent flex-shrink-0">
-                                <option value="FR">FR (Français)</option>
-                                <option value="EN">EN (English)</option>
-                                <option value="ES">ES (Español)</option>
-                                <option value="DE">DE (Deutsch)</option>
-                                <option value="ZH">ZH (中文)</option>
-                                <option value="JA">JA (日本語)</option>
-                                <option value="AR">AR (العربية)</option>
-                                <option value="HI">HI (हिन्दी)</option>
-                                <option value="PT">PT (Português)</option>
-                                <option value="RU">RU (Русский)</option>
-                                <option value="IT">IT (Italiano)</option>
-                                <option value="KO">KO (한국어)</option>
-                            </select>
-                        </div>
-                        <p id="translatedModalText" class="text-slate-900 dark:text-slate-100 leading-relaxed text-sm sm:text-base font-medium flex-1 whitespace-pre-wrap py-1"></p>
-                    </div>
-                </div>
-
-                <!-- Action Controls Toolbar -->
-                <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-archival-darkPaper p-3.5 rounded-xl border border-archival-border dark:border-archival-darkBorder text-xs font-mono">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="speakTranslatedText()" class="px-3.5 py-2 bg-archival-ink hover:bg-black dark:bg-archival-accent dark:hover:bg-red-800 text-white rounded-lg font-bold flex items-center gap-1.5 transition shadow">
-                            <i class="fa-solid fa-volume-high"></i>
-                            <span>Read Aloud</span>
-                        </button>
-                        <button onclick="copyTranslatedText()" class="px-3.5 py-2 bg-slate-200 dark:bg-archival-darkBorder hover:bg-slate-300 text-slate-800 dark:text-white rounded-lg font-bold flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-copy"></i>
-                            <span>Copy</span>
-                        </button>
-                    </div>
-                    <span id="agentWordCountStats" class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Words: 0 • Chars: 0</span>
-                </div>
-            </div>
-
-            <div class="bg-slate-100 dark:bg-archival-darkPaper px-5 sm:px-7 py-3.5 border-t border-archival-border dark:border-archival-darkBorder flex flex-wrap justify-between items-center gap-3 text-xs font-mono flex-shrink-0">
-                <span class="text-slate-400 text-[10px] sm:text-[11px] hidden sm:inline">FULL PARAGRAPH TRANSLATION PIPELINE • ARCHIVAL ENGINE V5</span>
-                <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
-                    <button onclick="applyTranslationToPage()" class="flex-1 sm:flex-initial px-4 py-2 bg-archival-accent hover:bg-red-800 text-white rounded-lg font-bold flex items-center justify-center gap-1.5 transition text-xs">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Apply Paragraph to Page</span>
-                    </button>
-                    <button onclick="closeTranslationModal()" class="px-4 py-2 bg-slate-200 dark:bg-archival-darkBorder hover:bg-slate-300 text-slate-800 dark:text-white rounded-lg font-bold text-xs">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- FAVOURITES DRAWER -->
     <aside id="favouritesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-archival-darkCard shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-archival-border dark:border-archival-darkBorder flex flex-col">
         <div class="p-5 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between bg-archival-ink text-white">
@@ -538,25 +347,6 @@
         </div>
 
         <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
-            <div class="bg-slate-50 dark:bg-archival-darkPaper p-4 rounded-xl border border-archival-border dark:border-archival-darkBorder space-y-3">
-                <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <i class="fa-solid fa-language text-archival-accent text-xl flex-shrink-0"></i>
-                        <div class="min-w-0">
-                            <h4 class="font-bold text-archival-ink dark:text-slate-100 text-xs uppercase tracking-wide truncate">Archives Translation Agent v5</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">Full Paragraph Translation Pipeline</p>
-                        </div>
-                    </div>
-                    <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                        <input type="checkbox" id="agentToggle" onchange="toggleAgentMode(this.checked)" class="sr-only peer">
-                        <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer dark:bg-archival-darkBorder peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-navy-600 peer-checked:bg-archival-accent"></div>
-                    </label>
-                </div>
-                <p class="font-editorial text-xs text-slate-600 dark:text-slate-300 leading-normal pt-2 border-t border-archival-border dark:border-archival-darkBorder">
-                    Enables interactive paragraph scanning and full contextual translation across 12 global languages with word-by-word structural alignment.
-                </p>
-            </div>
-
             <div class="space-y-3">
                 <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">Appearance & Theme</h4>
                 <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder">
@@ -569,7 +359,7 @@
         </div>
 
         <div class="p-4 border-t border-archival-border dark:border-archival-darkBorder bg-slate-50 dark:bg-archival-darkPaper text-center">
-            <span class="text-[11px] text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 5.0 (FULL-PARAGRAPH TRANSLATION)</span>
+            <span class="text-[11px] text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 5.0</span>
         </div>
     </aside>
 
@@ -634,7 +424,6 @@
                 favourites: "Favourites",
                 visitOutlet: "Visit Outlet",
                 settingsTitle: "Application Settings",
-                agentHoverHint: "Click any paragraph to translate",
                 toastFavouriteAdded: "Added to favourites.",
                 toastFavouriteRemoved: "Removed from favourites.",
                 toastUrlExecuted: "Target URL loaded in Execution Hub.",
@@ -669,7 +458,6 @@
                 favourites: "Mes Favoris",
                 visitOutlet: "Visiter le site",
                 settingsTitle: "Paramètres de l'application",
-                agentHoverHint: "Cliquer sur un paragraphe pour traduire",
                 toastFavouriteAdded: "Ajouté aux favoris.",
                 toastFavouriteRemoved: "Retiré des favoris.",
                 toastUrlExecuted: "URL exécutée avec succès dans le Hub.",
@@ -679,7 +467,6 @@
         };
 
         const mediaOutlets = [
-            // Original Outlets
             { id: "cbc-news", name: "CBC News", region: "Canada", country: "Canada", language: "EN", description: "Canada's national public broadcaster delivering national and regional breaking news.", url: "https://www.cbc.ca/news", iconClass: "fa-solid fa-radio" },
             { id: "radio-canada", name: "ICI Radio-Canada", region: "Canada", country: "Canada", language: "FR", description: "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.", url: "https://ici.radio-canada.ca", iconClass: "fa-solid fa-tower-broadcast" },
             { id: "globe-and-mail", name: "The Globe and Mail", region: "Canada", country: "Canada", language: "EN", description: "Canada's newspaper of record covering national business, politics, and culture.", url: "https://www.theglobeandmail.com", iconClass: "fa-solid fa-newspaper" },
@@ -709,8 +496,6 @@
             { id: "el-pais", name: "El País", region: "Europe", country: "Spain", language: "ES", description: "Spain's newspaper of record with global Spanish-language readership.", url: "https://elpais.com", iconClass: "fa-solid fa-book-open" },
             { id: "yonhap", name: "Yonhap News Agency", region: "Asia", country: "South Korea", language: "EN", description: "Key South Korean wire and news service covering East Asia.", url: "https://en.yna.co.kr", iconClass: "fa-solid fa-satellite" },
             { id: "ub-post", name: "The UB Post", region: "Asia", country: "Mongolia", language: "EN", description: "English-language newspaper providing news and analytical reports from Mongolia.", url: "https://ubpost.mongolnews.mn", iconClass: "fa-solid fa-mountain" },
-
-            // 10 NEW GLOBAL OUTLETS (Focusing on newly represented nations)
             { id: "folio-de-s-paulo", name: "Folha de S.Paulo", region: "South America", country: "Brazil", language: "PT", description: "Brazil's leading national daily newspaper providing extensive South American coverage.", url: "https://www.folha.uol.com.br", iconClass: "fa-solid fa-newspaper" },
             { id: "morgenpost-namibia", name: "The Namibian", region: "Africa", country: "Namibia", language: "EN", description: "Namibia's largest independent newspaper covering southern African developments.", url: "https://www.namibian.com.na", iconClass: "fa-solid fa-earth-africa" },
             { id: "asahi-shimbun", name: "The Asahi Shimbun", region: "Asia", country: "Japan", language: "JA/EN", description: "Major Japanese national newspaper reporting on Asia-Pacific politics and economics.", url: "https://www.asahi.com/ajw/", iconClass: "fa-solid fa-sun" },
@@ -731,10 +516,6 @@
         let currentRegion = 'All';
         let searchQuery = '';
         let activeFavourites = JSON.parse(localStorage.getItem('archives_favourites') || '[]');
-        let isAgentActive = false;
-        let agentTargetLang = 'FR';
-        let currentTargetElement = null;
-        let originalClickedParagraph = "";
         let wdHistory = JSON.parse(localStorage.getItem('archives_wd_history') || '[]');
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -954,10 +735,6 @@
                     </div>
                 `;
             }).join('');
-
-            if (isAgentActive) {
-                attachAgentListeners();
-            }
         }
 
         /* ==========================================================================
@@ -1173,324 +950,6 @@
                 document.getElementById('wd-frame-fallback').classList.remove('hidden');
             };
         });
-
-        /* ==========================================================================
-           9. REMODELED ARCHIVES TRANSLATION AGENT ENGINE v5 (Full Paragraph Pipeline)
-           ========================================================================== */
-
-        // Comprehensive multi-language vocabulary database for sentence/paragraph reconstruction
-        const paragraphLexicon = {
-            FR: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "Le diffuseur public national du Canada transmettant des nouvelles de dernière heure nationales et régionales.",
-                "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.": "Le diffuseur public francophone canadien offrant des nouvelles locales et internationales.",
-                "Canada's newspaper of record covering national business, politics, and culture.": "Le journal de référence du Canada couvrant les affaires nationales, la politique et la culture.",
-                "Journal indépendant québécois de référence axé sur la politique et les enjeux de société.": "Journal indépendant québécois de référence axé sur la politique et les enjeux de société.",
-                "Grand quotidien d'information numérique francophone basé à Montréal.": "Grand quotidien d'information numérique francophone basé à Montréal.",
-                "Canadian English-language conservative daily commentary and national headlines.": "Commentaires quotidiens conservateurs et manchettes nationales en langue anglaise du Canada.",
-                "Prominent American daily newspaper providing global reporting and investigation.": "Grand quotidien américain offrant des reportages internationaux et des enquêtes.",
-                "Major national daily focusing on American politics and federal government analysis.": "Grand quotidien national axé sur la politique américaine et l'analyse du gouvernement fédéral.",
-                "Non-profit public broadcasting audio and news network in the USA.": "Réseau de radiodiffusion publique et d'information à but non lucratif aux États-Unis.",
-                "Public service broadcaster delivering extensive world news coverage.": "Diffuseur de service public offrant une vaste couverture de l'actualité mondiale.",
-                "Journal quotidien français d'information générale de premier plan.": "Journal quotidien français d'information générale de premier plan.",
-                "Chaîne d'information internationale offrant des diffusions en français et en anglais.": "Chaîne d'information internationale offrant des diffusions en français et en anglais.",
-                "Independent British newspaper covering global environmental and social affairs.": "Journal britannique indépendant couvrant les affaires environnementales et sociales mondiales.",
-                "International news network offering Middle Eastern and global perspectives.": "Réseau d'information international offrant des perspectives du Moyen-Orient et du monde.",
-                "Global news organization providing real-time financial and wire reporting.": "Organisation mondiale d'information fournissant des dépêches et reportages financiers en temps réel.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.": "Explorez des répertoires sélectionnés d'organisations de presse fiables regroupées par régions géographiques. Marquez d'une étoile vos principaux canaux ou exécutez instantanément tout lien d'actualité mondial via World Direct."
-            },
-            ES: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "La radiodifusora pública nacional de Canadá que transmite noticias de última hora nacionales y regionales.",
-                "Canada's newspaper of record covering national business, politics, and culture.": "El periódico de referencia de Canadá que cubre negocios, política y cultura nacional.",
-                "Prominent American daily newspaper providing global reporting and investigation.": "Destacado periódico diario estadounidense que ofrece cobertura e investigación global.",
-                "Public service broadcaster delivering extensive world news coverage.": "Emisora de servicio público que ofrece una amplia cobertura de noticias mundiales.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Preservando el acceso a medios de comunicación verificados de Canadá y el mundo.",
-                "Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.": "Explore directorios seleccionados de organizaciones de noticias confiables agrupadas por regiones geográficas. Marque sus canales de prensa principales o ejecute cualquier enlace global al instante."
-            },
-            DE: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "Kanadas nationaler öffentlich-rechtlicher Sender, der nationale und regionale Eilmeldungen liefert.",
-                "Canada's newspaper of record covering national business, politics, and culture.": "Kanadas führende Zeitung für nationale Wirtschaft, Politik und Kultur.",
-                "Public service broadcaster delivering extensive world news coverage.": "Öffentlich-rechtlicher Rundfunksender mit umfassender weltweiter Berichterstattung.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Sicherung des Zugangs zu verifizierten kanadischen und globalen Nachrichtenmedien."
-            },
-            ZH: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "加拿大国家公共广播公司，提供全国和地方突发新闻。",
-                "Canada's newspaper of record covering national business, politics, and culture.": "加拿大记录在案的记录性报纸，涵盖全国商业、政治和文化。",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "保留获取经验证的加拿大及全球新闻媒体的途径。"
-            },
-            JA: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "カナダの全国公共放送局で、国内および地域のニュース速報を届けています。",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "検証されたカナダおよび世界のニュースメディアへのアクセスを保護します。"
-            },
-            PT: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "A emissora pública nacional do Canadá, transmitindo notícias de última hora nacionais e regionais.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Preservando o acesso a veículos de imprensa verificados do Canadá e do mundo."
-            },
-            RU: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "Канадская национальная общественная телерадиокомпания, передающая национальные и региональные новости.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Сохранение доступа к проверенным канадским и мировым новостным изданиям."
-            },
-            IT: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "L'emittente pubblica nazionale del Canada che trasmette notizie dell'ultima ora nazionali e regionali.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "Preservare l'accesso ai media di informazione verificati del Canada e del mondo."
-            },
-            KO: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "캐나다의 국영 공영 방송사로 전국 및 지역 속보를 전달합니다.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "검증된 캐나다 및 글로벌 뉴스 매체에 대한 접근성을 보존합니다."
-            },
-            AR: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "هيأة الإذاعة العامة الوطنية في كندا التي تقدم الأخبار العاجلة الوطنية والإقليمية.",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "الحفاظ على إمكانية الوصول إلى وسائل الإعلام الموثوقة في كندا والعالم."
-            },
-            HI: {
-                "Canada's national public broadcaster delivering national and regional breaking news.": "कनाडा का राष्ट्रीय सार्वजनिक प्रसारक जो राष्ट्रीय और क्षेत्रीय समाचार प्रदान करता है।",
-                "Preserving Access to Verified Canadian & Global News Outlets.": "कनाडा और वैश्विक सत्यापित समाचार आउटलेट्स तक पहुंच बनाए रखना।"
-            }
-        };
-
-        const universalWordDictionary = {
-            FR: {
-                "Canada's": "du Canada", "national": "national", "public": "public", "broadcaster": "diffuseur", "delivering": "fournissant",
-                "regional": "régionales", "breaking": "de dernière heure", "news": "nouvelles", "newspaper": "journal", "record": "référence",
-                "covering": "couvrant", "business": "affaires", "politics": "politique", "culture": "culture", "independent": "indépendant",
-                "daily": "quotidien", "global": "mondial", "reporting": "reportage", "investigation": "enquête", "broadcasting": "radiodiffusion",
-                "network": "réseau", "service": "service", "coverage": "couverture", "environmental": "environnemental", "social": "social",
-                "affairs": "affaires", "international": "international", "perspectives": "perspectives", "financial": "financier", "wire": "dépêche",
-                "Preserving": "Préservation de", "Access": "l'accès", "Verified": "vérifié", "Outlets": "médias", "Explore": "Explorez",
-                "curated": "sélectionnés", "directories": "répertoires", "reliable": "fiables", "organizations": "organisations",
-                "grouped": "regroupées", "geographic": "géographiques", "regions": "régions", "Star": "Marquez d'une étoile",
-                "primary": "principaux", "press": "presse", "channels": "canaux", "execute": "exécutez", "instantly": "instantanément"
-            },
-            ES: {
-                "Canada's": "de Canadá", "national": "nacional", "public": "público", "broadcaster": "difusor", "delivering": "entregando",
-                "regional": "regional", "breaking": "de última hora", "news": "noticias", "newspaper": "periódico", "record": "registro",
-                "covering": "cubriendo", "business": "negocios", "politics": "política", "culture": "cultura", "independent": "independiente",
-                "daily": "diario", "global": "global", "reporting": "reportaje", "investigation": "investigación", "network": "red",
-                "service": "servicio", "coverage": "cobertura", "environmental": "ambiental", "social": "social", "affairs": "asuntos",
-                "Preserving": "Preservando", "Access": "el acceso", "Verified": "verificado", "Outlets": "medios", "Explore": "Explore"
-            },
-            DE: {
-                "Canada's": "Kanadas", "national": "nationaler", "public": "öffentlich-rechtlicher", "broadcaster": "Sender",
-                "news": "Nachrichten", "newspaper": "Zeitung", "business": "Wirtschaft", "politics": "Politik", "culture": "Kultur",
-                "global": "global", "reporting": "Berichterstattung", "investigation": "Recherche", "network": "Netzwerk"
-            },
-            ZH: {
-                "Canada's": "加拿大的", "national": "国家", "public": "公共", "broadcaster": "广播公司", "news": "新闻",
-                "newspaper": "报纸", "business": "商业", "politics": "政治", "culture": "文化", "global": "全球", "reporting": "报道"
-            },
-            JA: {
-                "Canada's": "カナダの", "national": "国家", "public": "公共", "broadcaster": "放送局", "news": "ニュース",
-                "newspaper": "新聞", "business": "ビジネス", "politics": "政治", "culture": "文化", "global": "世界的な"
-            },
-            PT: {
-                "Canada's": "do Canadá", "national": "nacional", "public": "público", "broadcaster": "transmissor", "news": "notícias",
-                "newspaper": "jornal", "business": "negócios", "politics": "política", "culture": "cultura", "global": "global"
-            },
-            RU: {
-                "Canada's": "Канады", "national": "национальный", "public": "общественный", "broadcaster": "вещатель", "news": "новости",
-                "newspaper": "газета", "business": "бизнес", "politics": "политика", "culture": "культура", "global": "мировой"
-            },
-            IT: {
-                "Canada's": "del Canada", "national": "nazionale", "public": "pubblico", "broadcaster": "emittente", "news": "notizie",
-                "newspaper": "giornale", "business": "affari", "politics": "politica", "culture": "cultura", "global": "globale"
-            },
-            KO: {
-                "Canada's": "캐나다의", "national": "국립", "public": "공공", "broadcaster": "방송사", "news": "뉴스",
-                "newspaper": "신문", "business": "비즈니스", "politics": "정치", "culture": "문화", "global": "글로벌"
-            },
-            AR: {
-                "Canada's": "كندا", "national": "وطني", "public": "عام", "broadcaster": "مذيع", "news": "أخبار",
-                "newspaper": "صحيفة", "business": "أعمال", "politics": "سياسة", "culture": "ثقافة", "global": "عالمي"
-            },
-            HI: {
-                "Canada's": "कनाडा का", "national": "राष्ट्रीय", "public": "सार्वजनिक", "broadcaster": "प्रसारक", "news": "समाचार",
-                "newspaper": "समाचार पत्र", "business": "व्यापार", "politics": "राजनीति", "culture": "संस्कृति", "global": "वैश्विक"
-            }
-        };
-
-        function toggleAgentMode(enabled) {
-            isAgentActive = enabled;
-            const hud = document.getElementById('translationAgentHUD');
-            const dot = document.getElementById('agentActiveDot');
-
-            if (enabled) {
-                hud.classList.remove('hidden');
-                dot.classList.remove('hidden');
-                attachAgentListeners();
-                showToast('Paragraph Translation Agent active. Click paragraph text.');
-            } else {
-                hud.classList.add('hidden');
-                dot.classList.add('hidden');
-                detachAgentListeners();
-            }
-        }
-
-        function attachAgentListeners() {
-            const targets = document.querySelectorAll('#directory-section p, #world-direct-section p, section p');
-            targets.forEach(elem => {
-                elem.classList.add('translation-target-active');
-                elem.removeEventListener('click', handleParagraphElementClick);
-                elem.addEventListener('click', handleParagraphElementClick);
-            });
-        }
-
-        function detachAgentListeners() {
-            const targets = document.querySelectorAll('.translation-target-active');
-            targets.forEach(elem => {
-                elem.classList.remove('translation-target-active');
-                elem.removeEventListener('click', handleParagraphElementClick);
-            });
-        }
-
-        function handleParagraphElementClick(e) {
-            if (!isAgentActive) return;
-            e.stopPropagation();
-
-            currentTargetElement = this;
-            originalClickedParagraph = this.innerText.trim();
-            if (!originalClickedParagraph) return;
-
-            const laser = document.createElement('div');
-            laser.className = 'scanning-laser';
-            this.style.position = 'relative';
-            this.appendChild(laser);
-
-            const statusText = document.getElementById('agentStatusText');
-            statusText.textContent = "STATUS: PARAGRAPH TRANSLATING...";
-
-            setTimeout(() => {
-                laser.remove();
-                statusText.textContent = "STATUS: LIVE SCANNING";
-                openTranslationModal(originalClickedParagraph);
-            }, 400);
-        }
-
-        function openTranslationModal(sourceParagraph) {
-            const modal = document.getElementById('translationModal');
-            const origTextElem = document.getElementById('originalModalText');
-            const sourceStats = document.getElementById('sourceStats');
-            const langSelect = document.getElementById('modalLangSelect');
-
-            origTextElem.textContent = sourceParagraph;
-            const sourceWords = sourceParagraph.split(/\s+/).filter(Boolean).length;
-            sourceStats.textContent = `${sourceWords} words`;
-
-            if (langSelect) langSelect.value = agentTargetLang;
-
-            updateModalTranslationOutput(sourceParagraph);
-            modal.classList.remove('hidden');
-        }
-
-        function updateModalTranslationOutput(sourceParagraph) {
-            const transTextElem = document.getElementById('translatedModalText');
-            const output = translateFullParagraph(sourceParagraph, agentTargetLang);
-            transTextElem.textContent = output;
-
-            const words = output.split(/\s+/).filter(Boolean).length;
-            const chars = output.length;
-            document.getElementById('agentWordCountStats').textContent = `Output Words: ${words} • Chars: ${chars}`;
-        }
-
-        // Remodeled full paragraph translation engine logic
-        function translateFullParagraph(text, targetLang) {
-            const cleanParagraph = text.trim();
-            if (!cleanParagraph) return "";
-
-            // 1. Direct match check in paragraph lexicon
-            if (paragraphLexicon[targetLang] && paragraphLexicon[targetLang][cleanParagraph]) {
-                return paragraphLexicon[targetLang][cleanParagraph];
-            }
-
-            // 2. Sentence-by-sentence decomposition and translation pipeline
-            const sentences = cleanParagraph.match(/[^.!?]+[.!?]+/g) || [cleanParagraph];
-            const translatedSentences = sentences.map(sentence => {
-                const sClean = sentence.trim();
-                
-                // Check exact sentence match
-                if (paragraphLexicon[targetLang] && paragraphLexicon[targetLang][sClean]) {
-                    return paragraphLexicon[targetLang][sClean];
-                }
-
-                // Sentence token mapping using grammar substitution
-                const words = sClean.split(/(\s+|[.,!?;])/);
-                const dict = universalWordDictionary[targetLang] || universalWordDictionary.FR;
-
-                const translatedWords = words.map(token => {
-                    const cleanToken = token.replace(/[^a-zA-Z']/g, "");
-                    if (cleanToken && dict[cleanToken]) {
-                        return token.replace(cleanToken, dict[cleanToken]);
-                    }
-                    return token;
-                });
-
-                return translatedWords.join('');
-            });
-
-            return translatedSentences.join(' ');
-        }
-
-        function changeAgentTargetLang(val) {
-            agentTargetLang = val;
-            const select = document.getElementById('modalLangSelect');
-            if (select) select.value = val;
-        }
-
-        function changeModalTargetLang(val) {
-            agentTargetLang = val;
-            const select = document.getElementById('agentTargetLangSelect');
-            if (select) select.value = val;
-            if (originalClickedParagraph) {
-                updateModalTranslationOutput(originalClickedParagraph);
-            }
-        }
-
-        function speakTranslatedText() {
-            const translatedText = document.getElementById('translatedModalText').textContent;
-            if (!translatedText || !('speechSynthesis' in window)) {
-                showToast('Text-to-speech not supported on this browser.');
-                return;
-            }
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(translatedText);
-            
-            const langMap = {
-                FR: 'fr-FR', ES: 'es-ES', DE: 'de-DE', ZH: 'zh-CN',
-                JA: 'ja-JP', AR: 'ar-SA', HI: 'hi-IN', EN: 'en-US',
-                PT: 'pt-BR', RU: 'ru-RU', IT: 'it-IT', KO: 'ko-KR'
-            };
-            utterance.lang = langMap[agentTargetLang] || 'en-US';
-            window.speechSynthesis.speak(utterance);
-            showToast('Reading paragraph translation aloud...');
-        }
-
-        function copyTranslatedText() {
-            const translatedText = document.getElementById('translatedModalText').textContent;
-            navigator.clipboard.writeText(translatedText).then(() => {
-                showToast('Paragraph translation copied to clipboard!');
-            });
-        }
-
-        function applyTranslationToPage() {
-            if (currentTargetElement && originalClickedParagraph) {
-                const translated = translateFullParagraph(originalClickedParagraph, agentTargetLang);
-                currentTargetElement.innerText = translated;
-                closeTranslationModal();
-                showToast('Full paragraph translation applied to element');
-            }
-        }
-
-        function closeTranslationModal() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-            document.getElementById('translationModal').classList.add('hidden');
-        }
-
-        function toggleAgentHUDMinimize() {
-            const content = document.getElementById('hudExpandedContent');
-            const icon = document.getElementById('hudMinIcon');
-            content.classList.toggle('hidden');
-            icon.classList.toggle('fa-minus');
-            icon.classList.toggle('fa-plus');
-        }
     </script>
 </body>
 </html>
