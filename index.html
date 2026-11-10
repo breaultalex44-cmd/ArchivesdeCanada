@@ -116,11 +116,52 @@
                         <i class="fa-solid fa-sliders text-xs sm:text-sm"></i>
                     </button>
 
-                    <!-- Language Switcher Toggle -->
-                    <button onclick="toggleLanguage()" class="px-3 py-2 rounded-lg bg-archival-ink hover:bg-black dark:bg-archival-accent dark:hover:bg-red-800 text-white font-mono font-bold text-xs tracking-wider transition flex items-center gap-1 shadow-sm">
-                        <i class="fa-solid fa-globe text-xs"></i>
-                        <span id="langDisplay">FR</span>
-                    </button>
+                    <!-- Language Switcher Dropdown -->
+                    <div class="relative">
+                        <button onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-lg bg-archival-ink hover:bg-black dark:bg-archival-accent dark:hover:bg-red-800 text-white font-mono font-bold text-xs tracking-wider transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-globe text-xs"></i>
+                            <span id="langDisplay">EN</span>
+                            <i class="fa-solid fa-chevron-down text-[10px] opacity-75"></i>
+                        </button>
+                        <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder rounded-xl shadow-2xl py-2 z-50 text-xs font-mono">
+                            <button onclick="setLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>English</span>
+                                <span class="text-[10px] text-slate-400">EN</span>
+                            </button>
+                            <button onclick="setLanguage('fr-CA')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Français (Québec)</span>
+                                <span class="text-[10px] text-archival-gold font-bold">FR-CA</span>
+                            </button>
+                            <button onclick="setLanguage('fr-FR')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Français (France)</span>
+                                <span class="text-[10px] text-slate-400">FR-FR</span>
+                            </button>
+                            <button onclick="setLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Español</span>
+                                <span class="text-[10px] text-slate-400">ES</span>
+                            </button>
+                            <button onclick="setLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Italiano</span>
+                                <span class="text-[10px] text-slate-400">IT</span>
+                            </button>
+                            <button onclick="setLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Deutsch</span>
+                                <span class="text-[10px] text-slate-400">DE</span>
+                            </button>
+                            <button onclick="setLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>中文</span>
+                                <span class="text-[10px] text-slate-400">ZH</span>
+                            </button>
+                            <button onclick="setLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>日本語</span>
+                                <span class="text-[10px] text-slate-400">JA</span>
+                            </button>
+                            <button onclick="setLanguage('ru')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                                <span>Русский</span>
+                                <span class="text-[10px] text-slate-400">RU</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Dark Mode Toggle -->
                     <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-lg border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-archival-darkBorder transition">
@@ -268,12 +309,12 @@
                     <div class="bg-slate-100 dark:bg-archival-darkPaper px-4 sm:px-6 py-3 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-                            <span id="wd-status-text" class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider truncate">Ready for Execution</span>
+                            <span id="wd-status-text" class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider truncate" data-i18n="wdStatusReady">Ready for Execution</span>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <a id="wd-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab" class="p-2 bg-white dark:bg-archival-darkCard hover:bg-slate-100 dark:hover:bg-archival-darkBorder border border-archival-border dark:border-archival-darkBorder rounded-lg text-slate-700 dark:text-slate-200 flex items-center gap-1.5 px-3 font-semibold text-[11px]">
-                                <span>Open Direct</span>
+                                <span data-i18n="wdOpenDirect">Open Direct</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                             </a>
                         </div>
@@ -286,12 +327,12 @@
                             <!-- Fallback Notice for X-Frame-Options blocks -->
                             <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-archival-ink/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
                                 <i class="fa-solid fa-shield-halved text-archival-gold text-4xl"></i>
-                                <h4 class="font-serif font-bold text-lg">External Security Policy Notice</h4>
-                                <p class="font-editorial text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed">
+                                <h4 class="font-serif font-bold text-lg" data-i18n="wdSecurityTitle">External Security Policy Notice</h4>
+                                <p class="font-editorial text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed" data-i18n="wdSecurityDesc">
                                     This target domain restricts embedded framing due to strict cross-origin security policies.
                                 </p>
                                 <div class="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
-                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-5 py-2.5 bg-archival-accent hover:bg-red-800 text-white text-xs font-mono font-bold rounded-xl transition shadow text-center">
+                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-5 py-2.5 bg-archival-accent hover:bg-red-800 text-white text-xs font-mono font-bold rounded-xl transition shadow text-center" data-i18n="wdOpenNewTab">
                                         Open in New Tab
                                     </a>
                                 </div>
@@ -348,10 +389,10 @@
 
         <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
             <div class="space-y-3">
-                <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">Appearance & Theme</h4>
+                <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="settingsAppearance">Appearance & Theme</h4>
                 <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder">
-                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300">Theme Mode</span>
-                    <button onclick="toggleDarkMode()" class="px-4 py-2 bg-slate-200 dark:bg-archival-darkBorder text-slate-800 dark:text-slate-200 rounded-lg text-xs font-mono font-semibold">
+                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300" data-i18n="settingsThemeMode">Theme Mode</span>
+                    <button onclick="toggleDarkMode()" class="px-4 py-2 bg-slate-200 dark:bg-archival-darkBorder text-slate-800 dark:text-slate-200 rounded-lg text-xs font-mono font-semibold" data-i18n="settingsToggleTheme">
                         Toggle Light/Dark
                     </button>
                 </div>
@@ -392,7 +433,7 @@
 
     <script>
         /* ==========================================================================
-           1. DATA MODELS & LOCALIZATION DICTIONARY
+           1. DATA MODELS & LOCALIZATION DICTIONARY (9 LANGUAGES)
            ========================================================================== */
 
         const i18n = {
@@ -420,23 +461,29 @@
                 wdPresetsLabel: "Global Outlets Quick Launch",
                 wdHistoryLabel: "Recent Executions",
                 wdClearHistory: "Clear",
-                all: "All Regions",
-                favourites: "Favourites",
                 visitOutlet: "Visit Outlet",
                 settingsTitle: "Application Settings",
+                settingsAppearance: "Appearance & Theme",
+                settingsThemeMode: "Theme Mode",
+                settingsToggleTheme: "Toggle Light/Dark",
+                wdStatusReady: "Ready for Execution",
+                wdOpenDirect: "Open Direct",
+                wdSecurityTitle: "External Security Policy Notice",
+                wdSecurityDesc: "This target domain restricts embedded framing due to strict cross-origin security policies.",
+                wdOpenNewTab: "Open in New Tab",
                 toastFavouriteAdded: "Added to favourites.",
                 toastFavouriteRemoved: "Removed from favourites.",
                 toastUrlExecuted: "Target URL loaded in Execution Hub.",
                 toastUrlInvalid: "Please enter a valid HTTP/HTTPS URL.",
                 footerStorageNotice: "Starred directories and language choices are preserved locally on your device."
             },
-            fr: {
+            "fr-CA": {
                 mottoText: "Répertoire national du journalisme et des médias mondiaux",
                 export: "Exporter",
                 import: "Importer",
-                heroBadge: "Dépôt officiel de la presse bilingue",
-                heroTitle: "Préserver l'accès aux organes de presse vérifiés du Canada et du monde.",
-                heroDesc: "Explorez un répertoire de médias fiables classés par régions géographiques. Marquez d'une étoile vos favoris ou exécutez n'importe quel lien d'actualité via World Direct.",
+                heroBadge: "Dépôt officiel de presse bilingue",
+                heroTitle: "Préserver l'accès aux sources de nouvelles vérifiées au Canada et à travers le monde.",
+                heroDesc: "Explorez des répertoires d'organismes de presse fiables regroupés par régions géographiques. Marquez vos canaux de presse principaux ou exécutez instantanément tout lien d'actualité via World Direct.",
                 btnBrowseDir: "Explorer le répertoire",
                 btnWorldDirect: "Hub World Direct",
                 dirHeading: "Répertoire des médias mondiaux",
@@ -445,25 +492,323 @@
                 favouritesCount: "Favoris :",
                 searchPlaceholder: "Rechercher un média, un pays, une région...",
                 noResultsTitle: "Aucun média trouvé",
-                noResultsDesc: "Essayez de modifier vos mots-clés ou de réinitialiser les filtres de région.",
+                noResultsDesc: "Essayez de modifier vos mots-clés ou de réinitialiser le filtre de favoris/région.",
                 resetFilters: "Réinitialiser les filtres",
-                wdHeading: "Hub d'exécution de liens et d'actualités v5",
-                wdSubheading: "Exécutez et chargez instantanément n'importe quel article ou lien Web en mode cadre interactif.",
-                wdURLLabel: "URL de l'article ou du site Web",
-                wdExecuteBtn: "Exécuter l'actualité",
+                wdHeading: "Hub d'exécution de liens et de nouvelles v5",
+                wdSubheading: "Exécutez et chargez instantanément n'importe quel article ou lien web dans une vue interactive.",
+                wdURLLabel: "URL de l'article ou du site web",
+                wdExecuteBtn: "Exécuter",
                 wdPresetsLabel: "Lancement rapide des médias mondiaux",
                 wdHistoryLabel: "Exécutions récentes",
                 wdClearHistory: "Effacer",
-                all: "Toutes les régions",
-                favourites: "Mes Favoris",
-                visitOutlet: "Visiter le site",
+                visitOutlet: "Visiter le média",
                 settingsTitle: "Paramètres de l'application",
+                settingsAppearance: "Apparence et thème",
+                settingsThemeMode: "Mode de thème",
+                settingsToggleTheme: "Basculer Clair/Sombre",
+                wdStatusReady: "Prêt pour l'exécution",
+                wdOpenDirect: "Ouvrir direct",
+                wdSecurityTitle: "Avis de politique de sécurité externe",
+                wdSecurityDesc: "Ce domaine restreint l'intégration de cadres en raison de politiques de sécurité strictes.",
+                wdOpenNewTab: "Ouvrir dans un nouvel onglet",
                 toastFavouriteAdded: "Ajouté aux favoris.",
                 toastFavouriteRemoved: "Retiré des favoris.",
-                toastUrlExecuted: "URL exécutée avec succès dans le Hub.",
-                toastUrlInvalid: "Veuillez entrer une URL valide (HTTP/HTTPS).",
-                footerStorageNotice: "Les favoris et préférences linguistiques sont conservés localement sur votre appareil."
+                toastUrlExecuted: "URL cible chargée dans le Hub d'exécution.",
+                toastUrlInvalid: "Veuillez entrer une URL HTTP/HTTPS valide.",
+                footerStorageNotice: "Les répertoires favoris et les choix de langue sont conservés localement sur votre appareil."
+            },
+            "fr-FR": {
+                mottoText: "Répertoire national du journalisme et des médias mondiaux",
+                export: "Exporter",
+                import: "Importer",
+                heroBadge: "Répertoire officiel de presse bilingue",
+                heroTitle: "Préserver l'accès aux sources d'information vérifiées au Canada et dans le monde.",
+                heroDesc: "Explorez des répertoires d'organismes de presse fiables regroupés par régions géographiques. Ajoutez vos chaînes de presse en favoris ou chargez instantanément n'importe quel lien d'actualité via World Direct.",
+                btnBrowseDir: "Explorer le répertoire",
+                btnWorldDirect: "Hub World Direct",
+                dirHeading: "Répertoire des médias mondiaux",
+                dirSubheading: "Classé par région, pays et langue officielle de diffusion.",
+                totalSources: "Total des médias :",
+                favouritesCount: "Favoris :",
+                searchPlaceholder: "Rechercher un nom de média, pays, région...",
+                noResultsTitle: "Aucun média trouvé",
+                noResultsDesc: "Essayez de modifier vos mots-clés de recherche ou de réinitialiser le filtre.",
+                resetFilters: "Réinitialiser les filtres",
+                wdHeading: "Hub d'exécution de liens et d'actualités v5",
+                wdSubheading: "Exécutez et chargez instantanément n'importe quel article ou lien web en mode cadre interactif.",
+                wdURLLabel: "URL de l'article / du site web",
+                wdExecuteBtn: "Exécuter",
+                wdPresetsLabel: "Lancement rapide des médias mondiaux",
+                wdHistoryLabel: "Exécutions récentes",
+                wdClearHistory: "Effacer",
+                visitOutlet: "Visiter le site",
+                settingsTitle: "Paramètres de l'application",
+                settingsAppearance: "Apparence et thème",
+                settingsThemeMode: "Mode de thème",
+                settingsToggleTheme: "Basculer Clair/Sombre",
+                wdStatusReady: "Prêt pour l'exécution",
+                wdOpenDirect: "Ouvrir direct",
+                wdSecurityTitle: "Avis de politique de sécurité externe",
+                wdSecurityDesc: "Ce domaine restreint l'intégration de cadres en raison de politiques de sécurité strictes.",
+                wdOpenNewTab: "Ouvrir dans un nouvel onglet",
+                toastFavouriteAdded: "Ajouté aux favoris.",
+                toastFavouriteRemoved: "Retiré des favoris.",
+                toastUrlExecuted: "URL cible chargée dans le Hub d'exécution.",
+                toastUrlInvalid: "Veuillez entrer une URL HTTP/HTTPS valide.",
+                footerStorageNotice: "Les répertoires favoris et les choix de langue sont enregistrés localement sur votre appareil."
+            },
+            es: {
+                mottoText: "Directorio Nacional de Periodismo y Medios Globales",
+                export: "Exportar",
+                import: "Importar",
+                heroBadge: "Repositorio Oficial de Prensa Bilingüe",
+                heroTitle: "Preservando el acceso a medios de comunicación verificados de Canadá y el mundo.",
+                heroDesc: "Explore directorios seleccionados de organizaciones de noticias confiables agrupadas por regiones geográficas. Agregue a favoritos sus canales de prensa principales o ejecute cualquier enlace de noticias al instante a través de World Direct.",
+                btnBrowseDir: "Explorar Directorio",
+                btnWorldDirect: "Centro World Direct",
+                dirHeading: "Directorio de Medios Globales",
+                dirSubheading: "Categorizado por región, país e idioma oficial de transmisión.",
+                totalSources: "Medios Totales:",
+                favouritesCount: "Favoritos:",
+                searchPlaceholder: "Buscar nombre de medio, país, región...",
+                noResultsTitle: "No se encontraron medios",
+                noResultsDesc: "Intente modificar sus palabras clave de búsqueda o restablecer los filtros.",
+                resetFilters: "Restablecer Filtros",
+                wdHeading: "Centro de Ejecución de Enlaces y Noticias v5",
+                wdSubheading: "Ejecute y cargue cualquier artículo de noticias o enlace web al instante en vista de marco interactivo.",
+                wdURLLabel: "URL de Artículo / Sitio Web",
+                wdExecuteBtn: "Ejecutar",
+                wdPresetsLabel: "Inicio Rápido de Medios Globales",
+                wdHistoryLabel: "Ejecuciones Recientes",
+                wdClearHistory: "Borrar",
+                visitOutlet: "Visitar Medio",
+                settingsTitle: "Configuración de la Aplicación",
+                settingsAppearance: "Apariencia y Tema",
+                settingsThemeMode: "Modo de Tema",
+                settingsToggleTheme: "Cambiar Claro/Oscuro",
+                wdStatusReady: "Listo para Ejecución",
+                wdOpenDirect: "Abrir Directo",
+                wdSecurityTitle: "Aviso de Política de Seguridad Externa",
+                wdSecurityDesc: "Este dominio restringe el enmarcado integrado debido a estrictas políticas de seguridad.",
+                wdOpenNewTab: "Abrir en Nueva Pestaña",
+                toastFavouriteAdded: "Agregado a favoritos.",
+                toastFavouriteRemoved: "Eliminado de favoritos.",
+                toastUrlExecuted: "URL cargada en el Centro de Ejecución.",
+                toastUrlInvalid: "Por favor ingrese una URL HTTP/HTTPS válida.",
+                footerStorageNotice: "Los directorios marcados y la selección de idioma se guardan localmente en su dispositivo."
+            },
+            it: {
+                mottoText: "Direttorio Nazionale di Giornalismo e Media Globali",
+                export: "Esporta",
+                import: "Importa",
+                heroBadge: "Archivio Ufficiale della Stampa Bilingue",
+                heroTitle: "Preservare l'accesso a testate giornalistiche verificate canadesi e globali.",
+                heroDesc: "Esplora elenchi curati di organizzazioni di notizie affidabili raggruppate per regioni geografiche. Aggiungi ai preferiti i tuoi canali di stampa principali o esegui qualsiasi link di notizie istantaneamente tramite World Direct.",
+                btnBrowseDir: "Esplora Elenco",
+                btnWorldDirect: "Hub World Direct",
+                dirHeading: "Direttorio dei Media Globali",
+                dirSubheading: "Categorizzato per regione, paese e lingua di trasmissione ufficiale.",
+                totalSources: "Testate Totali:",
+                favouritesCount: "Preferiti:",
+                searchPlaceholder: "Cerca nome testata, paese, regione...",
+                noResultsTitle: "Nessuna Testata Trovata",
+                noResultsDesc: "Prova a modificare le parole chiave o a ripristinare i filtri.",
+                resetFilters: "Ripristina Filtri",
+                wdHeading: "Hub di Esecuzione Link e Notizie v5",
+                wdSubheading: "Esegui e carica qualsiasi articolo o link web all'istante in vista a riquadro interattivo.",
+                wdURLLabel: "URL Articolo / Sito Web",
+                wdExecuteBtn: "Esegui",
+                wdPresetsLabel: "Avvio Rapido Media Globali",
+                wdHistoryLabel: "Esecuzioni Recenti",
+                wdClearHistory: "Cancella",
+                visitOutlet: "Visita Testata",
+                settingsTitle: "Impostazioni Applicazione",
+                settingsAppearance: "Aspetto e Tema",
+                settingsThemeMode: "Modalità Tema",
+                settingsToggleTheme: "Cambia Chiaro/Scuro",
+                wdStatusReady: "Pronto per l'Esecuzione",
+                wdOpenDirect: "Apri Diretto",
+                wdSecurityTitle: "Avviso Politica di Sicurezza Esterna",
+                wdSecurityDesc: "Questo dominio vieta l'incorporazione in iframe a causa di rigide politiche di sicurezza.",
+                wdOpenNewTab: "Apri in Nuova Scheda",
+                toastFavouriteAdded: "Aggiunto ai preferiti.",
+                toastFavouriteRemoved: "Rimosso dai preferiti.",
+                toastUrlExecuted: "URL caricato nell'Hub di Esecuzione.",
+                toastUrlInvalid: "Inserisci un URL HTTP/HTTPS valido.",
+                footerStorageNotice: "Le preferenze di directory e lingua sono salvate localmente sul tuo dispositivo."
+            },
+            de: {
+                mottoText: "Nationales Verzeichnis für globalen Journalismus & Medien",
+                export: "Exportieren",
+                import: "Importieren",
+                heroBadge: "Offizielles bilinguales Pressearchiv",
+                heroTitle: "Zugang zu verifizierten kanadischen & globalen Nachrichtenquellen bewahren.",
+                heroDesc: "Entdecken Sie kuratierte Verzeichnisse zuverlässiger Nachrichtenorganisationen nach Regionen. Markieren Sie Ihre Hauptnachrichtenkanäle oder führen Sie jeden Link sofort über World Direct aus.",
+                btnBrowseDir: "Verzeichnis erkunden",
+                btnWorldDirect: "World Direct Hub",
+                dirHeading: "Globales Medienverzeichnis",
+                dirSubheading: "Kategorisiert nach Region, Land und offizieller Sprache.",
+                totalSources: "Medien gesamt:",
+                favouritesCount: "Favoriten:",
+                searchPlaceholder: "Medienname, Land, Region suchen...",
+                noResultsTitle: "Keine Medien gefunden",
+                noResultsDesc: "Versuchen Sie, Ihre Suchbegriffe zu ändern oder Filter zurückzusetzen.",
+                resetFilters: "Filter zurücksetzen",
+                wdHeading: "Universal-Link & Nachrichten-Ausführungs-Hub v5",
+                wdSubheading: "Führen Sie jeden Nachrichtenartikel oder Web-Link sofort in einer interaktiven Rahmenansicht aus.",
+                wdURLLabel: "Ziel-Artikel / Web-URL",
+                wdExecuteBtn: "Ausführen",
+                wdPresetsLabel: "Schnellstart globaler Medien",
+                wdHistoryLabel: "Letzte Ausführungen",
+                wdClearHistory: "Löschen",
+                visitOutlet: "Medien besuchen",
+                settingsTitle: "Anwendungseinstellungen",
+                settingsAppearance: "Darstellung & Design",
+                settingsThemeMode: "Design-Modus",
+                settingsToggleTheme: "Hell/Dunkel umschalten",
+                wdStatusReady: "Bereit zur Ausführung",
+                wdOpenDirect: "Direkt öffnen",
+                wdSecurityTitle: "Hinweis zur externen Sicherheitsrichtlinie",
+                wdSecurityDesc: "Diese Domain schränkt das Einbetten in Frames aufgrund strenger Sicherheitsrichtlinien ein.",
+                wdOpenNewTab: "In neuem Tab öffnen",
+                toastFavouriteAdded: "Zu Favoriten hinzugefügt.",
+                toastFavouriteRemoved: "Aus Favoriten entfernt.",
+                toastUrlExecuted: "Ziel-URL im Ausführungs-Hub geladen.",
+                toastUrlInvalid: "Bitte geben Sie eine gültige HTTP/HTTPS-URL ein.",
+                footerStorageNotice: "Markierte Verzeichnisse und Spracheinstellungen werden lokal auf Ihrem Gerät gespeichert."
+            },
+            zh: {
+                mottoText: "全球新闻与媒体国家目录",
+                export: "导出",
+                import: "导入",
+                heroBadge: "官方双语新闻资料库",
+                heroTitle: "维护对经核实的加拿大及全球新闻媒体的访问。",
+                heroDesc: "探索按地理区域分类的可靠新闻机构策划目录。星标您的主要媒体频道，或通过 World Direct 立即执行任何全球新闻链接。",
+                btnBrowseDir: "浏览目录",
+                btnWorldDirect: "World Direct 中心",
+                dirHeading: "全球媒体目录",
+                dirSubheading: "按地区、国家和官方广播语言分类。",
+                totalSources: "媒体总数：",
+                favouritesCount: "收藏夹：",
+                searchPlaceholder: "搜索媒体名称、国家、地区...",
+                noResultsTitle: "未找到新闻媒体",
+                noResultsDesc: "尝试更改搜索关键词或清除收藏/地区筛选器。",
+                resetFilters: "重置筛选器",
+                wdHeading: "通用链接与新闻执行中心 v5",
+                wdSubheading: "在交互式框架视图中即时执行并加载任何新闻文章或全球网页链接。",
+                wdURLLabel: "目标文章 / 网页 URL",
+                wdExecuteBtn: "执行",
+                wdPresetsLabel: "全球媒体快速启动",
+                wdHistoryLabel: "最近执行记录",
+                wdClearHistory: "清空",
+                visitOutlet: "访问媒体",
+                settingsTitle: "应用设置",
+                settingsAppearance: "外观与主题",
+                settingsThemeMode: "主题模式",
+                settingsToggleTheme: "切换浅色/深色",
+                wdStatusReady: "准备执行",
+                wdOpenDirect: "直接打开",
+                wdSecurityTitle: "外部安全策略通知",
+                wdSecurityDesc: "出于严格的跨域安全策略，此目标域限制了嵌入式框架加载。",
+                wdOpenNewTab: "在新标签页中打开",
+                toastFavouriteAdded: "已添加到收藏夹。",
+                toastFavouriteRemoved: "已从收藏夹移除。",
+                toastUrlExecuted: "目标 URL 已加载到执行中心。",
+                toastUrlInvalid: "请输入有效的 HTTP/HTTPS URL。",
+                footerStorageNotice: "星标目录和语言选择已在您的设备上本地保存。"
+            },
+            ja: {
+                mottoText: "世界ジャーナリズム＆メディア全国ディレクトリ",
+                export: "エクスポート",
+                import: "インポート",
+                heroBadge: "公式バイリンガルプレスリポジトリ",
+                heroTitle: "検証済みのカナダおよび世界のニュース媒体へのアクセスを維持します。",
+                heroDesc: "地域別にグループ化された信頼できる報道機関のキュレーションディレクトリを探索します。お気に入りのプレスチャンネルにスターを付けたり、World Directで任意のグローバルニュースリンクを即座に実行したりできます。",
+                btnBrowseDir: "ディレクトリを探索",
+                btnWorldDirect: "ワールドダイレクトハブ",
+                dirHeading: "グローバルメディアディレクトリ",
+                dirSubheading: "地域、国、公式放送言語ごとに分類されています。",
+                totalSources: "総媒体数：",
+                favouritesCount: "お気に入り：",
+                searchPlaceholder: "媒体名、国、地域を検索...",
+                noResultsTitle: "ニュース媒体が見つかりません",
+                noResultsDesc: "検索キーワードを変更するか、お気に入り/地域のフィルターをクリアしてみてください。",
+                resetFilters: "フィルターをリセット",
+                wdHeading: "ユニバーサルリンク＆ニュース実行ハブ v5",
+                wdSubheading: "インタラクティブなフレームビューで、任意のニュース記事やウェブリンクを即座に実行・ロードします。",
+                wdURLLabel: "ターゲット記事 / ウェブ URL",
+                wdExecuteBtn: "実行",
+                wdPresetsLabel: "グローバルメディアクイック起動",
+                wdHistoryLabel: "最近の実行履歴",
+                wdClearHistory: "クリア",
+                visitOutlet: "媒体を訪問",
+                settingsTitle: "アプリ設定",
+                settingsAppearance: "外観＆テーマ",
+                settingsThemeMode: "テーマモード",
+                settingsToggleTheme: "ライト/ダーク切替",
+                wdStatusReady: "実行準備完了",
+                wdOpenDirect: "直接開く",
+                wdSecurityTitle: "外部セキュリティポリシー通知",
+                wdSecurityDesc: "厳格なクロスドメインセキュリティポリシーのため、このターゲットドメインは埋め込みフレームを制限しています。",
+                wdOpenNewTab: "新しいタブで開く",
+                toastFavouriteAdded: "お気に入りに追加しました。",
+                toastFavouriteRemoved: "お気に入りから削除しました。",
+                toastUrlExecuted: "実行ハブにターゲットURLをロードしました。",
+                toastUrlInvalid: "有効な HTTP/HTTPS URL を入力してください。",
+                footerStorageNotice: "スター付きディレクトリと言語選択はデバイスにローカル保存されます。"
+            },
+            ru: {
+                mottoText: "Национальный каталог мировой журналистики и СМИ",
+                export: "Экспорт",
+                import: "Импорт",
+                heroBadge: "Официальный двуязычный пресс-репозиторий",
+                heroTitle: "Сохранение доступа к проверенным канадским и мировым новостным источникам.",
+                heroDesc: "Изучайте кураторские каталоги надежных новостных организаций, сгруппированные по географическим регионам. Добавляйте в избранное главные медиаканалы или запускайте любую новостную ссылку мгновенно через World Direct.",
+                btnBrowseDir: "Обзор каталога",
+                btnWorldDirect: "Хаб World Direct",
+                dirHeading: "Каталог мировых СМИ",
+                dirSubheading: "Категоризовано по регионам, странам и официальным языкам вещания.",
+                totalSources: "Всего источников:",
+                favouritesCount: "Избранное:",
+                searchPlaceholder: "Поиск СМИ, страны, региона...",
+                noResultsTitle: "Новостные источники не найдены",
+                noResultsDesc: "Попробуйте изменить ключевые слова поиска или сбросить фильтры.",
+                resetFilters: "Сбросить фильтры",
+                wdHeading: "Универсальный хаб ссылок и новостей v5",
+                wdSubheading: "Запускайте и загружайте любую новостную статью или веб-ссылку мгновенно в интерактивном режиме.",
+                wdURLLabel: "Целевая статья / веб-URL",
+                wdExecuteBtn: "Выполнить",
+                wdPresetsLabel: "Быстрый запуск мировых СМИ",
+                wdHistoryLabel: "Недавние запуски",
+                wdClearHistory: "Очистить",
+                visitOutlet: "Посетить сайт",
+                settingsTitle: "Настройки приложения",
+                settingsAppearance: "Внешний вид и тема",
+                settingsThemeMode: "Режим темы",
+                settingsToggleTheme: "Переключить светлую/темную",
+                wdStatusReady: "Готово к выполнению",
+                wdOpenDirect: "Открыть напрямую",
+                wdSecurityTitle: "Уведомление о внешней политике безопасности",
+                wdSecurityDesc: "Этот домен ограничивает встраивание кадров из-за строгих правил безопасности кросс-домена.",
+                wdOpenNewTab: "Открыть в новой вкладке",
+                toastFavouriteAdded: "Добавлено в избранное.",
+                toastFavouriteRemoved: "Удалено из избранного.",
+                toastUrlExecuted: "Целевой URL загружен в хаб.",
+                toastUrlInvalid: "Пожалуйста, введите действительный HTTP/HTTPS URL.",
+                footerStorageNotice: "Избранные каталоги и выбранный язык сохраняются локально на вашем устройстве."
             }
+        };
+
+        const regionTranslations = {
+            en: { All: "All Regions", Canada: "Canada", "United States": "United States", Europe: "Europe", "North America": "North America", "South America": "South America", Africa: "Africa", Asia: "Asia", Oceania: "Oceania", International: "International", Favourites: "Favourites" },
+            "fr-CA": { All: "Toutes les régions", Canada: "Canada", "United States": "États-Unis", Europe: "Europe", "North America": "Amérique du Nord", "South America": "Amérique du Sud", Africa: "Afrique", Asia: "Asie", Oceania: "Océanie", International: "International", Favourites: "Favoris" },
+            "fr-FR": { All: "Toutes les régions", Canada: "Canada", "United States": "États-Unis", Europe: "Europe", "North America": "Amérique du Nord", "South America": "Amérique du Sud", Africa: "Afrique", Asia: "Asie", Oceania: "Océanie", International: "International", Favourites: "Favoris" },
+            es: { All: "Todas las Regiones", Canada: "Canadá", "United States": "Estados Unidos", Europe: "Europa", "North America": "América del Norte", "South America": "América del Sur", Africa: "África", Asia: "Asia", Oceania: "Oceanía", International: "Internacional", Favourites: "Favoritos" },
+            it: { All: "Tutte le Regioni", Canada: "Canada", "United States": "Stati Uniti", Europe: "Europa", "North America": "Nord America", "South America": "Sud America", Africa: "Africa", Asia: "Asia", Oceania: "Oceania", International: "Internazionale", Favourites: "Preferiti" },
+            de: { All: "Alle Regionen", Canada: "Kanada", "United States": "Vereinigte Staaten", Europe: "Europa", "North America": "Nordamerika", "South America": "Südamerika", Africa: "Afrika", Asia: "Asien", Oceania: "Ozeanien", International: "International", Favourites: "Favoriten" },
+            zh: { All: "所有地区", Canada: "加拿大", "United States": "美国", Europe: "欧洲", "North America": "北美洲", "South America": "南美洲", Africa: "非洲", Asia: "亚洲", Oceania: "大洋洲", International: "国际", Favourites: "收藏夹" },
+            ja: { All: "すべての地域", Canada: "カナダ", "United States": "アメリカ合衆国", Europe: "ヨーロッパ", "North America": "北米", "South America": "南米", Africa: "アフリカ", Asia: "アジア", Oceania: "オセアニア", International: "国際", Favourites: "お気に入り" },
+            ru: { All: "Все регионы", Canada: "Канада", "United States": "США", Europe: "Европа", "North America": "Северная Америка", "South America": "Южная Америка", Africa: "Африка", Asia: "Азия", Oceania: "Океания", International: "Международные", Favourites: "Избранное" }
         };
 
         const mediaOutlets = [
@@ -512,13 +857,14 @@
            2. STATE MANAGEMENT & INITIALIZATION
            ========================================================================== */
 
-        let currentLang = localStorage.getItem('archives_lang') || 'en';
+        let currentLang = localStorage.getItem('archives_lang') || 'fr-CA';
         let currentRegion = 'All';
         let searchQuery = '';
         let activeFavourites = JSON.parse(localStorage.getItem('archives_favourites') || '[]');
         let wdHistory = JSON.parse(localStorage.getItem('archives_wd_history') || '[]');
 
         document.addEventListener('DOMContentLoaded', () => {
+            if (!i18n[currentLang]) currentLang = 'fr-CA';
             initTheme();
             updateI18nTexts();
             renderRegionFilters();
@@ -528,6 +874,20 @@
             initWorldDirect();
         });
 
+        // Close language dropdown on outside click
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('langDropdownMenu');
+            if (dropdown && !e.target.closest('button[onclick*="toggleLangDropdown"]') && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function toggleLangDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('langDropdownMenu');
+            dropdown.classList.toggle('hidden');
+        }
+
         /* ==========================================================================
            3. UI FEEDBACK & NOTIFICATION SYSTEM
            ========================================================================== */
@@ -536,7 +896,7 @@
             const toast = document.getElementById('toastNotification');
             const toastMsg = document.getElementById('toastMessage');
             
-            const message = i18n[currentLang][messageKeyOrText] || messageKeyOrText;
+            const message = (i18n[currentLang] && i18n[currentLang][messageKeyOrText]) || messageKeyOrText;
             toastMsg.textContent = message;
 
             toast.classList.remove('translate-y-[-120%]', 'opacity-0', 'pointer-events-none');
@@ -570,10 +930,17 @@
             document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-xs sm:text-sm text-archival-gold' : 'fa-solid fa-moon text-xs sm:text-sm';
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'fr' : 'en';
+        function setLanguage(lang) {
+            currentLang = lang;
             localStorage.setItem('archives_lang', currentLang);
-            document.getElementById('langDisplay').textContent = currentLang.toUpperCase();
+            document.getElementById('langDropdownMenu').classList.add('hidden');
+            
+            let displayCode = 'EN';
+            if (lang === 'fr-CA') displayCode = 'FR-CA';
+            else if (lang === 'fr-FR') displayCode = 'FR-FR';
+            else displayCode = lang.toUpperCase();
+            
+            document.getElementById('langDisplay').textContent = displayCode;
             updateI18nTexts();
             renderRegionFilters();
             renderDirectory();
@@ -582,7 +949,7 @@
         }
 
         function updateI18nTexts() {
-            const langData = i18n[currentLang];
+            const langData = i18n[currentLang] || i18n['en'];
             document.querySelectorAll('[data-i18n]').forEach(elem => {
                 const key = elem.getAttribute('data-i18n');
                 if (langData[key]) {
@@ -597,7 +964,12 @@
                 }
             });
 
-            document.getElementById('langDisplay').textContent = currentLang === 'en' ? 'FR' : 'EN';
+            let displayCode = 'EN';
+            if (currentLang === 'fr-CA') displayCode = 'FR-CA';
+            else if (currentLang === 'fr-FR') displayCode = 'FR-FR';
+            else displayCode = currentLang.toUpperCase();
+
+            document.getElementById('langDisplay').textContent = displayCode;
         }
 
         /* ==========================================================================
@@ -607,12 +979,10 @@
         function renderRegionFilters() {
             const container = document.getElementById('region-filter-buttons');
             const regions = ['All', 'Canada', 'United States', 'Europe', 'North America', 'South America', 'Africa', 'Asia', 'Oceania', 'International', 'Favourites'];
+            const regMap = regionTranslations[currentLang] || regionTranslations['en'];
             
             container.innerHTML = regions.map(reg => {
-                let label = reg;
-                if (reg === 'All') label = i18n[currentLang].all;
-                if (reg === 'Favourites') label = i18n[currentLang].favourites;
-
+                const label = regMap[reg] || reg;
                 const isActive = currentRegion === reg;
                 const activeClass = isActive 
                     ? 'bg-archival-ink text-white dark:bg-archival-accent dark:text-white shadow-sm font-bold' 
@@ -664,6 +1034,7 @@
         function renderDirectory() {
             const grid = document.getElementById('directory-grid');
             const emptyState = document.getElementById('empty-state');
+            const visitText = (i18n[currentLang] && i18n[currentLang]['visitOutlet']) || "Visit Outlet";
 
             let filtered = mediaOutlets.filter(outlet => {
                 const matchesRegion = (currentRegion === 'All') ||
@@ -728,7 +1099,7 @@
                             </span>
 
                             <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-archival-ink dark:text-archival-gold hover:underline font-bold flex items-center gap-1.5 py-1">
-                                <span data-i18n="visitOutlet">Visit Outlet</span>
+                                <span>${visitText}</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                             </a>
                         </div>
@@ -770,7 +1141,7 @@
                 drawerBody.innerHTML = `
                     <div class="text-center py-12 text-slate-400 space-y-2 font-editorial">
                         <i class="fa-solid fa-star text-3xl text-slate-300 dark:text-archival-darkBorder"></i>
-                        <p class="text-xs">No favourite outlets starred yet.</p>
+                        <p class="text-xs" data-i18n="noFavouritesSaved">No favourite outlets starred yet.</p>
                     </div>
                 `;
                 return;
