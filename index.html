@@ -325,7 +325,7 @@
                         <div id="wd-frame-wrapper" class="absolute inset-0 flex flex-col">
                             <iframe id="wd-iframe" src="about:blank" class="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
                             <!-- Fallback Notice for X-Frame-Options blocks -->
-                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-archival-ink/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 text-white z-10">
+                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-archival-ink/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
                                 <i class="fa-solid fa-shield-halved text-archival-gold text-4xl"></i>
                                 <h4 class="font-serif font-bold text-lg" data-i18n="wdSecurityTitle">External Security Policy Notice</h4>
                                 <p class="font-editorial text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed" data-i18n="wdSecurityDesc">
@@ -1238,31 +1238,12 @@
         }
 
         /* ==========================================================================
-           8. ADVANCED NEWS EXECUTION HUB (WORLD DIRECT v5 - PATCHED ENGINE)
+           8. ADVANCED NEWS EXECUTION HUB (WORLD DIRECT v5)
            ========================================================================== */
-
-        const PROXY_PROVIDERS = [
-            url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-            url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-            url => `https://proxy.cors.sh/${url}`
-        ];
-
-        let currentExecutionUrl = '';
-        let iframeCheckTimer = null;
 
         function initWorldDirect() {
             renderWdPresets();
             renderWdHistory();
-            
-            // Set up iframe fallback detection listeners
-            const iframe = document.getElementById('wd-iframe');
-            if (iframe) {
-                iframe.addEventListener('load', handleIframeLoad);
-                iframe.onerror = function() {
-                    handleIframeError();
-                };
-            }
-
             executeWorldDirectLink('https://www.cbc.ca/news');
         }
 
@@ -1284,25 +1265,15 @@
             window.scrollTo({ top: document.getElementById('world-direct-section').offsetTop - 80, behavior: 'smooth' });
         }
 
-        function normalizeUrl(url) {
-            url = url.trim();
-            if (!url) return '';
-            if (!/^https?:\/\//i.test(url)) {
-                url = 'https://' + url;
-            }
-            return url;
-        }
-
         function executeWorldDirectLink(forcedUrl) {
             const urlInput = document.getElementById('wd-url-input');
-            let targetUrl = normalizeUrl(forcedUrl || urlInput.value);
+            const targetUrl = forcedUrl || urlInput.value.trim();
 
             if (!targetUrl || (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://'))) {
                 showToast('toastUrlInvalid');
                 return;
             }
 
-            currentExecutionUrl = targetUrl;
             urlInput.value = targetUrl;
 
             document.getElementById('wd-external-link').href = targetUrl;
@@ -1310,21 +1281,8 @@
 
             const iframe = document.getElementById('wd-iframe');
             const fallback = document.getElementById('wd-frame-fallback');
-            const statusText = document.getElementById('wd-status-text');
-            const statusDot = document.getElementById('wd-status-dot');
-
-            fallback.classList.add('hidden');
-            if (statusText) statusText.textContent = "Executing Stream...";
-            if (statusDot) statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0";
-
-            if (iframeCheckTimer) clearTimeout(iframeCheckTimer);
-
-            // Set up fallback check after 2.5 seconds if cross-origin X-Frame-Options blocks loading silently
-            iframeCheckTimer = setTimeout(() => {
-                checkIframeAccessibility();
-            }, 2500);
-
             iframe.src = targetUrl;
+            fallback.classList.add('hidden');
 
             if (!wdHistory.includes(targetUrl)) {
                 wdHistory.unshift(targetUrl);
@@ -1334,79 +1292,6 @@
             }
 
             showToast('toastUrlExecuted');
-        }
-
-        function handleIframeLoad() {
-            const iframe = document.getElementById('wd-iframe');
-            if (!iframe || !iframe.src || iframe.src === 'about:blank') return;
-            
-            checkIframeAccessibility();
-        }
-
-        function checkIframeAccessibility() {
-            const iframe = document.getElementById('wd-iframe');
-            const statusText = document.getElementById('wd-status-text');
-            const statusDot = document.getElementById('wd-status-dot');
-
-            try {
-                // If domain blocks iframe, contentDocument access will throw error or document element count is 0/blank
-                const doc = iframe.contentDocument || iframe.contentWindow.document;
-                if (!doc || doc.URL === 'about:blank' || (doc.body && doc.body.innerHTML === '')) {
-                    // Try proxy fallback attempt before showing security notice
-                    tryProxyLoading(currentExecutionUrl);
-                    return;
-                }
-                
-                // Accessible successfully
-                if (statusText) statusText.textContent = "Live Stream Active";
-                if (statusDot) statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0";
-            } catch (err) {
-                // Direct iframe access restricted by X-Frame-Options / CSP header
-                tryProxyLoading(currentExecutionUrl);
-            }
-        }
-
-        function tryProxyLoading(targetUrl) {
-            const iframe = document.getElementById('wd-iframe');
-            const statusText = document.getElementById('wd-status-text');
-            const statusDot = document.getElementById('wd-status-dot');
-
-            if (!targetUrl || targetUrl.includes('api.allorigins.win')) {
-                handleIframeError();
-                return;
-            }
-
-            const proxyUrl = PROXY_PROVIDERS[0](targetUrl);
-            iframe.removeAttribute('onload');
-            
-            iframe.src = proxyUrl;
-            
-            if (statusText) statusText.textContent = "Bypassing Framing Restrictions...";
-            if (statusDot) statusDot.className = "w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0";
-
-            setTimeout(() => {
-                try {
-                    const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    if (doc && doc.body && doc.body.innerHTML !== '') {
-                        if (statusText) statusText.textContent = "Live Stream Active (Proxied)";
-                        if (statusDot) statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0";
-                    } else {
-                        handleIframeError();
-                    }
-                } catch(e) {
-                    handleIframeError();
-                }
-            }, 2000);
-        }
-
-        function handleIframeError() {
-            const fallback = document.getElementById('wd-frame-fallback');
-            const statusText = document.getElementById('wd-status-text');
-            const statusDot = document.getElementById('wd-status-dot');
-
-            if (fallback) fallback.classList.remove('hidden');
-            if (statusText) statusText.textContent = "Restricted Frame Security";
-            if (statusDot) statusDot.className = "w-2.5 h-2.5 rounded-full bg-red-500 flex-shrink-0";
         }
 
         function renderWdHistory() {
@@ -1429,6 +1314,13 @@
             localStorage.removeItem('archives_wd_history');
             renderWdHistory();
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const iframe = document.getElementById('wd-iframe');
+            iframe.onerror = function() {
+                document.getElementById('wd-frame-fallback').classList.remove('hidden');
+            };
+        });
     </script>
 </body>
 </html>
