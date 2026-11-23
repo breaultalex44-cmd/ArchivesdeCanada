@@ -20,16 +20,16 @@
                 extend: {
                     colors: {
                         archival: {
-                            paper: '#fcfbfa',
-                            darkPaper: '#141619',
+                            paper: '#faf7f2',       // Warm snow/parchment
+                            darkPaper: '#091410',   // Deep midnight pine
                             card: '#ffffff',
-                            darkCard: '#1d2126',
-                            border: '#e2dfd8',
-                            darkBorder: '#2c323c',
-                            ink: '#1c1f24',
-                            lightInk: '#545d6a',
-                            accent: '#8b2626', // Classic archival burgundy
-                            gold: '#b89742',
+                            darkCard: '#0f221b',    // Rich evergreen slate
+                            border: '#e5dcd0',      // Warm winter cream border
+                            darkBorder: '#1d3c30',  // Pine needle border
+                            ink: '#162821',         // Deep evergreen ink
+                            lightInk: '#4c6359',    // Muted spruce
+                            accent: '#b91c1c',      // Festive holly crimson
+                            gold: '#d4af37',        // Holiday metallic gold
                         }
                     },
                     fontFamily: {
@@ -44,14 +44,20 @@
     
     <style>
         .archival-bg {
-            background-color: #fcfbfa;
-            background-image: radial-gradient(#dcd7ce 0.6px, transparent 0.6px);
-            background-size: 20px 20px;
+            background-color: #faf7f2;
+            background-image: 
+                radial-gradient(rgba(212, 175, 55, 0.25) 1px, transparent 1px),
+                radial-gradient(rgba(185, 28, 28, 0.14) 1px, transparent 1px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
         }
         .dark .archival-bg {
-            background-color: #121417;
-            background-image: radial-gradient(#222730 0.6px, transparent 0.6px);
-            background-size: 20px 20px;
+            background-color: #091410;
+            background-image: 
+                radial-gradient(rgba(212, 175, 55, 0.18) 1px, transparent 1px),
+                radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
         }
         .custom-scrollbar::-webkit-scrollbar {
             width: 5px;
@@ -61,42 +67,112 @@
             background: rgba(0,0,0,0.03);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.18);
+            background: rgba(185, 28, 28, 0.35);
             border-radius: 3px;
         }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.18);
+            background: rgba(212, 175, 55, 0.35);
+        }
+
+        /* Christmas Snowfall & Holiday Animations */
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        .candy-cane-strip {
+            height: 4px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #b91c1c,
+                #b91c1c 10px,
+                #ffffff 10px,
+                #ffffff 20px,
+                #15803d 20px,
+                #15803d 30px,
+                #ffffff 30px,
+                #ffffff 40px
+            );
+            background-size: 56.57px 56.57px;
+            animation: barberpole 3s linear infinite;
+        }
+
+        @keyframes barberpole {
+            0% { background-position: 0 0; }
+            100% { background-position: 56.57px 0; }
+        }
+
+        @keyframes festiveShimmer {
+            0%, 100% { box-shadow: 0 0 12px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(185, 28, 28, 0.08); }
+            50% { box-shadow: 0 0 22px rgba(212, 175, 55, 0.45), inset 0 0 14px rgba(21, 128, 61, 0.15); }
+        }
+
+        .festive-glow {
+            animation: festiveShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes gentleSway {
+            0%, 100% { transform: rotate(-6deg); }
+            50% { transform: rotate(6deg); }
+        }
+
+        .ornament-sway {
+            display: inline-block;
+            transform-origin: top center;
+            animation: gentleSway 3.2s ease-in-out infinite;
+        }
+
+        @keyframes tickPop {
+            0% { transform: scale(1.18); color: #d4af37; }
+            100% { transform: scale(1); }
+        }
+
+        .digit-pop {
+            display: inline-block;
+            animation: tickPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
     </style>
 </head>
-<body class="archival-bg text-archival-ink dark:text-slate-100 min-h-screen flex flex-col font-body transition-colors duration-200 selection:bg-archival-accent selection:text-white">
+<body class="archival-bg text-archival-ink dark:text-slate-100 min-h-screen flex flex-col font-body transition-colors duration-200 selection:bg-archival-accent selection:text-white relative overflow-x-hidden">
+
+    <!-- Ambient Falling Snow Overlay -->
+    <canvas id="snow-canvas"></canvas>
 
     <!-- Toast Notification Banner -->
-    <div id="toastNotification" class="fixed top-20 right-4 left-4 sm:left-auto sm:right-6 z-50 transform translate-y-[-120%] opacity-0 transition-all duration-300 pointer-events-none bg-archival-ink text-white px-4 py-3 rounded-xl shadow-2xl border border-archival-gold/50 flex items-center gap-3 max-w-sm sm:max-w-md mx-auto sm:mx-0">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-archival-gold flex-shrink-0"></i>
+    <div id="toastNotification" class="fixed top-20 right-4 left-4 sm:left-auto sm:right-6 z-50 transform translate-y-[-120%] opacity-0 transition-all duration-300 pointer-events-none bg-archival-ink text-white px-4 py-3 rounded-xl shadow-2xl border border-archival-gold/70 flex items-center gap-3 max-w-sm sm:max-w-md mx-auto sm:mx-0">
+        <i id="toastIcon" class="fa-solid fa-holly-berry text-archival-gold flex-shrink-0"></i>
         <span id="toastMessage" class="text-xs font-semibold">Action completed successfully.</span>
     </div>
 
     <!-- Encyclopedic Header -->
-    <header class="sticky top-0 z-40 bg-white/95 dark:bg-archival-darkCard/95 backdrop-blur-md border-b border-archival-border dark:border-archival-darkBorder shadow-sm">
+    <header class="sticky top-0 z-40 bg-white/95 dark:bg-archival-darkCard/95 backdrop-blur-md border-b border-archival-border dark:border-archival-darkBorder shadow-md">
+        <div class="candy-cane-strip"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20 sm:h-24">
                 
                 <!-- Logo & Brand Identifier -->
                 <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer min-w-0" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-archival-accent flex items-center justify-center text-white shadow-md flex-shrink-0 border border-archival-gold/40">
+                    <div class="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-archival-accent to-red-900 flex items-center justify-center text-white shadow-md flex-shrink-0 border-2 border-archival-gold/70">
                         <i class="fa-solid fa-landmark text-lg sm:text-xl" title="Archives Emblem"></i>
+                        <span class="absolute -top-2 -right-2 text-xs text-archival-gold drop-shadow ornament-sway">
+                            <i class="fa-solid fa-snowflake"></i>
+                        </span>
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center space-x-2">
                             <h1 class="font-serif text-base sm:text-xl md:text-2xl font-bold tracking-wider text-archival-ink dark:text-white uppercase truncate">
                                 Archives de Canada
                             </h1>
-                            <span class="hidden md:inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-archival-accent/10 text-archival-accent dark:text-red-400 border border-archival-accent/30 font-mono">
-                                Vol. IV • Ref.
+                            <span class="hidden md:inline-flex items-center gap-1 text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-archival-accent/15 text-archival-accent dark:text-amber-300 border border-archival-gold/40 font-mono">
+                                <i class="fa-solid fa-tree text-emerald-700 dark:text-emerald-400"></i> Vol. IV • Ref.
                             </span>
                         </div>
-                        <p class="text-[10px] sm:text-xs font-editorial italic text-archival-lightInk dark:text-slate-400 truncate" id="motto-text" data-i18n="mottoText">
+                        <p class="text-[10px] sm:text-xs font-editorial italic text-archival-lightInk dark:text-emerald-200/80 truncate" id="motto-text" data-i18n="mottoText">
                             National Directory of Global Journalism & Media
                         </p>
                     </div>
@@ -105,58 +181,58 @@
                 <!-- Header Actions & Navigation -->
                 <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
                     <!-- Favourites Drawer Toggle -->
-                    <button onclick="toggleFavouritesDrawer()" class="relative px-3 py-2 rounded-lg border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-archival-darkBorder transition flex items-center gap-1.5 text-xs font-medium">
+                    <button onclick="toggleFavouritesDrawer()" class="relative px-3 py-2 rounded-xl border border-archival-border dark:border-archival-darkBorder bg-white/80 dark:bg-archival-darkPaper/80 text-archival-ink dark:text-slate-100 hover:border-archival-gold transition flex items-center gap-1.5 text-xs font-medium shadow-sm">
                         <i class="fa-solid fa-star text-archival-gold"></i>
                         <span class="hidden md:inline uppercase tracking-wider font-serif text-[11px]" data-i18n="favourites">Favourites</span>
-                        <span id="favouriteBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white bg-archival-gold rounded-full font-mono">0</span>
+                        <span id="favouriteBadge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white bg-archival-accent rounded-full font-mono">0</span>
                     </button>
 
                     <!-- Settings Drawer Button -->
-                    <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2 sm:p-2.5 rounded-lg border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-archival-darkBorder transition flex items-center gap-2 relative">
+                    <button onclick="toggleSettingsDrawer()" title="Settings" class="p-2 sm:p-2.5 rounded-xl border border-archival-border dark:border-archival-darkBorder bg-white/80 dark:bg-archival-darkPaper/80 text-archival-ink dark:text-slate-100 hover:border-archival-gold transition flex items-center gap-2 relative shadow-sm">
                         <i class="fa-solid fa-sliders text-xs sm:text-sm"></i>
                     </button>
 
                     <!-- Language Switcher Dropdown -->
                     <div class="relative">
-                        <button onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-lg bg-archival-ink hover:bg-black dark:bg-archival-accent dark:hover:bg-red-800 text-white font-mono font-bold text-xs tracking-wider transition flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-globe text-xs"></i>
+                        <button onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-xl bg-archival-accent hover:bg-red-800 text-white font-mono font-bold text-xs tracking-wider transition flex items-center gap-1.5 shadow-sm border border-archival-gold/50">
+                            <i class="fa-solid fa-globe text-xs text-amber-200"></i>
                             <span id="langDisplay">EN</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] opacity-75"></i>
+                            <i class="fa-solid fa-chevron-down text-[10px] opacity-80"></i>
                         </button>
                         <div id="langDropdownMenu" class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder rounded-xl shadow-2xl py-2 z-50 text-xs font-mono">
-                            <button onclick="setLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('en')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>English</span>
                                 <span class="text-[10px] text-slate-400">EN</span>
                             </button>
-                            <button onclick="setLanguage('fr-CA')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('fr-CA')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Français (Québec)</span>
                                 <span class="text-[10px] text-archival-gold font-bold">FR-CA</span>
                             </button>
-                            <button onclick="setLanguage('fr-FR')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('fr-FR')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Français (France)</span>
                                 <span class="text-[10px] text-slate-400">FR-FR</span>
                             </button>
-                            <button onclick="setLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('es')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Español</span>
                                 <span class="text-[10px] text-slate-400">ES</span>
                             </button>
-                            <button onclick="setLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('it')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Italiano</span>
                                 <span class="text-[10px] text-slate-400">IT</span>
                             </button>
-                            <button onclick="setLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('de')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Deutsch</span>
                                 <span class="text-[10px] text-slate-400">DE</span>
                             </button>
-                            <button onclick="setLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('zh')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>中文</span>
                                 <span class="text-[10px] text-slate-400">ZH</span>
                             </button>
-                            <button onclick="setLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('ja')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>日本語</span>
                                 <span class="text-[10px] text-slate-400">JA</span>
                             </button>
-                            <button onclick="setLanguage('ru')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-archival-darkBorder flex items-center justify-between text-slate-700 dark:text-slate-200">
+                            <button onclick="setLanguage('ru')" class="w-full text-left px-4 py-2 hover:bg-red-50 dark:hover:bg-archival-darkBorder flex items-center justify-between text-archival-ink dark:text-slate-200">
                                 <span>Русский</span>
                                 <span class="text-[10px] text-slate-400">RU</span>
                             </button>
@@ -164,7 +240,7 @@
                     </div>
 
                     <!-- Dark Mode Toggle -->
-                    <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-lg border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-archival-darkBorder transition">
+                    <button onclick="toggleDarkMode()" class="p-2 sm:p-2.5 rounded-xl border border-archival-border dark:border-archival-darkBorder bg-white/80 dark:bg-archival-darkPaper/80 text-archival-ink dark:text-slate-100 hover:border-archival-gold transition shadow-sm">
                         <i id="themeIcon" class="fa-solid fa-moon text-xs sm:text-sm"></i>
                     </button>
                 </div>
@@ -173,10 +249,22 @@
     </header>
 
     <!-- Editorial Intro Banner -->
-    <section class="bg-white/60 dark:bg-archival-darkCard/60 border-b border-archival-border dark:border-archival-darkBorder py-10 sm:py-14">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-md text-[11px] font-mono uppercase tracking-widest bg-archival-accent/10 text-archival-accent dark:text-red-400 border border-archival-accent/25" data-i18n="heroBadge">
-                Official Bilingual Press Repository
+    <section class="relative bg-gradient-to-b from-red-950/5 via-white/75 to-emerald-950/5 dark:from-red-950/30 dark:via-archival-darkCard/80 dark:to-emerald-950/40 border-b border-archival-border dark:border-archival-darkBorder py-10 sm:py-14 overflow-hidden">
+        <!-- Decorative Corner Pine & Holly Accents -->
+        <div class="hidden sm:flex items-center gap-2 absolute top-4 left-6 text-emerald-700/40 dark:text-emerald-400/30 text-xl pointer-events-none">
+            <i class="fa-solid fa-holly-berry text-archival-accent/50"></i>
+            <i class="fa-solid fa-snowflake"></i>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 absolute top-4 right-6 text-emerald-700/40 dark:text-emerald-400/30 text-xl pointer-events-none">
+            <i class="fa-solid fa-snowflake"></i>
+            <i class="fa-solid fa-holly-berry text-archival-accent/50"></i>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 relative z-10">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-mono uppercase tracking-widest bg-archival-accent/10 text-archival-accent dark:text-amber-300 border border-archival-gold/40 shadow-sm">
+                <i class="fa-solid fa-star text-archival-gold text-[10px]"></i>
+                <span data-i18n="heroBadge">Official Bilingual Press Repository</span>
+                <i class="fa-solid fa-star text-archival-gold text-[10px]"></i>
             </span>
             <h2 class="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-archival-ink dark:text-white max-w-4xl mx-auto leading-tight tracking-tight" data-i18n="heroTitle">
                 Preserving Access to Verified Canadian & Global News Outlets.
@@ -185,12 +273,56 @@
                 Explore curated directories of reliable news organizations grouped by geographic regions. Star your primary press channels or execute any global news link instantly via World Direct.
             </p>
 
+            <!-- Compact Animated Christmas & New Year's Eve Countdown Section -->
+            <div class="pt-2 flex justify-center">
+                <div class="festive-glow inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-5 px-4 py-2.5 rounded-2xl bg-white/90 dark:bg-archival-darkPaper/90 border border-archival-gold/50 shadow-sm backdrop-blur-sm">
+                    <!-- Christmas Day Countdown -->
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-7 h-7 rounded-lg bg-archival-accent/15 text-archival-accent dark:text-red-400 border border-archival-accent/30 flex items-center justify-center text-xs ornament-sway">
+                            <i class="fa-solid fa-tree"></i>
+                        </span>
+                        <div class="text-left">
+                            <div class="text-[9px] font-mono uppercase tracking-widest text-archival-accent dark:text-red-400 font-bold leading-none mb-1">
+                                Christmas Day
+                            </div>
+                            <div id="xmas-countdown" class="font-mono text-xs font-bold text-archival-ink dark:text-white tracking-tight flex items-center gap-1">
+                                <span id="xmas-d">00</span><span class="text-[10px] font-normal text-slate-400">d</span>
+                                <span id="xmas-h">00</span><span class="text-[10px] font-normal text-slate-400">h</span>
+                                <span id="xmas-m">00</span><span class="text-[10px] font-normal text-slate-400">m</span>
+                                <span id="xmas-s" class="text-archival-accent dark:text-archival-gold">00</span><span class="text-[10px] font-normal text-slate-400">s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden sm:block h-7 w-px bg-archival-gold/40"></div>
+                    <div class="block sm:hidden w-full h-px bg-archival-gold/30"></div>
+
+                    <!-- New Year's Eve Countdown -->
+                    <div class="flex items-center gap-2.5">
+                        <span class="w-7 h-7 rounded-lg bg-emerald-700/15 text-emerald-700 dark:text-emerald-400 border border-emerald-600/30 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-champagne-glasses"></i>
+                        </span>
+                        <div class="text-left">
+                            <div class="text-[9px] font-mono uppercase tracking-widest text-emerald-700 dark:text-emerald-400 font-bold leading-none mb-1">
+                                New Year's Eve
+                            </div>
+                            <div id="nye-countdown" class="font-mono text-xs font-bold text-archival-ink dark:text-white tracking-tight flex items-center gap-1">
+                                <span id="nye-d">00</span><span class="text-[10px] font-normal text-slate-400">d</span>
+                                <span id="nye-h">00</span><span class="text-[10px] font-normal text-slate-400">h</span>
+                                <span id="nye-m">00</span><span class="text-[10px] font-normal text-slate-400">m</span>
+                                <span id="nye-s" class="text-emerald-700 dark:text-archival-gold">00</span><span class="text-[10px] font-normal text-slate-400">s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex flex-wrap items-center justify-center gap-3 pt-3">
-                <a href="#directory-section" class="px-5 py-2.5 rounded-xl bg-archival-ink hover:bg-black dark:bg-archival-accent dark:hover:bg-red-800 text-white text-xs font-semibold tracking-wide transition shadow-sm flex items-center gap-2 font-mono uppercase">
+                <a href="#directory-section" class="px-5 py-2.5 rounded-xl bg-archival-accent hover:bg-red-800 text-white text-xs font-semibold tracking-wide transition shadow-md flex items-center gap-2 font-mono uppercase border border-archival-gold/50">
                     <i class="fa-solid fa-book-open"></i>
                     <span data-i18n="btnBrowseDir">Explore Directory</span>
                 </a>
-                <a href="#world-direct-section" class="px-5 py-2.5 rounded-xl bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-white hover:bg-slate-50 dark:hover:bg-archival-darkBorder text-xs font-semibold tracking-wide transition shadow-sm flex items-center gap-2 font-mono uppercase">
+                <a href="#world-direct-section" class="px-5 py-2.5 rounded-xl bg-emerald-900 hover:bg-emerald-800 dark:bg-archival-darkPaper dark:hover:bg-archival-darkBorder border border-archival-gold/50 text-white text-xs font-semibold tracking-wide transition shadow-md flex items-center gap-2 font-mono uppercase">
                     <i class="fa-solid fa-satellite text-archival-gold"></i>
                     <span data-i18n="btnWorldDirect">World Direct Hub</span>
                 </a>
@@ -199,24 +331,27 @@
     </section>
 
     <!-- Main Content Grid / Encyclopedic Layout -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1 space-y-14 sm:space-y-16 w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-1 space-y-14 sm:space-y-16 w-full relative z-10">
         
         <!-- DIRECTORY SECTION -->
         <section id="directory-section" class="space-y-6 sm:space-y-8">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-archival-border dark:border-archival-darkBorder pb-5">
                 <div>
-                    <h3 class="text-xl sm:text-2xl font-serif font-bold text-archival-ink dark:text-white" data-i18n="dirHeading">Global Media Directory</h3>
+                    <h3 class="text-xl sm:text-2xl font-serif font-bold text-archival-ink dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-holly-berry text-archival-accent text-base"></i>
+                        <span data-i18n="dirHeading">Global Media Directory</span>
+                    </h3>
                     <p class="text-xs sm:text-sm font-editorial text-archival-lightInk dark:text-slate-400 mt-1" data-i18n="dirSubheading">Categorized by region, country, and official broadcast language.</p>
                 </div>
 
                 <div class="flex items-center gap-4 text-xs font-mono pt-2 md:pt-0">
-                    <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+                    <div class="flex items-center gap-1.5 text-archival-ink dark:text-slate-300">
                         <span data-i18n="totalSources">Total Outlets:</span>
-                        <span id="total-sources-count" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-archival-darkBorder font-bold text-archival-ink dark:text-slate-100">0</span>
+                        <span id="total-sources-count" class="px-2 py-0.5 rounded bg-emerald-800/10 dark:bg-archival-darkBorder border border-emerald-700/20 font-bold text-emerald-900 dark:text-emerald-300">0</span>
                     </div>
-                    <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+                    <div class="flex items-center gap-1.5 text-archival-ink dark:text-slate-300">
                         <span data-i18n="favouritesCount">Favourites:</span>
-                        <span id="favourites-count" class="px-2 py-0.5 rounded bg-archival-gold/15 text-archival-gold font-bold">0</span>
+                        <span id="favourites-count" class="px-2 py-0.5 rounded bg-archival-gold/20 border border-archival-gold/40 text-amber-800 dark:text-archival-gold font-bold">0</span>
                     </div>
                 </div>
             </div>
@@ -225,10 +360,10 @@
             <div class="flex flex-col lg:flex-row justify-between gap-4 items-stretch lg:items-center">
                 <!-- Search Box -->
                 <div class="relative flex-1 max-w-lg">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-archival-accent/70 text-xs"></i>
                     <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search outlet name, country, region..." data-i18n-placeholder="searchPlaceholder"
                         class="w-full pl-10 pr-9 py-3 rounded-xl bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-xs text-archival-ink dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-archival-accent transition shadow-sm">
-                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs p-1">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-archival-accent text-xs p-1">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -245,11 +380,11 @@
             </div>
 
             <!-- Empty Directory State -->
-            <div id="empty-state" class="hidden text-center py-16 bg-white dark:bg-archival-darkCard rounded-2xl border border-dashed border-archival-border dark:border-archival-darkBorder p-8 space-y-3">
-                <i class="fa-solid fa-folder-open text-4xl text-slate-300 dark:text-slate-600"></i>
-                <h4 class="font-serif font-bold text-slate-700 dark:text-slate-200 text-base" data-i18n="noResultsTitle">No News Outlets Found</h4>
-                <p class="text-xs font-editorial text-slate-500 dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the favourites/region filter.</p>
-                <button onclick="resetFilters()" class="px-4 py-2 bg-slate-200 dark:bg-archival-darkBorder text-slate-700 dark:text-slate-200 text-xs font-mono font-bold rounded-lg hover:bg-slate-300 transition" data-i18n="resetFilters">
+            <div id="empty-state" class="hidden text-center py-16 bg-white dark:bg-archival-darkCard rounded-2xl border border-dashed border-archival-gold/60 p-8 space-y-3">
+                <i class="fa-solid fa-snowflake text-4xl text-archival-accent/50"></i>
+                <h4 class="font-serif font-bold text-archival-ink dark:text-slate-200 text-base" data-i18n="noResultsTitle">No News Outlets Found</h4>
+                <p class="text-xs font-editorial text-archival-lightInk dark:text-slate-400 max-w-md mx-auto" data-i18n="noResultsDesc">Try altering your search keywords or clearing the favourites/region filter.</p>
+                <button onclick="resetFilters()" class="px-4 py-2 bg-archival-accent text-white text-xs font-mono font-bold rounded-lg hover:bg-red-800 transition" data-i18n="resetFilters">
                     Reset Filters
                 </button>
             </div>
@@ -260,7 +395,7 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
                 <div>
                     <div class="flex items-center gap-2.5 mb-1">
-                        <span class="px-2.5 py-0.5 rounded bg-archival-gold/15 text-archival-gold border border-archival-gold/30 text-[10px] font-mono font-bold uppercase tracking-wider">World Direct</span>
+                        <span class="px-2.5 py-0.5 rounded bg-archival-gold/20 text-amber-800 dark:text-archival-gold border border-archival-gold/40 text-[10px] font-mono font-bold uppercase tracking-wider">World Direct</span>
                         <h3 class="text-xl sm:text-2xl font-serif font-bold text-archival-ink dark:text-white" data-i18n="wdHeading">Universal Link & News Execution Hub</h3>
                     </div>
                     <p class="text-xs sm:text-sm font-editorial text-archival-lightInk dark:text-slate-400" data-i18n="wdSubheading">Execute and load any news article or global web link instantly in interactive frame view.</p>
@@ -272,12 +407,12 @@
                 <!-- Controls & Quick Presets Sidebar -->
                 <div class="lg:col-span-4 bg-white dark:bg-archival-darkCard rounded-2xl p-5 sm:p-6 border border-archival-border dark:border-archival-darkBorder shadow-sm space-y-5">
                     <div class="space-y-2">
-                        <label class="block text-xs font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" data-i18n="wdURLLabel">Target Article / Web URL</label>
+                        <label class="block text-xs font-mono font-bold uppercase tracking-wider text-archival-lightInk dark:text-slate-400" data-i18n="wdURLLabel">Target Article / Web URL</label>
                         <div class="flex flex-col sm:flex-row gap-2">
                             <input type="url" id="wd-url-input" placeholder="https://www.cbc.ca/news/world..."
-                                class="w-full sm:flex-1 p-3 rounded-xl bg-slate-50 dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-archival-accent font-mono">
-                            <button onclick="executeWorldDirectLink()" class="w-full sm:w-auto px-5 py-3 bg-archival-accent hover:bg-red-800 text-white rounded-xl font-mono font-bold transition flex items-center justify-center gap-1.5 shadow-sm text-xs flex-shrink-0">
-                                <i class="fa-solid fa-bolt"></i>
+                                class="w-full sm:flex-1 p-3 rounded-xl bg-archival-paper dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-slate-100 text-xs focus:outline-none focus:ring-2 focus:ring-archival-accent font-mono">
+                            <button onclick="executeWorldDirectLink()" class="w-full sm:w-auto px-5 py-3 bg-archival-accent hover:bg-red-800 text-white rounded-xl font-mono font-bold transition flex items-center justify-center gap-1.5 shadow-sm text-xs flex-shrink-0 border border-archival-gold/40">
+                                <i class="fa-solid fa-bolt text-amber-200"></i>
                                 <span data-i18n="wdExecuteBtn">Execute</span>
                             </button>
                         </div>
@@ -285,7 +420,7 @@
 
                     <!-- Quick Global News Presets -->
                     <div class="space-y-2">
-                        <span class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="wdPresetsLabel">Global Outlets Quick Launch</span>
+                        <span class="block text-[11px] font-mono font-bold uppercase tracking-wider text-archival-lightInk dark:text-slate-400" data-i18n="wdPresetsLabel">Global Outlets Quick Launch</span>
                         <div id="wd-presets-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-52 overflow-y-auto custom-scrollbar pr-1">
                             <!-- Populated dynamically -->
                         </div>
@@ -294,7 +429,7 @@
                     <!-- Session Execution History -->
                     <div class="space-y-2 pt-3 border-t border-archival-border dark:border-archival-darkBorder">
                         <div class="flex items-center justify-between">
-                            <span class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="wdHistoryLabel">Recent Executions</span>
+                            <span class="block text-[11px] font-mono font-bold uppercase tracking-wider text-archival-lightInk dark:text-slate-400" data-i18n="wdHistoryLabel">Recent Executions</span>
                             <button onclick="clearWdHistory()" class="text-[11px] font-mono text-slate-400 hover:text-archival-accent p-1" data-i18n="wdClearHistory">Clear</button>
                         </div>
                         <div id="wd-history-list" class="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar text-xs font-mono">
@@ -306,33 +441,33 @@
                 <!-- Main Executed Canvas & Frame Viewer -->
                 <div class="lg:col-span-8 bg-white dark:bg-archival-darkCard rounded-2xl border border-archival-border dark:border-archival-darkBorder shadow-sm overflow-hidden flex flex-col min-h-[520px] sm:min-h-[600px]">
                     <!-- Canvas Toolbar -->
-                    <div class="bg-slate-100 dark:bg-archival-darkPaper px-4 sm:px-6 py-3 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
+                    <div class="bg-archival-paper dark:bg-archival-darkPaper px-4 sm:px-6 py-3 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between flex-wrap gap-2 text-xs font-mono">
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
-                            <span id="wd-status-text" class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider truncate" data-i18n="wdStatusReady">Ready for Execution</span>
+                            <span id="wd-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse flex-shrink-0"></span>
+                            <span id="wd-status-text" class="font-bold text-archival-ink dark:text-slate-200 uppercase tracking-wider truncate" data-i18n="wdStatusReady">Ready for Execution</span>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <a id="wd-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab" class="p-2 bg-white dark:bg-archival-darkCard hover:bg-slate-100 dark:hover:bg-archival-darkBorder border border-archival-border dark:border-archival-darkBorder rounded-lg text-slate-700 dark:text-slate-200 flex items-center gap-1.5 px-3 font-semibold text-[11px]">
+                            <a id="wd-external-link" href="#" target="_blank" rel="noopener noreferrer" title="Open in new tab" class="p-2 bg-white dark:bg-archival-darkCard hover:border-archival-gold border border-archival-border dark:border-archival-darkBorder rounded-lg text-archival-ink dark:text-slate-200 flex items-center gap-1.5 px-3 font-semibold text-[11px] transition">
                                 <span data-i18n="wdOpenDirect">Open Direct</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs text-archival-accent dark:text-archival-gold"></i>
                             </a>
                         </div>
                     </div>
 
                     <!-- Display Area: Iframe Viewer -->
-                    <div class="flex-1 relative bg-slate-50 dark:bg-navy-950 flex flex-col">
+                    <div class="flex-1 relative bg-archival-paper dark:bg-archival-darkPaper flex flex-col">
                         <div id="wd-frame-wrapper" class="absolute inset-0 flex flex-col">
                             <iframe id="wd-iframe" src="about:blank" class="w-full h-full border-0 bg-white" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
                             <!-- Fallback Notice for X-Frame-Options blocks -->
-                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-archival-ink/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
+                            <div id="wd-frame-fallback" class="hidden absolute inset-0 bg-archival-darkPaper/95 backdrop-blur-md p-6 sm:p-8 flex flex-col items-center justify-center text-center space-y-4 text-white">
                                 <i class="fa-solid fa-shield-halved text-archival-gold text-4xl"></i>
                                 <h4 class="font-serif font-bold text-lg" data-i18n="wdSecurityTitle">External Security Policy Notice</h4>
                                 <p class="font-editorial text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed" data-i18n="wdSecurityDesc">
                                     This target domain restricts embedded framing due to strict cross-origin security policies.
                                 </p>
                                 <div class="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
-                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-5 py-2.5 bg-archival-accent hover:bg-red-800 text-white text-xs font-mono font-bold rounded-xl transition shadow text-center" data-i18n="wdOpenNewTab">
+                                    <a id="wd-fallback-external" href="#" target="_blank" class="px-5 py-2.5 bg-archival-accent hover:bg-red-800 text-white text-xs font-mono font-bold rounded-xl transition shadow text-center border border-archival-gold/50" data-i18n="wdOpenNewTab">
                                         Open in New Tab
                                     </a>
                                 </div>
@@ -347,8 +482,9 @@
     </main>
 
     <!-- FAVOURITES DRAWER -->
-    <aside id="favouritesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-archival-darkCard shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-archival-border dark:border-archival-darkBorder flex flex-col">
-        <div class="p-5 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between bg-archival-ink text-white">
+    <aside id="favouritesDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-archival-darkCard shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-archival-gold/40 flex flex-col">
+        <div class="candy-cane-strip"></div>
+        <div class="p-5 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between bg-gradient-to-r from-archival-ink to-emerald-950 text-white">
             <div class="flex items-center gap-2.5">
                 <i class="fa-solid fa-star text-archival-gold"></i>
                 <h3 class="font-serif font-bold text-base sm:text-lg" data-i18n="favourites">Saved Favourites Outlets</h3>
@@ -362,13 +498,13 @@
             <!-- Dynamic saved favourites list -->
         </div>
 
-        <div class="p-4 border-t border-archival-border dark:border-archival-darkBorder bg-slate-50 dark:bg-archival-darkPaper flex justify-between gap-3 font-mono">
-            <button onclick="exportFavourites()" class="flex-1 px-3 py-2.5 bg-slate-200 dark:bg-archival-darkBorder text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-download"></i>
+        <div class="p-4 border-t border-archival-border dark:border-archival-darkBorder bg-archival-paper dark:bg-archival-darkPaper flex justify-between gap-3 font-mono">
+            <button onclick="exportFavourites()" class="flex-1 px-3 py-2.5 bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-xs font-bold rounded-lg text-archival-ink dark:text-slate-200 hover:border-archival-gold transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-download text-archival-accent dark:text-archival-gold"></i>
                 <span data-i18n="export">Export</span>
             </button>
-            <label class="flex-1 px-3 py-2.5 bg-slate-200 dark:bg-archival-darkBorder text-xs font-bold rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-300 transition cursor-pointer flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-upload"></i>
+            <label class="flex-1 px-3 py-2.5 bg-white dark:bg-archival-darkCard border border-archival-border dark:border-archival-darkBorder text-xs font-bold rounded-lg text-archival-ink dark:text-slate-200 hover:border-archival-gold transition cursor-pointer flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-upload text-emerald-700 dark:text-emerald-400"></i>
                 <span data-i18n="import">Import</span>
                 <input type="file" accept=".json" onchange="importFavourites(event)" class="hidden">
             </label>
@@ -376,10 +512,11 @@
     </aside>
 
     <!-- SETTINGS DRAWER -->
-    <aside id="settingsDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-archival-darkCard shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-archival-border dark:border-archival-darkBorder flex flex-col">
-        <div class="p-5 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between bg-archival-ink text-white">
+    <aside id="settingsDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white dark:bg-archival-darkCard shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out border-l border-archival-gold/40 flex flex-col">
+        <div class="candy-cane-strip"></div>
+        <div class="p-5 border-b border-archival-border dark:border-archival-darkBorder flex items-center justify-between bg-gradient-to-r from-archival-ink to-emerald-950 text-white">
             <div class="flex items-center gap-2.5">
-                <i class="fa-solid fa-sliders text-slate-300"></i>
+                <i class="fa-solid fa-sliders text-archival-gold"></i>
                 <h3 class="font-serif font-bold text-base sm:text-lg" data-i18n="settingsTitle">Application Settings</h3>
             </div>
             <button onclick="toggleSettingsDrawer()" class="p-2 rounded text-slate-300 hover:text-white">
@@ -389,46 +526,47 @@
 
         <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-sm">
             <div class="space-y-3">
-                <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="settingsAppearance">Appearance & Theme</h4>
-                <div class="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder">
-                    <span class="text-xs font-medium text-slate-700 dark:text-slate-300" data-i18n="settingsThemeMode">Theme Mode</span>
-                    <button onclick="toggleDarkMode()" class="px-4 py-2 bg-slate-200 dark:bg-archival-darkBorder text-slate-800 dark:text-slate-200 rounded-lg text-xs font-mono font-semibold" data-i18n="settingsToggleTheme">
+                <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-archival-lightInk dark:text-slate-400" data-i18n="settingsAppearance">Appearance & Theme</h4>
+                <div class="flex items-center justify-between p-3.5 bg-archival-paper dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder">
+                    <span class="text-xs font-medium text-archival-ink dark:text-slate-300" data-i18n="settingsThemeMode">Theme Mode</span>
+                    <button onclick="toggleDarkMode()" class="px-4 py-2 bg-archival-accent text-white rounded-lg text-xs font-mono font-semibold hover:bg-red-800 transition" data-i18n="settingsToggleTheme">
                         Toggle Light/Dark
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="p-4 border-t border-archival-border dark:border-archival-darkBorder bg-slate-50 dark:bg-archival-darkPaper text-center">
-            <span class="text-[11px] text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 5.0</span>
+        <div class="p-4 border-t border-archival-border dark:border-archival-darkBorder bg-archival-paper dark:bg-archival-darkPaper text-center">
+            <span class="text-[11px] text-archival-lightInk dark:text-slate-400 font-mono">ARCHIVES SYSTEM VERSION 5.0</span>
         </div>
     </aside>
 
-    <div id="drawerOverlay" onclick="closeAllDrawers()" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    <div id="drawerOverlay" onclick="closeAllDrawers()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity"></div>
 
     <!-- Encyclopedic Footer -->
-    <footer class="bg-archival-ink text-white mt-20 border-t border-archival-darkBorder">
+    <footer class="bg-gradient-to-b from-archival-ink to-[#07110d] text-white mt-20 border-t border-archival-gold/40 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-6">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
                 <div class="flex items-center space-x-3 justify-center md:justify-start">
-                    <div class="w-10 h-10 rounded bg-archival-accent flex items-center justify-center text-white font-bold flex-shrink-0 border border-archival-gold/40">
+                    <div class="w-10 h-10 rounded-xl bg-archival-accent flex items-center justify-center text-white font-bold flex-shrink-0 border border-archival-gold/60">
                         <i class="fa-solid fa-landmark"></i>
                     </div>
                     <div class="min-w-0">
                         <h3 class="font-serif font-bold text-sm sm:text-base tracking-wider uppercase truncate">Archives de Canada</h3>
-                        <p class="text-xs font-editorial text-slate-400 truncate" data-i18n="mottoText">National Directory of Global Journalism & Media</p>
+                        <p class="text-xs font-editorial text-emerald-200/75 truncate" data-i18n="mottoText">National Directory of Global Journalism & Media</p>
                     </div>
                 </div>
 
-                <p class="font-editorial text-xs text-slate-400 max-w-md" data-i18n="footerStorageNotice">
+                <p class="font-editorial text-xs text-slate-300 max-w-md" data-i18n="footerStorageNotice">
                     Starred directories and language choices are preserved locally on your device.
                 </p>
             </div>
 
-            <div class="border-t border-archival-darkBorder pt-6 text-center text-xs font-mono text-slate-500">
+            <div class="border-t border-archival-darkBorder pt-6 text-center text-xs font-mono text-emerald-200/60">
                 <p>&copy; Archives de Canada. All rights reserved. Supporting press freedom & bilingual news access globally.</p>
             </div>
         </div>
+        <div class="candy-cane-strip"></div>
     </footer>
 
     <script>
@@ -872,6 +1010,8 @@
             updateFavouriteCounts();
             renderFavouritesDrawer();
             initWorldDirect();
+            initChristmasCountdowns();
+            initSnowfall();
         });
 
         // Close language dropdown on outside click
@@ -920,14 +1060,14 @@
                 document.getElementById('themeIcon').className = 'fa-solid fa-sun text-xs sm:text-sm text-archival-gold';
             } else {
                 document.documentElement.classList.remove('dark');
-                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-xs sm:text-sm';
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-xs sm:text-sm text-archival-accent';
             }
         }
 
         function toggleDarkMode() {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('archives_theme', isDark ? 'dark' : 'light');
-            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-xs sm:text-sm text-archival-gold' : 'fa-solid fa-moon text-xs sm:text-sm';
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-xs sm:text-sm text-archival-gold' : 'fa-solid fa-moon text-xs sm:text-sm text-archival-accent';
         }
 
         function setLanguage(lang) {
@@ -985,11 +1125,11 @@
                 const label = regMap[reg] || reg;
                 const isActive = currentRegion === reg;
                 const activeClass = isActive 
-                    ? 'bg-archival-ink text-white dark:bg-archival-accent dark:text-white shadow-sm font-bold' 
-                    : 'bg-white dark:bg-archival-darkCard text-slate-700 dark:text-slate-300 border border-archival-border dark:border-archival-darkBorder hover:bg-slate-100 dark:hover:bg-archival-darkBorder';
+                    ? 'bg-archival-accent text-white shadow-sm font-bold border border-archival-gold/50' 
+                    : 'bg-white dark:bg-archival-darkCard text-archival-ink dark:text-slate-300 border border-archival-border dark:border-archival-darkBorder hover:border-archival-gold';
 
                 return `
-                    <button onclick="filterByRegion('${reg}')" class="px-3.5 py-2 rounded-lg text-xs font-mono uppercase tracking-wider whitespace-nowrap transition flex-shrink-0 ${activeClass}">
+                    <button onclick="filterByRegion('${reg}')" class="px-3.5 py-2 rounded-xl text-xs font-mono uppercase tracking-wider whitespace-nowrap transition flex-shrink-0 ${activeClass}">
                         ${reg === 'Favourites' ? '<i class="fa-solid fa-star text-archival-gold mr-1"></i>' : ''}
                         ${label}
                     </button>
@@ -1065,16 +1205,17 @@
                 const starClass = isFav ? 'fa-solid text-archival-gold' : 'fa-regular text-slate-300 dark:text-slate-600 hover:text-archival-gold';
 
                 return `
-                    <div class="bg-white dark:bg-archival-darkCard rounded-2xl p-5 border border-archival-border dark:border-archival-darkBorder shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group">
+                    <div class="bg-white dark:bg-archival-darkCard rounded-2xl p-5 border border-archival-border dark:border-archival-darkBorder hover:border-archival-gold/70 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4 group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-archival-accent via-archival-gold to-emerald-700 opacity-70"></div>
                         <div class="space-y-3">
                             <div class="flex items-start justify-between gap-2">
                                 <div class="flex items-center gap-3 min-w-0">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder flex items-center justify-center text-archival-ink dark:text-archival-gold group-hover:scale-105 transition-transform flex-shrink-0">
+                                    <div class="w-10 h-10 rounded-xl bg-archival-paper dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder flex items-center justify-center text-archival-accent dark:text-archival-gold group-hover:scale-105 transition-transform flex-shrink-0">
                                         <i class="${outlet.iconClass} text-base"></i>
                                     </div>
                                     <div class="min-w-0">
                                         <h4 class="font-serif font-bold text-archival-ink dark:text-white text-sm leading-tight truncate">${outlet.name}</h4>
-                                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider truncate block">${outlet.country} • ${outlet.language}</span>
+                                        <span class="text-[10px] font-mono text-archival-lightInk dark:text-emerald-300/75 uppercase tracking-wider truncate block">${outlet.country} • ${outlet.language}</span>
                                     </div>
                                 </div>
 
@@ -1088,17 +1229,17 @@
                                 </div>
                             </div>
 
-                            <p class="font-editorial text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <p class="font-editorial text-xs sm:text-sm text-archival-lightInk dark:text-slate-300 leading-relaxed">
                                 ${outlet.description}
                             </p>
                         </div>
 
-                        <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-archival-darkBorder text-xs">
-                            <span class="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-slate-100 dark:bg-archival-darkPaper text-slate-600 dark:text-slate-400">
+                        <div class="flex items-center justify-between pt-3 border-t border-archival-border/70 dark:border-archival-darkBorder text-xs">
+                            <span class="px-2.5 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-emerald-800/10 dark:bg-archival-darkPaper text-emerald-900 dark:text-emerald-300 border border-emerald-700/20">
                                 ${outlet.region}
                             </span>
 
-                            <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-archival-ink dark:text-archival-gold hover:underline font-bold flex items-center gap-1.5 py-1">
+                            <a href="${outlet.url}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-archival-accent dark:text-archival-gold hover:underline font-bold flex items-center gap-1.5 py-1">
                                 <span>${visitText}</span>
                                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                             </a>
@@ -1140,7 +1281,7 @@
             if (activeFavourites.length === 0) {
                 drawerBody.innerHTML = `
                     <div class="text-center py-12 text-slate-400 space-y-2 font-editorial">
-                        <i class="fa-solid fa-star text-3xl text-slate-300 dark:text-archival-darkBorder"></i>
+                        <i class="fa-solid fa-star text-3xl text-archival-gold/50"></i>
                         <p class="text-xs" data-i18n="noFavouritesSaved">No favourite outlets starred yet.</p>
                     </div>
                 `;
@@ -1150,14 +1291,14 @@
             const savedOutlets = mediaOutlets.filter(o => activeFavourites.includes(o.id));
 
             drawerBody.innerHTML = savedOutlets.map(outlet => `
-                <div class="p-3.5 bg-slate-50 dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder flex items-center justify-between gap-2">
+                <div class="p-3.5 bg-archival-paper dark:bg-archival-darkPaper rounded-xl border border-archival-border dark:border-archival-darkBorder flex items-center justify-between gap-2">
                     <div class="space-y-0.5 min-w-0 pr-2">
                         <h5 class="font-serif font-bold text-xs text-archival-ink dark:text-slate-100 truncate">${outlet.name}</h5>
-                        <p class="font-mono text-[10px] text-slate-400 truncate">${outlet.country} (${outlet.language})</p>
+                        <p class="font-mono text-[10px] text-archival-lightInk dark:text-emerald-300/70 truncate">${outlet.country} (${outlet.language})</p>
                     </div>
 
                     <div class="flex items-center gap-2 flex-shrink-0">
-                        <a href="${outlet.url}" target="_blank" class="p-2 text-xs text-archival-ink dark:text-archival-gold hover:underline">
+                        <a href="${outlet.url}" target="_blank" class="p-2 text-xs text-archival-accent dark:text-archival-gold hover:underline">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                         <button onclick="toggleFavourite('${outlet.id}')" class="p-2 text-xs text-archival-accent hover:text-red-700">
@@ -1252,9 +1393,9 @@
             const presets = mediaOutlets.slice(0, 10);
 
             container.innerHTML = presets.map(p => `
-                <button onclick="executeWorldDirectLink('${p.url}')" class="p-2.5 rounded-xl bg-slate-50 dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder hover:border-archival-accent text-left transition truncate">
-                    <span class="block font-serif font-bold text-xs text-slate-800 dark:text-slate-200 truncate">${p.name}</span>
-                    <span class="block font-mono text-[10px] text-slate-400 truncate">${p.country}</span>
+                <button onclick="executeWorldDirectLink('${p.url}')" class="p-2.5 rounded-xl bg-archival-paper dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder hover:border-archival-gold text-left transition truncate">
+                    <span class="block font-serif font-bold text-xs text-archival-ink dark:text-slate-200 truncate">${p.name}</span>
+                    <span class="block font-mono text-[10px] text-archival-lightInk dark:text-emerald-300/70 truncate">${p.country}</span>
                 </button>
             `).join('');
         }
@@ -1302,9 +1443,9 @@
             }
 
             list.innerHTML = wdHistory.map(url => `
-                <button onclick="loadInOutletsWd('${url}')" class="w-full text-left p-2 rounded-lg bg-slate-50 dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder text-slate-700 dark:text-slate-300 hover:text-archival-accent truncate flex items-center justify-between">
+                <button onclick="loadInOutletsWd('${url}')" class="w-full text-left p-2 rounded-lg bg-archival-paper dark:bg-archival-darkPaper border border-archival-border dark:border-archival-darkBorder text-archival-ink dark:text-slate-300 hover:border-archival-gold truncate flex items-center justify-between">
                     <span class="truncate pr-2">${url}</span>
-                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400 flex-shrink-0"></i>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-archival-accent dark:text-archival-gold flex-shrink-0"></i>
                 </button>
             `).join('');
         }
@@ -1321,6 +1462,105 @@
                 document.getElementById('wd-frame-fallback').classList.remove('hidden');
             };
         });
+
+        /* ==========================================================================
+           9. CHRISTMAS & NEW YEAR'S EVE COUNTDOWN + SNOWFALL ANIMATION
+           ========================================================================== */
+
+        function updateDigit(id, newVal) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const formatted = String(newVal).padStart(2, '0');
+            if (el.textContent !== formatted) {
+                el.textContent = formatted;
+                el.classList.remove('digit-pop');
+                void el.offsetWidth; // trigger reflow for animation
+                el.classList.add('digit-pop');
+            }
+        }
+
+        function initChristmasCountdowns() {
+            function tick() {
+                const now = new Date();
+                const year = now.getFullYear();
+
+                // Next Christmas Day (Dec 25, 00:00:00)
+                let xmas = new Date(year, 11, 25, 0, 0, 0);
+                if (now > new Date(year, 11, 25, 23, 59, 59)) {
+                    xmas = new Date(year + 1, 11, 25, 0, 0, 0);
+                }
+
+                // Next New Year's Eve (Dec 31, 00:00:00)
+                let nye = new Date(year, 11, 31, 0, 0, 0);
+                if (now > new Date(year, 11, 31, 23, 59, 59)) {
+                    nye = new Date(year + 1, 11, 31, 0, 0, 0);
+                }
+
+                const diffXmas = Math.max(0, xmas - now);
+                const diffNye = Math.max(0, nye - now);
+
+                updateDigit('xmas-d', Math.floor(diffXmas / (1000 * 60 * 60 * 24)));
+                updateDigit('xmas-h', Math.floor((diffXmas / (1000 * 60 * 60)) % 24));
+                updateDigit('xmas-m', Math.floor((diffXmas / (1000 * 60)) % 60));
+                updateDigit('xmas-s', Math.floor((diffXmas / 1000) % 60));
+
+                updateDigit('nye-d', Math.floor(diffNye / (1000 * 60 * 60 * 24)));
+                updateDigit('nye-h', Math.floor((diffNye / (1000 * 60 * 60)) % 24));
+                updateDigit('nye-m', Math.floor((diffNye / (1000 * 60)) % 60));
+                updateDigit('nye-s', Math.floor((diffNye / 1000) % 60));
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        }
+
+        function initSnowfall() {
+            const canvas = document.getElementById('snow-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const flakeCount = Math.min(55, Math.floor(width / 25));
+            const flakes = Array.from({ length: flakeCount }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 2.4 + 1,
+                speedY: Math.random() * 0.7 + 0.3,
+                drift: Math.random() * 0.5 - 0.25,
+                phase: Math.random() * Math.PI * 2
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                const isDark = document.documentElement.classList.contains('dark');
+                ctx.fillStyle = isDark ? 'rgba(255, 255, 255, 0.55)' : 'rgba(212, 175, 55, 0.45)';
+
+                for (const f of flakes) {
+                    f.y += f.speedY;
+                    f.phase += 0.015;
+                    f.x += Math.sin(f.phase) * 0.35 + f.drift;
+
+                    if (f.y > height) {
+                        f.y = -5;
+                        f.x = Math.random() * width;
+                    }
+                    if (f.x > width) f.x = 0;
+                    if (f.x < 0) f.x = width;
+
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
     </script>
 </body>
 </html>
